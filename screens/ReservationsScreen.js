@@ -19,7 +19,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 
 
-export default function Reservations() {
+export default function ReservationsScreen() {
 
   return (
       <View style={styles.inputContainer}>

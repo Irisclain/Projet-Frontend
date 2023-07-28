@@ -19,7 +19,7 @@ const handleConnection = () => {
 };
 
 
-export default function SignUpServiceProviderScreen() {
+export default function ServiceProviderSignUpScreen() {
 
   return (
       <View style={styles.inputContainer}>

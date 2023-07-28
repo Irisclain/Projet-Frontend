@@ -19,7 +19,7 @@ const handleConnection = () => {
 };
 
 
-export default function SignUpOwnerScreen() {
+export default function OwnerSignUpScreen() {
 
   return (
       <View style={styles.inputContainer}>
