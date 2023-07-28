@@ -65,7 +65,9 @@ export default function ChatScreen({ navigation, route: { params } }) {
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <View style={styles.blackBanner}>
-        <Image source={require('../assets/Logo-banniere.png')} style={styles.bannerImage} />
+      <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Image source={require('../assets/Logo-banniere.png')} style={styles.bannerImage} />
+        </TouchableOpacity>
       </View>
           
       <LinearGradient
@@ -87,7 +89,7 @@ export default function ChatScreen({ navigation, route: { params } }) {
         <ScrollView style={styles.scroller}>
           {
             messages.map((message, i) => (
-              <View key={message.id} style={[styles.messageWrapper, { ...(message.username === params.username ? styles.messageSent : styles.messageRecieved) }]}>
+              <View key={i} style={[styles.messageWrapper, { ...(message.username === params.username ? styles.messageSent : styles.messageRecieved) }]}>
                 <View style={[styles.message, { ...(message.username === params.username ? styles.messageSentBg : styles.messageRecievedBg) }]}>
                   <Text style={styles.messageText}>{message.text}</Text>
                 </View>
