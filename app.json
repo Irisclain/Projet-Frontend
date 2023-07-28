@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "staynomad-gestion",
-    "slug": "staynomad-gestion",
+    "name": "chatapp2",
+    "slug": "chatapp2",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
