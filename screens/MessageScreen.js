@@ -3,7 +3,7 @@ import { randomUsernames } from '../data/randomUsernames';
 import {LinearGradient} from 'expo-linear-gradient';
 import FontAwesome from'react-native-vector-icons/FontAwesome';
 
-export default function HomeScreen({ navigation }) {
+export default function MessageScreen({ navigation }) {
   const handleNavigation = () => {
     const username = randomUsernames[Math.floor(Math.random() * randomUsernames.length - 1)];
     navigation.navigate('Chat', { username });
