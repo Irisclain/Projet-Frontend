@@ -15,4 +15,4 @@ export default function App() {
     </NavigationContainer>
   );
 }
-okok
+// okok
