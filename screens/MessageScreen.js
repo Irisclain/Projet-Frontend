@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       backgroundColor: 'white',
       paddingTop: 40,
-      marginTop: 20,
+      marginTop: 10,
     },
   header: {
     width: 159,
