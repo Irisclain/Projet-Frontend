@@ -19,15 +19,15 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 
 
-export default function AddAccommodationScreen() {
+export default function AddAccommodationScreen({ navigation }) {
 
   return (
-      <View style={styles.container}>
-        <Text>Ajouter un hébergement</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('MessageScreen')} style={styles.button} activeOpacity={0.8}>
+      <SafeAreaView style={styles.container}>
+      <Text>//AddAccommodationScreen === Page pour ajouter un hébergement</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Message')} style={styles.button} activeOpacity={0.8}>
             <Text style={styles.textButton}>(//bas de page//) Messagerie</Text>
         </TouchableOpacity>
-      </View>
+      </SafeAreaView>
   );
 }
 
@@ -35,7 +35,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    marginTop: Platform.OS === "android" ? 37 : 0,
     backgroundColor: '#DDD'
   },
   button: {

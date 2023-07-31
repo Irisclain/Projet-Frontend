@@ -1,4 +1,4 @@
-/*import React from "react";
+import React from "react";
 import { useState } from 'react';
 import {
   SafeAreaView,
@@ -19,15 +19,15 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 
 
-export default function AgenciesScreen() {
+export default function AgenciesScreen({ navigation }) {
 
   return (
-      <View style={styles.inputContainer}>
-        <Text>Distribution (navigation par tab)</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('MessageScreen')} style={styles.button} activeOpacity={0.8}>
+      <SafeAreaView style={styles.container}>
+      <Text>//AgenciesScreen === Page pour choisir ses canaux de distribution (navigation par tab)</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Message')} style={styles.button} activeOpacity={0.8}>
             <Text style={styles.textButton}>(//bas de page//)Messagerie</Text>
         </TouchableOpacity>
-      </View>
+      </SafeAreaView>
   );
 }
 
@@ -35,7 +35,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    marginTop: Platform.OS === "android" ? 37 : 0,
     backgroundColor: '#DDD'
   },
   button: {
