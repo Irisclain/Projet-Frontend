@@ -55,7 +55,6 @@ const TabNavigator = () => {
       <Tab.Screen name="Agencies" component={AgenciesScreen} />
       <Tab.Screen name="ServiceProviders" component={ServiceProvidersScreen} />
       <Tab.Screen name="OneAccommodation" component={OneAccommodationScreen} />
-      <Tab.Screen name="AddAccommodation" component={AddAccommodationScreen} />
     </Tab.Navigator>
   );
 };
@@ -72,6 +71,7 @@ export default function App() {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="OwnerSignUp" component={OwnerSignUpScreen} />
+          <Stack.Screen name="AddAccommodation" component={AddAccommodationScreen} />
           <Stack.Screen name="ServiceProviderSignUp" component={ServiceProviderSignUpScreen} />
           <Stack.Screen name="Message" component={MessageScreen} />
           <Stack.Screen name="Chat" component={ChatScreen} />
