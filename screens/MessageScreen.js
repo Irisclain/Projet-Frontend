@@ -1,7 +1,6 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View, SectionList, Modal } from 'react-native';
 import {LinearGradient} from 'expo-linear-gradient';
-//import FontAwesome from'react-native-vector-icons/FontAwesome';
-import { FontAwesome } from '@expo/vector-icons';
+import FontAwesome from'react-native-vector-icons/FontAwesome';
 import { useState } from 'react';
 
 const DATA = [
@@ -13,6 +12,7 @@ const DATA = [
       { name: 'Maison Toulon', selected: false },
       { name: 'Loft Paris', selected: false },
     ],
+    selectedAll: false,
   },
 ];
 
@@ -25,13 +25,44 @@ const contactsData = [
       { name: 'Ursule LESBONSTUYAUX', selected: false },
       { name: 'Jean-Jacques ASPIRATEUR', selected: false },
     ],
+    selectedAll: false,
   },
 ];
+
+const getSelectedItems1 = (data) => {
+  const selectedItems1 = [];
+  data.forEach((section) => {
+    section.data.forEach((item) => {
+      if (item.selected) {
+        selectedItems1.push(item.name);
+      }
+    });
+  });
+  return selectedItems1;
+};
+
+const getSelectedItems2 = (data) => {
+  const selectedItems2 = [];
+  data.forEach((section) => {
+    section.data.forEach((item) => {
+      if (item.selected) {
+        selectedItems2.push(item.name);
+      }
+    });
+  });
+  return selectedItems2;
+};
 
 export default function MessageScreen({ navigation }) {
   const [modal1Visible, setModal1Visible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
-  const [data, setData] = useState([]);
+  const [dataAccom, setDataAccom] = useState(DATA);
+  const [dataCont, setDataCont] = useState(contactsData);
+  const [selectAllAccom, setSelectAllAccom] = useState(false);
+  const [selectAllCont, setSelectAllCont] = useState(false);
+
+  const selectedItems1 = getSelectedItems1(dataAccom);
+  const selectedItems2 = getSelectedItems2(dataCont);
 
   const handleNavigation = () => {
     //const username = randomUsernames[Math.floor(Math.random() * randomUsernames.length)];
@@ -58,18 +89,47 @@ export default function MessageScreen({ navigation }) {
 
   //console.log(modalVisible)
 
+
   const handleItemSelection = (itemIndex) => {
-    const updatedData = [...DATA];
+    const updatedData = [...dataAccom];
     const sectionIndex = 0;
     updatedData[sectionIndex].data[itemIndex].selected = !updatedData[sectionIndex].data[itemIndex].selected;
-    setData(updatedData);
+    const allSelected = updatedData[sectionIndex].data.every((item) => item.selected);
+    updatedData[sectionIndex].selectedAll = allSelected;
+    setSelectAllAccom(allSelected);
+    setDataCont(updatedData);
+  };
+
+  const handleSelectAllAccom = () => {
+    setDataAccom((prevDataAccom) => {
+      const updatedData = [...prevDataAccom];
+      updatedData[0].data.forEach((item) => {
+        item.selected = !selectAllAccom;
+      });
+      setSelectAllAccom(!selectAllAccom);
+      return updatedData;
+    });
   };
 
   const handleItemSelection2 = (itemIndex) => {
-    const updatedData = [...contactsData];
+    const updatedData = [...dataCont];
     const sectionIndex = 0;
     updatedData[sectionIndex].data[itemIndex].selected = !updatedData[sectionIndex].data[itemIndex].selected;
-    setData(updatedData);
+    const allSelected = updatedData[sectionIndex].data.every((item) => item.selected);
+    updatedData[sectionIndex].selectedAll = allSelected;
+    setSelectAllCont(allSelected);
+    setDataCont(updatedData);
+  };
+
+  const handleSelectAllCont = () => {
+    setDataCont((prevDataCont) => {
+      const updatedData = [...prevDataCont];
+      updatedData[0].data.forEach((item) => {
+        item.selected = !selectAllCont;
+      });
+      setSelectAllCont(!selectAllCont);
+      return updatedData;
+    });
   };
 
   return (
@@ -91,6 +151,15 @@ export default function MessageScreen({ navigation }) {
       <Modal visible={modal1Visible} animationType="fade" transparent>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
+          <View style={styles.selectionModalContent}>
+          <TouchableOpacity onPress={handleSelectAllAccom}>
+              <FontAwesome
+                name={selectAllAccom ? 'check-square-o' : 'square-o'}
+                color={selectAllAccom ? 'green' : 'black'}
+                size={25}/>
+          </TouchableOpacity>
+          <Text style={styles.selection}>Tout séléctionner</Text>
+          </View>
           <SectionList
             sections={DATA}
             keyExtractor={(item, index) => item + index}
@@ -101,8 +170,7 @@ export default function MessageScreen({ navigation }) {
                     <FontAwesome
                       name={item.selected ? 'check-square-o' : 'square-o'}
                       color={item.selected ? 'green' : 'black'}
-                      size={25}
-                    />
+                      size={25}/>
                   </TouchableOpacity>
                   <Text style={styles.modalTitle}>{item.name}</Text>
                 </View>
@@ -118,6 +186,13 @@ export default function MessageScreen({ navigation }) {
           </View>
         </View>
       </Modal>
+      <View style={styles.selectedItemsContainer}>
+        {selectedItems1.map((name, index) => (
+          <Text key={index} style={styles.selectedItemText}>
+            {name}
+          </Text>
+        ))}
+      </View>
 
       <View style={styles.allbuttons}>
       <View style={styles.buttonPrestaContainer}>
@@ -161,6 +236,16 @@ export default function MessageScreen({ navigation }) {
         <Modal visible={modal2Visible} animationType="fade" transparent>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
+          <View style={styles.selectionModalContent}>
+          <TouchableOpacity onPress={handleSelectAllCont}>
+              <FontAwesome
+                name={selectAllCont ? 'check-square-o' : 'square-o'}
+                color={selectAllCont ? 'green' : 'black'}
+                size={25}
+                paddingLeft={50}/>
+          </TouchableOpacity>
+          <Text style={styles.selection}>Tout sélectionner</Text>
+          </View>
           <SectionList
             sections={contactsData}
             keyExtractor={(item, index) => item + index}
@@ -188,6 +273,13 @@ export default function MessageScreen({ navigation }) {
           </View>
         </View>
       </Modal>
+      <View style={styles.selectedItemsContainer}>
+        {selectedItems2.map((name, index) => (
+          <Text key={index} style={styles.selectedItemText}>
+            {name}
+          </Text>
+        ))}
+      </View>
 
         <TouchableOpacity onPress={() => handleNavigation()} style={styles.buttonSend}>
           <Text style={styles.buttonSendText}>Send message 👉🏼</Text>
@@ -202,13 +294,14 @@ const styles = StyleSheet.create({
     color: '#000',
     fontSize: 20,
     justifyContent: 'center',
-    marginTop: -120, 
+    marginTop: 0, 
+    marginBottom: -30,
   },
   allbuttons: {
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
-    marginTop: -130,
+    marginTop: -60,
   },
   angles: {
     marginLeft: 5,
@@ -228,19 +321,16 @@ const styles = StyleSheet.create({
     left: 5,
     width: 180,
     height: 50,
+    marginBottom: -10,
   },
   blackBanner:{
     marginTop: -20,
     width: '100%',
     height: 50,
-    marginBottom: -20,
   },
   button: {
-    width: 155,
+    width: 158,
     height: 64,
-    paddingTop: 5,
-    paddingLeft: 10,
-    paddingRight: 10,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
@@ -284,6 +374,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     marginBottom: 20,
+    marginTop: -20,
   },
   buttonSendText: {
   fontSize: 16,
@@ -310,7 +401,8 @@ const styles = StyleSheet.create({
     color: '#000',
     fontSize: 20,
     justifyContent: 'center',
-    marginTop: -20,
+    marginTop: 110,
+    marginBottom: -30,
   },
   container: {
       flex: 1,
@@ -320,13 +412,13 @@ const styles = StyleSheet.create({
       marginTop: 25,
     },
   header: {
-    width: 159,
+    width: 162,
     height: 68,
     marginBottom: -10,
     borderRadius: 10,
     borderRadius: 10,
     marginTop: 60,
-    marginRight: 15,
+    marginRight: 9,
     marginLeft: 5,
   },
   item: {
@@ -347,7 +439,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10, 
   },
   locaButton: {
-    width: 330,
+    width: 340,
     height: 64,
     paddingTop: 5,
     paddingLeft: 10,
@@ -361,7 +453,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   locaHeader: {
-    width: 334,
+    width: 344,
     height: 68,
     marginBottom: -10,
     borderRadius: 10,
@@ -399,6 +491,31 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+  selectedItemsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginBottom: 50,
+    marginTop: 30,
+  },
+  selectedItemText: {
+    backgroundColor: '#EBEAE7',
+    borderRadius: 20,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    margin: 5,
+  },
+  selection: {
+    fontSize: 16,
+    marginLeft: 10,
+  },
+  selectionModalContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end', // Pour aligner à droite
+    marginRight: 110, // Espacement du bord droit
+    marginBottom: 10,
+  },
   textModalButton: {
     color: 'black',
     height: 24,
@@ -411,5 +528,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     textAlign: 'center',
     textDecorationLine:'underline',
+    marginBottom: 5,
   },
 });
