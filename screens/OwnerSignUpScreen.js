@@ -36,7 +36,7 @@ export default function OwnerSignUpScreen({ navigation }) {
   return (
       <SafeAreaView style={styles.container}>
         <View style={styles.haut}>
-          <Header navigation={navigation} accommodation='F5 à Bordeaux'/>
+          <Header navigation={navigation} accommodation=''/>
           <View style={styles.bider}>
             <Text>//OwnerSignUpScreen === Page d'inscription pour un propriétaire</Text>
             <TouchableOpacity onPress={() => handleConnection()} style={styles.button} activeOpacity={0.8}>
@@ -47,7 +47,7 @@ export default function OwnerSignUpScreen({ navigation }) {
             </TouchableOpacity>
           </View>
         </View>
-          <Footer navigation={navigation}/>
+        <Footer navigation={navigation} messageButton={false}/>
       </SafeAreaView>
   );
 }

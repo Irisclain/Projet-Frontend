@@ -10,6 +10,8 @@ import {
   View,
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 // import { useDispatch, useSelector } from 'react-redux';
 // import {  } from '../reducers/user';
 // import {  } from '../reducers/accommodations';
@@ -23,10 +25,13 @@ export default function AgenciesScreen({ navigation }) {
 
   return (
       <SafeAreaView style={styles.container}>
-      <Text>//AgenciesScreen === Page pour choisir ses canaux de distribution (navigation par tab)</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Message')} style={styles.button} activeOpacity={0.8}>
-            <Text style={styles.textButton}>(//bas de page//)Messagerie</Text>
-        </TouchableOpacity>
+        <View style={styles.haut}>
+          <Header navigation={navigation} accommodation=''/>
+          <View style={styles.bider}>
+            <Text>//AgenciesScreen === Page pour choisir ses canaux de distribution (navigation par tab)</Text>
+          </View>
+        </View>
+        <Footer navigation={navigation} messageButton={true}/>
       </SafeAreaView>
   );
 }

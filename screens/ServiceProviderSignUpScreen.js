@@ -10,6 +10,8 @@ import {
   View,
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 // import { useDispatch, useSelector } from 'react-redux';
 // import {  } from '../reducers/user';
 
@@ -24,16 +26,16 @@ export default function ServiceProviderSignUpScreen({ navigation }) {
   
   return (
       <SafeAreaView style={styles.container}>
-      <Text>//ServiceProviderSignUpScreen === Page d'inscription pour un prestataire</Text>
+      <View style={styles.haut}>
+        <Header navigation={navigation} accommodation=''/>
+        <View style={styles.bider}>
+          <Text>//ServiceProviderSignUpScreen === Page d'inscription pour un prestataire</Text>
         <TouchableOpacity onPress={() => handleConnection()} style={styles.button} activeOpacity={0.8}>
             <Text style={styles.textButton}>(//après connection//)Mes hébergements</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Home')} style={styles.button} activeOpacity={0.8}>
-            <Text style={styles.textButton}>(//retour à la page des inscriptions//)</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Message')} style={styles.button} activeOpacity={0.8}>
-            <Text style={styles.textButton}>(//Vers la Messagerie//)</Text>
-        </TouchableOpacity>
+          </View>
+        </View>
+        <Footer navigation={navigation} messageButton={true}/>
       </SafeAreaView>
   );
 }
