@@ -64,11 +64,11 @@ export default function ChatScreen({ navigation, route: { params } }) {
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <View style={styles.blackBanner}>
+          <View style={styles.bannerbackground}/>
+      <Image source={require('../assets/Fond-banniere.png')} style={styles.blackBanner} />
       <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image source={require('../assets/Logo-banniere.png')} style={styles.bannerImage} />
         </TouchableOpacity>
-      </View>
           
       <LinearGradient
      colors={['#CD43FD', '#FF7A00', '#FAB26F', '#FFE279']}
@@ -124,18 +124,24 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingTop: 40,
   },
-  blackBanner: {
+  bannerbackground: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    height: 70,
+    height: 30,
     backgroundColor: '#000',
+  },
+  blackBanner:{
+    marginTop: -20,
+    width: '100%',
+    height: 50,
+    marginBottom: -20,
   },
   bannerImage:{
     position: 'absolute',
-    top: 10,
-    left: 5,
+    bottom: -5,
+    right: 5,
     width: 180,
     height: 50,
   },
