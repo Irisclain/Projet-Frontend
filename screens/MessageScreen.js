@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
   },
   bannerbackground: {
     position: 'absolute',
-    top: -20,
+    top: -30,
     left: 0,
     right: 0,
     height: 50,
@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       backgroundColor: 'white',
       paddingTop: 40,
-      marginTop: 10,
+      marginTop: 25,
     },
   header: {
     width: 159,
