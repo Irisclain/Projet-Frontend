@@ -30,3 +30,26 @@ export default function AgenciesScreen() {
       </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#DDD'
+  },
+  button: {
+    alignItems: 'center',
+    paddingTop: 8,
+    width: '100%',
+    marginTop: 30,
+    backgroundColor: '#fbe29c',
+    borderRadius: 1,
+  },
+  textButton: {
+    //fontFamily: 'Futura',
+    height: 30,
+    fontWeight: '600',
+    fontSize: 16,
+  },
+});

@@ -1,5 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator, createMaterialTopTabNavigator } from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 // import ChatScreen from './screens/ChatScreen';
 import AddAccommodationScreen from './screens/AddAccommodationScreen';
@@ -63,8 +64,8 @@ export default function App() {
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="OwnerSignUp" component={OwnerSignUpScreen} />
           <Stack.Screen name="ServiceProviderSignUp" component={ServiceProviderSignUpScreen} />
-          <Stack.Screen name="TabNavigator" component={TabNavigator} />
           <Stack.Screen name="Message" component={MessageScreen} />
+          <Stack.Screen name="TabNavigator" component={TabNavigator} />
         </Stack.Navigator>
       </NavigationContainer>
       

@@ -14,13 +14,14 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 // import {  } from '../reducers/user';
 
 
-const handleConnection = () => {
-  navigation.navigate('MyAccommodationsScreen');
-};
 
 
-export default function ServiceProviderSignUpScreen() {
+export default function ServiceProviderSignUpScreen({ navigation }) {
 
+  const handleConnection = () => {
+    navigation.navigate('MyAccommodationsScreen');
+  };
+  
   return (
       <View style={styles.inputContainer}>
         <Text>Page d'inscription pour un prestataire</Text>
@@ -33,3 +34,26 @@ export default function ServiceProviderSignUpScreen() {
       </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#DDD'
+  },
+  button: {
+    alignItems: 'center',
+    paddingTop: 8,
+    width: '100%',
+    marginTop: 30,
+    backgroundColor: '#fbe29c',
+    borderRadius: 1,
+  },
+  textButton: {
+    //fontFamily: 'Futura',
+    height: 30,
+    fontWeight: '600',
+    fontSize: 16,
+  },
+});
