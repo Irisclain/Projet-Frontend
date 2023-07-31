@@ -3,55 +3,7 @@ import {LinearGradient} from 'expo-linear-gradient';
 import FontAwesome from'react-native-vector-icons/FontAwesome';
 import { useState } from 'react';
 
-const DATA = [
-  {
-    title: 'Mes hébergements',
-    data: [
-      { name: 'Appartement Bordeaux centre', selected: false },
-      { name: 'Villa Marmande', selected: false },
-      { name: 'Maison Toulon', selected: false },
-      { name: 'Loft Paris', selected: false },
-    ],
-    selectedAll: false,
-  },
-];
-
-const contactsData = [
-  {
-    title: 'Mes contacts',
-    data: [
-      { name: 'Jean-José MENAGE', selected: false },
-      { name: 'Irène MECANO', selected: false },
-      { name: 'Ursule LESBONSTUYAUX', selected: false },
-      { name: 'Jean-Jacques ASPIRATEUR', selected: false },
-    ],
-    selectedAll: false,
-  },
-];
-
-const getSelectedItems1 = (data) => {
-  const selectedItems1 = [];
-  data.forEach((section) => {
-    section.data.forEach((item) => {
-      if (item.selected) {
-        selectedItems1.push(item.name);
-      }
-    });
-  });
-  return selectedItems1;
-};
-
-const getSelectedItems2 = (data) => {
-  const selectedItems2 = [];
-  data.forEach((section) => {
-    section.data.forEach((item) => {
-      if (item.selected) {
-        selectedItems2.push(item.name);
-      }
-    });
-  });
-  return selectedItems2;
-};
+const BACKEND_ADDRESS = 'http://localhost:3000';
 
 export default function MessageScreen({ navigation }) {
   const [modal1Visible, setModal1Visible] = useState(false);
@@ -63,6 +15,56 @@ export default function MessageScreen({ navigation }) {
 
   const selectedItems1 = getSelectedItems1(dataAccom);
   const selectedItems2 = getSelectedItems2(dataCont);
+
+  const DATA = [
+    {
+      title: 'Mes hébergements',
+      data: [
+        { name: 'Appartement Bordeaux centre', selected: false },
+        { name: 'Villa Marmande', selected: false },
+        { name: 'Maison Toulon', selected: false },
+        { name: 'Loft Paris', selected: false },
+      ],
+      selectedAll: false,
+    },
+  ];
+  
+  const contactsData = [
+    {
+      title: 'Mes contacts',
+      data: [
+        { name: 'Jean-José MENAGE', selected: false },
+        { name: 'Irène MECANO', selected: false },
+        { name: 'Ursule LESBONSTUYAUX', selected: false },
+        { name: 'Jean-Jacques ASPIRATEUR', selected: false },
+      ],
+      selectedAll: false,
+    },
+  ];
+  
+  const getSelectedItems1 = (data) => {
+    const selectedItems1 = [];
+    data.forEach((section) => {
+      section.data.forEach((item) => {
+        if (item.selected) {
+          selectedItems1.push(item.name);
+        }
+      });
+    });
+    return selectedItems1;
+  };
+  
+  const getSelectedItems2 = (data) => {
+    const selectedItems2 = [];
+    data.forEach((section) => {
+      section.data.forEach((item) => {
+        if (item.selected) {
+          selectedItems2.push(item.name);
+        }
+      });
+    });
+    return selectedItems2;
+  };
 
   const handleNavigation = () => {
     //const username = randomUsernames[Math.floor(Math.random() * randomUsernames.length)];

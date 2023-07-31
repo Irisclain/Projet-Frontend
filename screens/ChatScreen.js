@@ -15,7 +15,7 @@ import FontAwesome from'react-native-vector-icons/FontAwesome';
 import {LinearGradient} from 'expo-linear-gradient';
 
 const pusher = new Pusher('4c35491e793ed55ea5db', { cluster: 'eu' });
-const BACKEND_ADDRESS = 'http://192.168.1.77:3000';
+const BACKEND_ADDRESS = 'http://localhost:3000';
 
 export default function ChatScreen({ navigation, route: { params } }) {
   const [messages, setMessages] = useState([]);
