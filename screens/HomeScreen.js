@@ -1,7 +1,6 @@
-/*import React from "react";
+import React from "react";
 import { useState } from 'react';
 import {
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -9,6 +8,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {
+  SafeAreaView,
+  SafeAreaProvider,
+  SafeAreaInsetsContext,
+  useSafeAreaInsets,
+  initialWindowMetrics,
+} from 'react-native-safe-area-context';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 // import { useDispatch, useSelector } from 'react-redux';
 // import {  } from '../reducers/user';
@@ -16,30 +22,58 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 
 
-const handleOwnerSignUp = () => {
-    navigation.navigate('OwnerSignUpScreen');
-};
-const handleServiceProviderSignUp = () => {
-    navigation.navigate('ServiceProviderSignUpScreen');
-};
-const handleConnection = () => {
-    navigation.navigate('MyAccommodationsScreen');
-};
-
-export default function HomeScreen() {
-
+export default function HomeScreen({ navigation }) {
+  const handleOwnerSignUp = () => {
+      navigation.navigate('OwnerSignUp');
+  };
+  const handleServiceProviderSignUp = () => {
+      navigation.navigate('ServiceProviderSignUp');
+  };
+  const handleConnection = () => {
+    navigation.navigate('TabNavigator');
+  };
+  
   return (
-      <View style={styles.inputContainer}>
-        <Text>HomeScreen</Text>
+      <SafeAreaView style={styles.container}>
+        <Text>//Screen HomeScreen === Page d'accueil avant connexion//</Text>
         <TouchableOpacity onPress={() => handleOwnerSignUp()} style={styles.button} activeOpacity={0.8}>
             <Text style={styles.textButton}>SignUp Propriétaire</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleServiceProviderSignUp()} style={styles.button} activeOpacity={0.8}>
-            <Text style={styles.textButton}>SignUp Propriétaire</Text>
+            <Text style={styles.textButton}>SignUp Prestataire</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleConnection()} style={styles.button} activeOpacity={0.8}>
-            <Text style={styles.textButton}>(//après connection//)Mes hébergements</Text>
+            <Text style={styles.textButton}>(//après connection//) Mes hébergements</Text>
         </TouchableOpacity>
-      </View>
+        <TouchableOpacity onPress={() => navigation.navigate('Message')} style={styles.button} activeOpacity={0.8}>
+            <Text style={styles.textButton}>(//Vers la Messagerie//)</Text>
+        </TouchableOpacity>
+      </SafeAreaView>
   );
-}*/
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    marginTop: Platform.OS === "android" ? 37 : 0,
+    backgroundColor: '#DDD',
+    borderWidth: 1,
+    borderColor: 'red',
+  },
+  button: {
+    alignItems: 'center',
+    paddingTop: 8,
+    width: '100%',
+    marginTop: 30,
+    backgroundColor: '#fbe29c',
+    borderRadius: 1,
+  },
+  textButton: {
+    //fontFamily: 'Futura',
+    height: 30,
+    fontWeight: '600',
+    fontSize: 16,
+  },
+});
