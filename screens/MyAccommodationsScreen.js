@@ -49,7 +49,8 @@ export default function MyAccommodationsScreen({ navigation }) {
       <Text style={{fontSize:30}}>Mes Hébergements</Text>
     {/* <View>{accommodation}</View>   */}
       <Text>MyAccommodationsScreen === Page de tous les hébergements (navigation par tab)</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Message')} style={styles.button} activeOpacity={0.8}>
+      <View style={styles.containerbutton}>
+        <TouchableOpacity onPress={() => navigation.navigate('AddAccommodation')} style={styles.button} activeOpacity={0.8}>
           <LinearGradient
      colors={['#CD83FD', '#FAB28F', '#FFE279','white']}
      start={{ x: 1.0, y: 0.0 }} end={{ x: 1.0, y: 1.0 }}
@@ -60,6 +61,7 @@ export default function MyAccommodationsScreen({ navigation }) {
             <Text style={styles.textButton}>Nouvel Hébergement</Text>
             </LinearGradient>
         </TouchableOpacity>
+        </View>
     </SafeAreaView>
   );
 }
@@ -72,23 +74,22 @@ const styles = StyleSheet.create({
     marginTop: Platform.OS === "android" ? 37 : 0,
     backgroundColor: '#DDD'
   },
+  containerbutton:{
+    paddingTop:500,
+    display: 'flex',
+    flexDirection:'column',
+    alignItems:'center',
+    
+  },
   textButton: {  
     paddingLeft:5,
     paddingTop:10,  
     width: 200,
-    height: 50,
+    height: '100%',
     fontWeight: '400',
     fontSize: 20,
   },
-  button: {
-    display:'flex',
-    alignItems: 'center',
-    
-    flexDirection:'column',
-    justifyContent: 'flex-end',
-
-   
-  },
+  
   accomodationcontainer: {
     display: 'flex',
     flexDirection:'row',
