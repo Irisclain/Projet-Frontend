@@ -1,5 +1,6 @@
 import React from "react";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import {LinearGradient} from 'expo-linear-gradient';
 import {
   SafeAreaView,
   ScrollView,
@@ -8,6 +9,8 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Image,
+  Button,
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 // import { useDispatch, useSelector } from 'react-redux';
@@ -21,13 +24,43 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 export default function MyAccommodationsScreen({ navigation }) {
 
+    const [accommodation, setAccommodation] = useState([]);
+  
+    useEffect(() => {
+      const newAccommodation = (
+        <View style={styles.accomodationcontainer}>
+          <Image source={require('../assets/favicon.png')} />
+          <View>
+            <Text style={{fontSize: 20, marginTop:-40}}>Titre du bien !</Text>
+            <Text>Description de l'Appartement</Text> 
+          </View>
+          <TouchableOpacity onPress={() => navigation.navigate('AddAccommodationScreen')} style={styles.memobutton}>
+            <Text>mémo d'achats</Text>
+          </TouchableOpacity>
+        </View>
+      );
+  
+      setAccommodation((prevAccommodation) => [...prevAccommodation, newAccommodation]);
+    }, []);
+  
+   
   return (
-      <SafeAreaView style={styles.container}>
-      <Text>//MyAccommodationsScreen === Page de tous les hébergements (navigation par tab)</Text>
+    <SafeAreaView style={styles.container}>
+      <Text style={{fontSize:30}}>Mes Hébergements</Text>
+    {/* <View>{accommodation}</View>   */}
+      <Text>MyAccommodationsScreen === Page de tous les hébergements (navigation par tab)</Text>
         <TouchableOpacity onPress={() => navigation.navigate('Message')} style={styles.button} activeOpacity={0.8}>
-            <Text style={styles.textButton}>(//bas de page//)Messagerie</Text>
+          <LinearGradient
+     colors={['#CD83FD', '#FAB28F', '#FFE279','white']}
+     start={{ x: 1.0, y: 0.0 }} end={{ x: 1.0, y: 1.0 }}
+     height={50}
+     borderRadius={20}
+     
+     >
+            <Text style={styles.textButton}>Nouvel Hébergement</Text>
+            </LinearGradient>
         </TouchableOpacity>
-      </SafeAreaView>
+    </SafeAreaView>
   );
 }
 
@@ -39,18 +72,43 @@ const styles = StyleSheet.create({
     marginTop: Platform.OS === "android" ? 37 : 0,
     backgroundColor: '#DDD'
   },
+  textButton: {  
+    paddingLeft:5,
+    paddingTop:10,  
+    width: 200,
+    height: 50,
+    fontWeight: '400',
+    fontSize: 20,
+  },
   button: {
+    display:'flex',
     alignItems: 'center',
+    
+    flexDirection:'column',
+    justifyContent: 'flex-end',
+
+   
+  },
+  accomodationcontainer: {
+    display: 'flex',
+    flexDirection:'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height:120,
     paddingTop: 8,
     width: '100%',
-    marginTop: 30,
-    backgroundColor: '#fbe29c',
-    borderRadius: 1,
+    marginTop: 30,  
+    backgroundColor: 'white',
+    paddingLeft:20,
+    paddingRight:20,
   },
-  textButton: {
-    //fontFamily: 'Futura',
-    height: 30,
-    fontWeight: '600',
-    fontSize: 16,
-  },
+  memobutton: {
+    alignItems:'center',
+    justifyContent: 'center',
+    borderColor: '#fbe29c',
+    borderWidth:2,
+    width: 80,
+    height: 80,
+    borderRadius:40,
+  },  
 });
