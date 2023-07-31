@@ -11,18 +11,21 @@ export default function MessageScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.blackBanner}>
+      <View style={styles.bannerbackground}/>
+      <Image source={require('../assets/Fond-banniere.png')} style={styles.blackBanner} />
         <Image source={require('../assets/Logo-banniere.png')} style={styles.bannerImage} />
-      </View>
+
       <View style={styles.inset}>
       <Text style={styles.title}>Messagerie</Text>
+
       <Text style={styles.accomodationList}>Choix du logement <FontAwesome name="angle-down" color="black" size={25} margin={10} /></Text>
-      <View style={styles.buttonContainer}>
+      
+      <View style={styles.allbuttons}>
+      <View style={styles.buttonPrestaContainer}>
       <LinearGradient
      colors={['#CD43FD', '#FF7A00', '#FAB26F', '#FFE279']}
      start={{ x: 0.0, y: 1.0 }} end={{ x: 1.0, y: 1.0 }}
-     style={styles.header}
-   >
+     style={styles.header}>
       <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Ménage</Text>
         </TouchableOpacity>
@@ -30,22 +33,25 @@ export default function MessageScreen({ navigation }) {
         <LinearGradient
      colors={['#CD43FD', '#FF7A00', '#FAB26F', '#FFE279']}
      start={{ x: 0.0, y: 1.0 }} end={{ x: 1.0, y: 1.0 }}
-     style={styles.header}
-   >
+     style={styles.header}>
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Dépannage</Text>
         </TouchableOpacity>
       </LinearGradient>
       </View>
+
+      <View style={styles.buttonLocaContainer}>
       <LinearGradient
      colors={['#CD43FD', '#FF7A00', '#FAB26F', '#FFE279']}
      start={{ x: 0.0, y: 1.0 }} end={{ x: 1.0, y: 1.0 }}
-     style={styles.header}
-   >
-        <TouchableOpacity style={styles.button}>
+     style={styles.locaHeader}>
+        <TouchableOpacity style={styles.locaButton}>
           <Text style={styles.buttonText}>Locataires</Text>
         </TouchableOpacity>
         </LinearGradient>
+        </View>
+        </View>
+
         <Text style={styles.contactList}>Choix de contacts <FontAwesome name="angle-down" color="black" size={25} margin={10} /></Text>
         <TouchableOpacity onPress={() => handleNavigation()} style={styles.buttonSend}>
           <Text style={styles.buttonSendText}>Send message 👉🏼</Text>
@@ -62,30 +68,38 @@ const styles = StyleSheet.create({
       backgroundColor: 'white',
       paddingTop: 40,
     },
-    blackBanner: {
+    bannerbackground: {
       position: 'absolute',
       top: 0,
       left: 0,
       right: 0,
-      height: 70,
+      height: 30,
       backgroundColor: '#000',
+    },
+    blackBanner:{
+      marginTop: -20,
+      width: '100%',
+      height: 50,
+      marginBottom: -20,
     },
     bannerImage:{
       position: 'absolute',
-      top: 10,
+      top: 5,
       left: 5,
       width: 180,
       height: 50,
     },
-  inset: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'white',
-    paddingTop: 30,
-    paddingLeft: 20,
-    paddingRight: 20,
-    marginTop: 30,
-  },
+    inset: {
+      flex: 1,
+      width: '100%',
+      backgroundColor: 'white',
+      paddingTop: 30,
+      paddingLeft: 20,
+      paddingRight: 20,
+      marginTop: 30,
+      justifyContent: 'space-between', 
+      paddingBottom: 10, 
+    },
   title: {
     color: '#000',
     fontSize: 28,
@@ -97,9 +111,20 @@ const styles = StyleSheet.create({
     color: '#000',
     fontSize: 20,
     justifyContent: 'center',
-    marginTop: 30,
+    marginTop: -120, 
   },
-  buttonContainer:{
+  allbuttons: {
+    marginTop: -130,
+  },
+  buttonPrestaContainer:{
+    display: 'flex',
+    width: 101,
+    height: 41,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: -15,
+  },
+  buttonLocaContainer:{
     display: 'flex',
     width: 101,
     height: 41,
@@ -108,16 +133,17 @@ const styles = StyleSheet.create({
     marginLeft: -15,
   },
   header: {
-    width: 109,
+    width: 159,
     height: 68,
     marginBottom: -10,
     borderRadius: 10,
     borderRadius: 10,
     marginTop: 60,
-    marginRight: 10,
+    marginRight: 15,
+    marginLeft: 5,
   },
   button: {
-    width: 105,
+    width: 155,
     height: 64,
     paddingTop: 5,
     paddingLeft: 10,
@@ -138,15 +164,39 @@ const styles = StyleSheet.create({
       justifiyContent: 'center',
       marginBottom: 5,
   },
+  locaHeader: {
+    width: 334,
+    height: 68,
+    marginBottom: -10,
+    borderRadius: 10,
+    borderRadius: 10,
+    marginTop: 150,
+    marginHorizontal: 8,
+  },
+  locaButton: {
+    width: 330,
+    height: 64,
+    paddingTop: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    borderRadius: 10,
+    margin: 2,
+    justifyContent: 'center',
+  },
   contactList: {
     color: '#000',
     fontSize: 20,
     justifyContent: 'center',
-    marginTop: 80,
+    marginTop: -20,
   },
   buttonSend: {
     backgroundColor: '#fae4b3',
-    width: '60%',
+    width: '80%',
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 30,
@@ -161,23 +211,12 @@ const styles = StyleSheet.create({
     //fontFamily: 'actor',
     fontSize: 18,
     opacity: 0.7,
-  }
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginBottom: 20,
+},
+buttonSendText: {
+  fontSize: 16,
+  fontStyle: 'bold',
+},
 });
-
-
-/*inset: {
-    width: '100%',
-    height: '35%',
-    borderTopLeftRadius: 50,
-    borderTopRightRadius: 50,
-    backgroundColor: 'rgba(13, 8, 9, 0.9)',
-    paddingTop: 60,
-    paddingLeft: 20,
-    paddingRight: 20,
-    borderTopColor: '#ffe099',
-    borderLeftColor: '#ffe099',
-    borderRightColor: '#ffe099',
-    borderTopWidth: 4,
-    borderRightWidth: 0.1,
-    borderLeftWidth: 0.1
-  },*/
