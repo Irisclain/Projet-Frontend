@@ -205,6 +205,9 @@ const styles = StyleSheet.create({
     marginTop: -120, 
   },
   allbuttons: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
     marginTop: -130,
   },
   angles: {
@@ -249,19 +252,17 @@ const styles = StyleSheet.create({
   },
   buttonLocaContainer:{
     display: 'flex',
-    width: 101,
+    width: '100%',
     height: 41,
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: -15,
   },
-  buttonPrestaContainer:{
+  buttonPrestaContainer: {
     display: 'flex',
-    width: 101,
+    width: '100%',
     height: 41,
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: -15,
   },
   buttonSend: {
     backgroundColor: '#fae4b3',
@@ -296,7 +297,8 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   centeredView: {
-    flex: 1,
+    marginTop: 70,
+    flex: 0.98,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -351,7 +353,6 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
     flexDirection: 'row',
-    justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: 'white',
     borderRadius: 10,
