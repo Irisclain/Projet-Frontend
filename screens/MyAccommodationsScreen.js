@@ -28,16 +28,21 @@ export default function MyAccommodationsScreen({ navigation }) {
   
     useEffect(() => {
       const newAccommodation = (
-        <View style={styles.accomodationcontainer}>
-          <Image source={require('../assets/favicon.png')} />
+        <View>
+        <View style={{ height: 1, backgroundColor: 'black' }} />
+        <View  style={styles.accomodationcontainer}>        
+          <Image source={require('../assets/icon.png')}
+          style={{height:120, width:130}} />
           <View>
-            <Text style={{fontSize: 20, marginTop:-40}}>Titre du bien !</Text>
+            <Text style={{fontSize: 20, marginTop:-40}}>Titre du bien </Text>
             <Text>Description de l'Appartement</Text> 
           </View>
           <TouchableOpacity onPress={() => navigation.navigate('AddAccommodationScreen')} style={styles.memobutton}>
             <Text>mémo d'achats</Text>
           </TouchableOpacity>
         </View>
+        <View style={{ height: 1, backgroundColor: 'black' }} />
+      </View>
       );
   
       setAccommodation((prevAccommodation) => [...prevAccommodation, newAccommodation]);
@@ -47,12 +52,13 @@ export default function MyAccommodationsScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={{fontSize:30}}>Mes Hébergements</Text>
-    {/* <View>{accommodation}</View>   */}
-      <Text>MyAccommodationsScreen === Page de tous les hébergements (navigation par tab)</Text>
+    <ScrollView style={styles.scroll}>
+      {accommodation}</ScrollView>  
+      
       <View style={styles.containerbutton}>
         <TouchableOpacity onPress={() => navigation.navigate('AddAccommodation')} style={styles.button} activeOpacity={0.8}>
           <LinearGradient
-     colors={['#CD83FD', '#FAB28F', '#FFE279','white']}
+     colors={[ '#FAB28F', 'white','white']}
      start={{ x: 1.0, y: 0.0 }} end={{ x: 1.0, y: 1.0 }}
      height={50}
      borderRadius={20}
@@ -74,8 +80,13 @@ const styles = StyleSheet.create({
     marginTop: Platform.OS === "android" ? 37 : 0,
     backgroundColor: '#DDD'
   },
+  scroll: {
+    heigth:500,
+  },
   containerbutton:{
-    paddingTop:500,
+    paddingTop:40,
+    marginBottom:200,
+
     display: 'flex',
     flexDirection:'column',
     alignItems:'center',
@@ -91,16 +102,16 @@ const styles = StyleSheet.create({
   },
   
   accomodationcontainer: {
+    marginTop:15,
     display: 'flex',
     flexDirection:'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     height:120,
     paddingTop: 8,
-    width: '100%',
-    marginTop: 30,  
+    width: '100%', 
     backgroundColor: 'white',
-    paddingLeft:20,
+    paddingLeft:0,
     paddingRight:20,
   },
   memobutton: {
