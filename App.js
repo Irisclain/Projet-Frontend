@@ -2,8 +2,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-// import ChatScreen from './screens/ChatScreen';
-import AddAccommodationScreen from './screens/AddAccommodationScreen';
+import ChatScreen from './screens/ChatScreen';
+import MessageScreen from './screens/MessageScreen';
+/*import AddAccommodationScreen from './screens/AddAccommodationScreen';
 import AgenciesScreen from './screens/AgenciesScreen';
 import HomeScreen from './screens/HomeScreen';
 import MessageScreen from './screens/MessageScreen';
@@ -18,13 +19,13 @@ import ServiceProvidersScreen from './screens/ServiceProvidersScreen';
 // import { configureStore } from '@reduxjs/toolkit';
 // import user from './reducers/user';
 // import message from './reducers/message';
-// import accommodation from './reducers/accommodation';
+// import accommodation from './reducers/accommodation';*/
 
 
 const Stack = createNativeStackNavigator();
-const Tab = createMaterialTopTabNavigator();
+//const Tab = createMaterialTopTabNavigator();
 
-const TabNavigator = () => {
+/*const TabNavigator = () => {
   return (
     <Tab.Navigator 
     // screenOptions={({ route }) => ({
@@ -52,12 +53,12 @@ const TabNavigator = () => {
       <Tab.Screen name="AddAccommodation" component={AddAccommodationScreen} />
     </Tab.Navigator>
   );
-};
+};*/
 
     // <Provider store={store}>
     // </Provider>
 
-export default function App() {
+/*export default function App() {
   return (
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -71,5 +72,17 @@ export default function App() {
       
     
   );
+}*/
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Message" component={MessageScreen} />
+        <Stack.Screen name="Chat" component={ChatScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }
+
 // okok
