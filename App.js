@@ -21,11 +21,13 @@ import {
   Dimensions,
   Image,
   ImageBackground,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
+import {StatusBarStyle} from 'react-native';
 
 // import { Provider } from 'react-redux';
 // import { configureStore } from '@reduxjs/toolkit';
@@ -84,20 +86,27 @@ export default function App() {
 
   return (
     <NavigationContainer>
- {/* <Header navigation={navigation} accommodation=''/> */}
-<Header/>
-<Stack.Navigator screenOptions={{ headerShown: false }}>
-<Stack.Screen name="Home" component={HomeScreen} />
-<Stack.Screen name="OwnerSignUp" component={OwnerSignUpScreen} />
-<Stack.Screen name="ServiceProviderSignUp" component={ServiceProviderSignUpScreen} />
-<Stack.Screen name="MyAccommodations" component={MyAccommodationsScreen} />
-<Stack.Screen name="AddAccommodation" component={AddAccommodationScreen} />
-{/* <Stack.Screen name="ServiceProviders" component={ServiceProvidersScreen} options={{ title: 'Prestations' }} /> */}
-<Stack.Screen name="Message" component={MessageScreen} />
-<Stack.Screen name="Chat" component={ChatScreen} />
-<Stack.Screen name="TabNavigator" component={TabNavigator} />
-</Stack.Navigator>
-</NavigationContainer>
+      <StatusBar
+        animated={true}
+        backgroundColor="#61dafb"
+        //barStyle={statusBarStyle}
+        //showHideTransition={statusBarTransition}
+        //hidden={hidden}
+      />
+      {/* <Header navigation={navigation} accommodation=''/> */}
+      <Header/>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="OwnerSignUp" component={OwnerSignUpScreen} />
+      <Stack.Screen name="ServiceProviderSignUp" component={ServiceProviderSignUpScreen} />
+      <Stack.Screen name="MyAccommodations" component={MyAccommodationsScreen} />
+      <Stack.Screen name="AddAccommodation" component={AddAccommodationScreen} />
+      {/* <Stack.Screen name="ServiceProviders" component={ServiceProvidersScreen} options={{ title: 'Prestations' }} /> */}
+      <Stack.Screen name="Message" component={MessageScreen} />
+      <Stack.Screen name="Chat" component={ChatScreen} />
+      <Stack.Screen name="TabNavigator" component={TabNavigator} />
+      </Stack.Navigator>
+    </NavigationContainer>
   )
 }
 
