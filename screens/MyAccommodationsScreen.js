@@ -25,21 +25,6 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 
 
-<<<<<<< HEAD
-export default function MyAccommodationsScreen({ navigation }) {
-    const [accommodation, setAccommodation] = useState([]);
-  
-    useEffect(() => {
-      const newAccommodation = (
-        <View key={accommodation.length}>
-        <View style={{ height: 1, backgroundColor: 'black',marginTop:10 }} />
-        <View style={styles.accomodationcontainer}>        
-          <Image source={require('../assets/icon.png')}
-          style={{height:120, width:130}} />
-          <View>
-            <Text style={{fontSize: 20, marginTop:-40}}>Titre du bien </Text>
-            <Text>Description de l'Appartement</Text> 
-=======
 export default function MyAccommodationsScreen() {
 
   // const accommodationSchema = mongoose.Schema({
@@ -138,7 +123,6 @@ export default function MyAccommodationsScreen() {
             <Text style={styles.accommodationTitle}>{data.name.substring(0, 20)}...</Text>
             </TouchableOpacity>
             <Text>{data.description.substring(0, 76)}...</Text> 
->>>>>>> 91a644609b9962d6c003ce7e300428f8d424d195
           </View>
           {/* <TouchableOpacity onPress={() => navigation.navigate('AddAccommodationScreen')} style={styles.memobutton}>
             <Text>mémo d'achats</Text>

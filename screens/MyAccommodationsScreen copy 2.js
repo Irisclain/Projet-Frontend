@@ -1,4 +1,4 @@
-import React from "react";
+/*import React from "react";
 import { useState, useEffect } from 'react';
 import {LinearGradient} from 'expo-linear-gradient';
 import {
@@ -224,4 +224,4 @@ const styles = StyleSheet.create({
     borderRadius:40,
     marginBottom:10,
   },  
-});
+});*/
