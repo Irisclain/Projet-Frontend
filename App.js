@@ -36,7 +36,6 @@ import {
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialTopTabNavigator();
-//  tabBarOptions={{ style: styles.tabBar }}
 const TabNavigator = () => {
   return (
     <Tab.Navigator 
@@ -91,7 +90,7 @@ export default function App() {
 <Stack.Screen name="Home" component={HomeScreen} />
 <Stack.Screen name="OwnerSignUp" component={OwnerSignUpScreen} />
 <Stack.Screen name="ServiceProviderSignUp" component={ServiceProviderSignUpScreen} />
-<Stack.Screen name="MyAccommodations" component={MyAccommodationsScreen} options={{ tabBarShowLabel: false, style: styles.labelHidden }} />
+<Stack.Screen name="MyAccommodations" component={MyAccommodationsScreen} />
 <Stack.Screen name="AddAccommodation" component={AddAccommodationScreen} />
 {/* <Stack.Screen name="ServiceProviders" component={ServiceProvidersScreen} options={{ title: 'Prestations' }} /> */}
 <Stack.Screen name="Message" component={MessageScreen} />
@@ -126,16 +125,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     justifyContent: 'center',
     marginRight: 20,
-  },
-  labelHidden: {
-    height: 0,
-    width: 0,
-    overflow: 'hidden',
-  },
-  tabBar: {
-    backgroundColor:'red',
-    borderWidth:1,
-    borderColor: 'green',
   },
 });
 

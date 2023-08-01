@@ -35,7 +35,6 @@ export default function MyAccommodationsScreen() {
   //   price: Number,
   //   distribution: Array,
   //  });
-    const navigation = useNavigation();
 
     const fauxHerbergements=[{
       name: "Appartement Cosy au Cœur de la Ville",
@@ -111,6 +110,12 @@ export default function MyAccommodationsScreen() {
     }
     ]
 
+
+    
+    const navigation = useNavigation();
+
+
+
     const accommodations = fauxHerbergements.map((data, i) => {
       return (
         <View style={styles.accommodationContainer} key={i}>
@@ -119,7 +124,7 @@ export default function MyAccommodationsScreen() {
           style={styles.accommodationPicture}
           />
           <View style={styles.accommodationText}>
-            <TouchableOpacity onPress={() => navigation.navigate('Reservations')}>
+            <TouchableOpacity onPress={() => navigation.navigate('TabNavigator')}>
             <Text style={styles.accommodationTitle}>{data.name.substring(0, 20)}...</Text>
             </TouchableOpacity>
             <Text>{data.description.substring(0, 76)}...</Text> 

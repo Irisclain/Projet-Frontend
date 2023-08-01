@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    marginTop: Platform.OS === "android" ? 37 : 0,
+    backgroundColor: '#fff',
   },
   image: {
     width: 300,
