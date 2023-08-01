@@ -196,7 +196,7 @@ distriInput: {
   },
   image: {
     width: 140,
-    height: 120,
+    height: 100,
     borderRadius: 10,
     marginLeft:-20,
     marginTop:-30,
@@ -241,7 +241,7 @@ distriInput: {
     fontSize: 16,
   },
   modalView: {
-    margin: 20,
+    marginTop: 350,
     backgroundColor: 'white',
     borderRadius: 20,
     shadowColor: '#000',
