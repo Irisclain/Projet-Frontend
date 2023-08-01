@@ -26,7 +26,6 @@ export default function AgenciesScreen({ navigation }) {
   return (
       <SafeAreaView style={styles.container}>
         <View style={styles.haut}>
-          <Header navigation={navigation} accommodation=''/>
           <View style={styles.bider}>
             <Text>//AgenciesScreen === Page pour choisir ses canaux de distribution (navigation par tab)</Text>
           </View>

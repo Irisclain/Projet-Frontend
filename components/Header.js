@@ -15,6 +15,20 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 export default function Header(props) {
   
+
+
+  // <View>
+  //   <ImageBackground source={require('../assets/Fond-banniere.png')} style={styles.header}>
+  //     <TouchableOpacity onPress={() => props.navigation.navigate('Home')} activeOpacity={0.3}>
+  //       <Image source={require('../assets/Logo-banniere.png')} style={styles.logo} />
+  //     </TouchableOpacity>
+  //     <Text style={styles.accommodationTitle}>{props.accommodation}</Text>        
+  //   </ImageBackground>
+  // </View>
+
+
+
+
   return (
       <View>
         <ImageBackground source={require('../assets/Fond-banniere.png')} style={styles.header}>

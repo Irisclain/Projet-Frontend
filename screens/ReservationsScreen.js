@@ -26,9 +26,8 @@ export default function ReservationsScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.haut}>
-        <Header navigation={navigation} accommodation=''/>
         <View style={styles.bider}>
-          <Text style={styles.textButton}>(//bas de page//)Messagerie</Text>
+          <Text style={styles.textButton}>Corps de la page ReservationScreen</Text>
           </View>
         </View>
         <Footer navigation={navigation} messageButton={true}/>
@@ -41,8 +40,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    marginTop: Platform.OS === "android" ? 37 : 0,
-    backgroundColor: '#DDD'
+    backgroundColor: '#fff',
   },
   button: {
     alignItems: 'center',
@@ -57,5 +55,16 @@ const styles = StyleSheet.create({
     height: 30,
     fontWeight: '600',
     fontSize: 16,
+  },
+  haut: {
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    width: '100%',
+  },
+  bider: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    backgroundColor: '#fff',
   },
 });

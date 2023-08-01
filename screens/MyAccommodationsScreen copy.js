@@ -1,4 +1,4 @@
-import React from "react";
+/*import React from "react";
 import { useState, useEffect } from 'react';
 import {LinearGradient} from 'expo-linear-gradient';
 import {
@@ -23,13 +23,14 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 
 export default function MyAccommodationsScreen({ navigation }) {
+
     const [accommodation, setAccommodation] = useState([]);
   
     useEffect(() => {
       const newAccommodation = (
         <View>
-        <View style={{ height: 1, backgroundColor: 'black',marginTop:10 }} />
-        <View style={styles.accomodationcontainer}>        
+        <View style={{ height: 1, backgroundColor: 'black' }} />
+        <View  style={styles.accomodationcontainer}>        
           <Image source={require('../assets/icon.png')}
           style={{height:120, width:130}} />
           <View>
@@ -50,25 +51,14 @@ export default function MyAccommodationsScreen({ navigation }) {
    
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={{fontSize:30, marginTop:10, marginBottom:10,textDecorationLine: "underline",}}>Mes Hébergements</Text>
+      <Text style={{fontSize:30}}>Mes Hébergements</Text>
     <ScrollView style={styles.scroll}>
       {accommodation}</ScrollView>  
       
       <View style={styles.containerbutton}>
-        <TouchableOpacity onPress={() => navigation.navigate('TabNavigator')} style={styles.button} activeOpacity={0.8}>
-          <LinearGradient
-     colors={[ '#FAB28F', 'pink','white']}
-     start={{ x: 1.0, y: 0.0 }} end={{ x: 1.0, y: 1.0 }}
-     height={50}
-     borderRadius={20}
-     
-     >
-            <Text style={styles.textButton}>Lien vers les réservations d'un hébergement</Text>
-            </LinearGradient>
-        </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('AddAccommodation')} style={styles.button} activeOpacity={0.8}>
           <LinearGradient
-     colors={[ '#FAB28F', 'pink','white']}
+     colors={[ '#FAB28F', 'white','white']}
      start={{ x: 1.0, y: 0.0 }} end={{ x: 1.0, y: 1.0 }}
      height={50}
      borderRadius={20}
@@ -88,7 +78,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     marginTop: Platform.OS === "android" ? 37 : 0,
-    backgroundColor: 'white'
+    backgroundColor: '#DDD'
   },
   scroll: {
     heigth:500,
@@ -96,6 +86,7 @@ const styles = StyleSheet.create({
   containerbutton:{
     paddingTop:40,
     marginBottom:200,
+
     display: 'flex',
     flexDirection:'column',
     alignItems:'center',
@@ -111,7 +102,7 @@ const styles = StyleSheet.create({
   },
   
   accomodationcontainer: {
-    
+    marginTop:15,
     display: 'flex',
     flexDirection:'row',
     justifyContent: 'space-between',
@@ -120,6 +111,7 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     width: '100%', 
     backgroundColor: 'white',
+    paddingLeft:0,
     paddingRight:20,
   },
   memobutton: {
@@ -130,6 +122,5 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius:40,
-    marginBottom:10,
   },  
-});
+});*/
