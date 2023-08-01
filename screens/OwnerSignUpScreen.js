@@ -10,6 +10,7 @@ import {
   View,
   Modal,
   Pressable,
+  Alert
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
@@ -122,7 +123,7 @@ const styles = StyleSheet.create({
   },
   centeredView: {
     position: 'absolute',
-    top: 235,
+    top: 200,
     left: 220,
     right: 20,
   },

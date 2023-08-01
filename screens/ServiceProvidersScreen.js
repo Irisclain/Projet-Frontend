@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    marginTop: Platform.OS === 'android' ? 37 : 0,
+    //marginTop: Platform.OS === 'android' ? 37 : 0,
     backgroundColor: '#DDD',
   },
   button: {
@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    marginTop: '-50%',
+    marginTop: '-45%',
     backgroundColor: '#f0f0f0',
   },
   navigationButton: {

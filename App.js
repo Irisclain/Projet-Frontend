@@ -39,11 +39,14 @@ const Tab = createMaterialTopTabNavigator();
 //  tabBarOptions={{ style: styles.tabBar }}
 const TabNavigator = () => {
   return (
-    <Tab.Navigator screenOptions={() => ({
+    <Tab.Navigator 
+    screenOptions={{
       tabBarActiveTintColor: '#FF7A00',
-      tabBarInactiveTintColor: '#CD43FD',
-      tabBarStyle: {marginTop: -10, marginBottom:12}
-    })}>
+      tabBarInactiveTintColor: 'black',
+      style: { marginTop: -10, marginBottom: 12 },
+      tabBarIndicatorStyle: { backgroundColor: '#FF7A00' },
+    }}
+    >
       <Tab.Screen name="Reservations" component={ReservationsScreen} options={{  title: 'Réservations' }} />
       <Tab.Screen name="Agencies" component={AgenciesScreen} options={{  title: 'Distribution' }} />
       <Tab.Screen name="ServiceProviders" component={ServiceProvidersScreen} options={{  title: 'Prestations' }} />
@@ -108,7 +111,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingTop:12,
     paddingBottom:12,
-    marginTop: Platform.OS === "android"? 37 : 0,
+    //marginTop: Platform.OS === "android"? 37 : 0,
   },
   logo:{
     top: 5,

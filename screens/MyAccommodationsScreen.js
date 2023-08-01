@@ -27,7 +27,7 @@ export default function MyAccommodationsScreen({ navigation }) {
   
     useEffect(() => {
       const newAccommodation = (
-        <View>
+        <View key={accommodation.length}>
         <View style={{ height: 1, backgroundColor: 'black',marginTop:10 }} />
         <View style={styles.accomodationcontainer}>        
           <Image source={require('../assets/icon.png')}

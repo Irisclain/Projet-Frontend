@@ -136,9 +136,6 @@ export default function MessageScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.bannerbackground}/>
-      <Image source={require('../assets/Fond-banniere.png')} style={styles.blackBanner} />
-        <Image source={require('../assets/Logo-banniere.png')} style={styles.bannerImage} />
 
       <View style={styles.inset}>
       <Text style={styles.title}>Messagerie</Text>
@@ -411,7 +408,6 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       backgroundColor: 'white',
       paddingTop: 40,
-      marginTop: 25,
     },
   header: {
     width: 162,
