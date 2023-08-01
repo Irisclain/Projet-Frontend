@@ -41,7 +41,7 @@ const TabNavigator = () => {
   return (
     <Tab.Navigator screenOptions={() => ({
       tabBarActiveTintColor: '#FF7A00',
-      tabBarInactiveTintColor: '#CD43FD',
+      tabBarInactiveTintColor: 'black',
       tabBarStyle: {marginTop: -10, marginBottom:12}
     })}>
       <Tab.Screen name="Reservations" component={ReservationsScreen} options={{  title: 'Réservations' }} />
