@@ -25,6 +25,10 @@ export default function HomeScreen({ navigation }) {
   const handleServiceProviderSignUp = () => {
       navigation.navigate('ServiceProviderSignUp');
   };
+
+  const handleConnection = () => {
+      navigation.navigate('MyAccommodations');
+  };
   
   return (
       <SafeAreaView style={styles.container}>
@@ -62,12 +66,6 @@ export default function HomeScreen({ navigation }) {
             <TouchableOpacity onPress={() => handleConnection()} style={styles.signUpButtonEmail} activeOpacity={0.8}>
               <Image source={require('../assets/Logo-email.png')} style={styles.logoEmail} />
                 <Text style={styles.textButton}>Via email</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleConnection()} style={styles.buttons} activeOpacity={0.8}>
-                <Text style={styles.textButton}>(//après connection//) Mes hébergements</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Message')} style={styles.buttons} activeOpacity={0.8}>
-                <Text style={styles.textButton}>(//Vers la Messagerie//)</Text>
             </TouchableOpacity>
           </View>
         </View>

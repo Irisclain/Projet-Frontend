@@ -180,7 +180,7 @@ distriInput: {
   fontSize: 18,
   paddingHorizontal: 12,
   paddingVertical: 11,
-  color: '#545454',
+  color: '#868686',
   flexDirection: 'row',
   justifyContent:'space-between',
 },
