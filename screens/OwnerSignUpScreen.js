@@ -38,7 +38,7 @@ export default function OwnerSignUpScreen({ navigation }) {
             <Text style={styles.civiInput}> Civilité : {civilite ? ` ${civilite}` : ''} </Text>
             <View style={styles.buttons}> 
             <TouchableOpacity onPress={handlePressOpen}>
-              <FontAwesome name="angle-down" color="black" size={25} />
+              <FontAwesome name="angle-down" color="#868686" size={25} />
             </TouchableOpacity>
             </View>
             <Modal
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     paddingHorizontal: 12,
     paddingVertical: 11,
-    color: '#545454',
+    color: '#868686',
     flexDirection: 'row',
     justifyContent:'space-between',
   },
