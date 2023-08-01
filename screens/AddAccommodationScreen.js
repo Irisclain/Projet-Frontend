@@ -55,7 +55,6 @@ const handleSubmit =  () => {
 
   return (
     <View style={styles.container}>
-      <Header navigation={navigation} accommodation=''/>
         <Text style={{fontSize:30, marginTop:10, marginBottom:20,textDecorationLine: "underline",alignItems:'center'}}>Ajouter un Hébergement</Text>
         <View style={styles.container1}>
           <View style={styles.picturename}>
