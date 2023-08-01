@@ -23,10 +23,9 @@ import Footer from '../components/Footer';
 const distributeurs = [
   {
     data: [
-      { image: require('../assets/faux-appart-1.jpg'), selected: false },
-      { name: 'Airbnb', selected: false },
-      { name: 'Booking', selected: false },
-      { name: 'Expedia', selected: false },
+      { image: require('../assets/Logo-Booking.png'), selected: false },
+      { image: require('../assets/Logo-Airbnb.png'), selected: false },
+      { image: require('../assets/Logo-Expedia.png'), selected: false },
     ],
     selectedAll: false,
   },
@@ -79,12 +78,12 @@ const styles = StyleSheet.create({
     marginTop: Platform.OS === "android" ? 37 : 0,
   },
   image: {
-    width: 200,
-    height: 150,
-    marginLeft: 10,
+    width: 300,
+    height: 80,
+    marginLeft: 0,
   },
   modalTitle: {
-    fontSize: 20,
+    fontSize: 10,
     marginHorizontal: 10,
   },
   item: {
