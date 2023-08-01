@@ -52,23 +52,10 @@ export default function MyAccommodationsScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={{fontSize:30}}>Mes Hébergements</Text>
-
-
     <ScrollView style={styles.scroll}>
       {accommodation}</ScrollView>  
       
-      <View style={styles.containerbutton}>      
-        <TouchableOpacity onPress={() => navigation.navigate('Reservations')} style={styles.button} activeOpacity={0.8}>
-          <LinearGradient
-     colors={[ '#FAB28F', 'white','white']}
-     start={{ x: 1.0, y: 0.0 }} end={{ x: 1.0, y: 1.0 }}
-     height={50}
-     borderRadius={20}
-     
-     >
-            <Text style={styles.textButton}>Réservations d'un hébergement</Text>
-            </LinearGradient>
-        </TouchableOpacity>      
+      <View style={styles.containerbutton}>
         <TouchableOpacity onPress={() => navigation.navigate('AddAccommodation')} style={styles.button} activeOpacity={0.8}>
           <LinearGradient
      colors={[ '#FAB28F', 'white','white']}
