@@ -80,7 +80,7 @@ export default function MyAccommodationsScreen() {
       name: "Appartement Hanté dans les quartiers Louches",
       picture: require("../assets/faux-appart-6.jpg"),
       address: "3 rue du Coupe-Gorge, Kitej",
-      description: "Vivez une aventure trépidante ainsi que vos derniers instants, dans cette demeure ayant appartenu aux plus grands psychopathes de l'histoire. Décoré avec goût mais en hâte, cet endroit maudit vous offrira des instants inoubliables, que vous n'aurez pas le temps d'oublier.",
+      description: "Vivez une aventure trépidante ainsi que vos derniers instants, dans cette demeure ayant appartenu aux plus grands psychopathes de l'histoire. Décoré avec goût mais en hâte, cet endroit maudit vous offrira des instants inoubliables, que vous n'aurez pas le temps d'oublier. Volcan à cinq minutes à pied.",
       price: 310,
       distribution: ["AirBNB"],
     },
