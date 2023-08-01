@@ -8,6 +8,9 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  SectionList,
+  Image,
+
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Header from '../components/Header';
@@ -17,19 +20,52 @@ import Footer from '../components/Footer';
 // import {  } from '../reducers/accommodations';
 // import {  } from '../reducers/messages';
 
-
+const distributeurs = [
+  {
+    data: [
+      { image: require('../assets/faux-appart-1.jpg'), selected: false },
+      { name: 'Airbnb', selected: false },
+      { name: 'Booking', selected: false },
+      { name: 'Expedia', selected: false },
+    ],
+    selectedAll: false,
+  },
+];
 
 
 
 export default function AgenciesScreen({ navigation }) {
-
+  const [dataCont, setDataCont] = useState(distributeurs);
+  
+  const handleItemSelection2 = (itemIndex) => {
+    const updatedData = [...dataCont];
+    const sectionIndex = 0;
+    updatedData[sectionIndex].data[itemIndex].selected = !updatedData[sectionIndex].data[itemIndex].selected;
+    setDataCont(updatedData);
+  };
   return (
       <SafeAreaView style={styles.container}>
-        <View style={styles.haut}>
-          <View style={styles.bider}>
-            <Text>//AgenciesScreen === Page pour choisir ses canaux de distribution (navigation par tab)</Text>
-          </View>
-        </View>
+        <Text>Ou voulez-vous que votre annonce apparaisse ?</Text>
+        <SectionList
+            sections={distributeurs}
+            keyExtractor={(item, index) => item + index}
+            renderItem={({ item, index }) => (
+              <View style={styles.item}>
+                <View style={styles.checkboxContainer}>
+                  <TouchableOpacity onPress={() => handleItemSelection2(index)} style={styles.checkbox}>
+                    <FontAwesome
+                      name={item.selected ? 'check-square-o' : 'square-o'}
+                      color={item.selected ? 'green' : 'black'}
+                      size={40}
+                    />
+                  </TouchableOpacity>
+                  <Text style={styles.modalTitle}>{item.name}</Text>
+                  <Image source={item.image} style={styles.image} />
+                </View>
+              </View>
+            )}
+            
+          />
         <Footer navigation={navigation} messageButton={true}/>
       </SafeAreaView>
   );
@@ -41,7 +77,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     marginTop: Platform.OS === "android" ? 37 : 0,
-    backgroundColor: '#DDD'
+  },
+  image: {
+    width: 200,
+    height: 150,
+    marginLeft: 10,
+  },
+  modalTitle: {
+    fontSize: 20,
+    marginHorizontal: 10,
+  },
+  item: {
+    borderRadius: 30,
+    padding: 20,
+    marginVertical: 8,
+  },
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   button: {
     alignItems: 'center',
