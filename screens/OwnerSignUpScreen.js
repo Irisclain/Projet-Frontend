@@ -18,7 +18,7 @@ export default function OwnerSignUpScreen({ navigation }) {
   const [civilite, setCivilite] = useState('');
 
   const handleConnection = () => {
-    navigation.navigate('TabNavigator');
+    navigation.navigate('MyAccommodations');
   };
 
   const handlePress = (e) => {

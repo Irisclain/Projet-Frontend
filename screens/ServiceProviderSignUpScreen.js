@@ -19,7 +19,7 @@ export default function ServiceProviderSignUpScreen({ navigation }) {
   const [presta, setPresta] = useState('');
 
   const handleConnection = () => {
-    navigation.navigate('TabNavigator');
+    navigation.navigate('MyAccommodations');
   };
 
   const handlePress = (e) => {
