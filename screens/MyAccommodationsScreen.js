@@ -147,7 +147,7 @@ export default function MyAccommodationsScreen({ navigation }) {
     </ScrollView>  
       
       <View style={styles.containerbutton}>
-        <TouchableOpacity onPress={() => navigation.navigate('Reservations')} style={styles.button} activeOpacity={0.8}>
+        <TouchableOpacity onPress={() => navigation.navigate('TabNavigator')} style={styles.button} activeOpacity={0.8}>
           <LinearGradient
      colors={[ '#FAB28F', 'pink','white']}
      start={{ x: 1.0, y: 0.0 }} end={{ x: 1.0, y: 1.0 }}
