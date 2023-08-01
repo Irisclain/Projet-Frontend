@@ -73,6 +73,7 @@ export default function App() {
           <Stack.Screen name="OwnerSignUp" component={OwnerSignUpScreen} />
           <Stack.Screen name="AddAccommodation" component={AddAccommodationScreen} />
           <Stack.Screen name="ServiceProviderSignUp" component={ServiceProviderSignUpScreen} />
+          <Stack.Screen name="ServiceProviders" component={ServiceProvidersScreen} />
           <Stack.Screen name="Message" component={MessageScreen} />
           <Stack.Screen name="Chat" component={ChatScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
