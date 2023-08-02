@@ -30,22 +30,20 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {StatusBarStyle} from 'react-native';
-import currentRoute  from './reducers/currentRoute';
-import currentAccommodation from './reducers/currentAccommodation';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-// import user from './reducers/user';
+import {StatusBarStyle} from 'react-native';
+import currentRoute  from './reducers/currentRoute';
+import currentAccommodation from './reducers/currentAccommodation';
+import user from './reducers/user';
 // import message from './reducers/message';
-// import accommodation from './reducers/accommodation';
-
+// import accommodation from './reducers/accommodation';*/
 
 const store = configureStore({
-  reducer: { currentRoute, currentAccommodation },
+  reducer: { currentAccommodation, currentRoute, user },
 });
-
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialTopTabNavigator();
@@ -74,7 +72,7 @@ const TabNavigator = () => {
 
     const Header = () => {
       const currentRoute = useSelector((state) => state.currentRoute.value);      
-      // console.log ('nom de la page : ', currentRoute)
+      console.log ('nom de la page : ', currentRoute)
 
       const navigation=useNavigation();
       const navigationRef = useNavigationContainerRef();
@@ -82,7 +80,7 @@ const TabNavigator = () => {
         return ;
       } else {
         let destination = 'MyAccommodations';
-        if (currentRoute==='ownerSignup' || currentRoute==='serviceProviderSignup'){
+        if (currentRoute==='OwnerSignUp' || currentRoute==='ServiceProviderSignUp'){
           destination = 'Home';
         }
         
@@ -97,7 +95,7 @@ const TabNavigator = () => {
           </View>
         );
         }
-    };    
+    };     
 
 
 
@@ -107,7 +105,7 @@ const TabNavigator = () => {
 export default function App() {
 
   return (
-    <Provider store={store}>
+  <Provider store={store}>
     <NavigationContainer>
       <StatusBar animated={false} backgroundColor="#000"/>
       <Header/>
@@ -124,7 +122,7 @@ export default function App() {
       <Stack.Screen name="TabNavigator" component={TabNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
-    </Provider>
+  </Provider>
   )
 }
 

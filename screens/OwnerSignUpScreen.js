@@ -1,88 +1,101 @@
 import React from "react";
-import { useState } from 'react';
 import {
   Image,
-  SafeAreaView,
+  KeyboardAvoidingView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
-  Modal,
-  Pressable,
-  Alert
 } from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import FontAwesome from'react-native-vector-icons/FontAwesome';
+import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { updateCurrentRoute } from '../reducers/currentRoute';
+import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
+import { addUser } from '../reducers/user';
+
+const BACKEND_ADDRESS = 'http://192.168.1.77:3000';
 
 export default function OwnerSignUpScreen({ navigation }) {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [civilite, setCivilite] = useState('');
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    dispatch(updateCurrentRoute('OwnerSignUp'));    
+  }, []);
 
-  const handleConnection = () => {
-    navigation.navigate('MyAccommodations');
-  };
+  const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    firstname: '',
+    lastname: '',
+    username: '',
+    email: '',
+    password: '',
+    role: 'propriétaire',
+  });
 
-  const handlePress = (e) => {
-    setModalVisible(false);
-    setCivilite(e);
-  };
 
-  const handlePressOpen = () => {
-    setModalVisible(true);
+  const handleNewUser = () => {
+    fetch(`${BACKEND_ADDRESS}/users/signup`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => {
+        if (response.ok) {
+          console.log('Utilisateur enregistré avec succès!');
+          dispatch(addUser(formData));
+          navigation.navigate('MyAccommodations');
+        } else {
+          console.error('Erreur lors de l\'enregistrement de l\'utilisateur');
+        }
+      })
+      .catch((error) => {
+        console.error('Erreur lors de l\'enregistrement de l\'utilisateur:', error);
+      });
   };
   
   return (
-      <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
          <View style={styles.haut}>
         <Text style={styles.title}>Inscription Propriétaire</Text>
           <View style={styles.bider}>
-            <Text style={styles.civiInput}> Civilité : {civilite ? ` ${civilite}` : ''} </Text>
-            <View style={styles.buttons}> 
-            <TouchableOpacity onPress={handlePressOpen}>
-              <FontAwesome name="angle-down" color="#868686" size={25} />
-            </TouchableOpacity>
+            <TextInput placeholder="Nom..." style={styles.inputs} value={formData.lastname} onChangeText={(text) => setFormData({ ...formData, lastname: text })}/>
+            <TextInput placeholder="Prénom..." style={styles.inputs} value={formData.firstname} onChangeText={(text) => setFormData({ ...formData, firstname: text })}/>
+            <TextInput placeholder="Nom d'utilisateur..." style={styles.inputs} value={formData.username} onChangeText={(text) => setFormData({ ...formData, username: text })}/>
+            <TextInput placeholder="Email..." style={styles.inputs} value={formData.email} onChangeText={(text) => setFormData({ ...formData, email: text })}/>
+            <View style={styles.inputsContainer}>
+              <TextInput
+                secureTextEntry={!showPassword}
+                placeholder="*** Mot de passe ***"
+                style={styles.inputs}
+                value={formData.password}
+                onChangeText={(text) => setFormData({ ...formData, password: text })}/>
+              <TouchableOpacity
+                onPress={() => setShowPassword((prevShowPassword) => !prevShowPassword)}
+                style={styles.iconContainer}>
+                <FontAwesome name={showPassword ? 'eye' : 'eye-slash'} size={24} color="#a6a6a6" />
+              </TouchableOpacity>
             </View>
-            <Modal
-              animationType="none"
-              transparent={true}
-              visible={modalVisible}
-              onRequestClose={() => {
-                Alert.alert('Modal has been closed.');
-                setModalVisible(!modalVisible);
-              }}>
-              <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                <Pressable onPress={() => handlePress('Monsieur')}>
-                  <Text style={styles.modalText}>Monsieur</Text>
-                </Pressable>
-                <Pressable onPress={() => handlePress('Madame')}>
-                  <Text style={styles.modalText}>Madame</Text>
-                </Pressable>
-                </View>
-              </View>
-            </Modal>
-            
-            <TextInput placeholder="Nom..." style={styles.inputs}/>
-            <TextInput placeholder="Prénom..." style={styles.inputs}/>
-            <TextInput placeholder="Email..." style={styles.inputs}/>
-            <TextInput placeholder="*** Mot de passe ***" style={styles.inputs}/>
-            <TouchableOpacity onPress={() => handleConnection()} style={styles.button} activeOpacity={0.8}>
+            <TouchableOpacity onPress={() => handleNewUser()} style={styles.button} activeOpacity={0.8}>
                 <Text style={styles.textButton}>S'inscrire</Text>
             </TouchableOpacity>
             <Text style={styles.text}>ou</Text>
             <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={() => handleConnection()} style={styles.signUpButtonFb} activeOpacity={0.8}>
+            <TouchableOpacity onPress={() => handleNewUser()} style={styles.signUpButtonFb} activeOpacity={0.8}>
             <Image source={require('../assets/Logo-fb.png')} style={styles.logoFb} />
                 <Text style={styles.buttonText}>Via Facebook</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleConnection()} style={styles.signUpButtonGoogle} activeOpacity={0.8}>
+            <TouchableOpacity onPress={() => handleNewUser()} style={styles.signUpButtonGoogle} activeOpacity={0.8}>
             <Image source={require('../assets/Logo-google.png')} style={styles.logoGoogle} />
                 <Text style={styles.buttonText}>Via Google</Text>
             </TouchableOpacity>
             </View>
           </View>
         </View>
-      </SafeAreaView>
+      </KeyboardAvoidingView>
   );
 }
 
@@ -104,11 +117,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#a6a6a6',
   },
-  buttons:{
-    position: 'absolute',
-    right: 100,
-    top: 13,
-  }, 
   buttonContainer: {
     display:'flex',
     flexDirection: 'row',
@@ -120,26 +128,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     alignSelf: 'center',
     marginTop: 30,
-  },
-  centeredView: {
-    position: 'absolute',
-    top: 200,
-    left: 220,
-    right: 20,
-  },
-  civiInput: {
-    width: 280,
-    height: 50, 
-    borderWidth: 1,
-    borderColor: '#a6a6a6',
-    borderRadius: 10,
-    marginBottom: 10,
-    fontSize: 18,
-    paddingHorizontal: 12,
-    paddingVertical: 11,
-    color: '#868686',
-    flexDirection: 'row',
-    justifyContent:'space-between',
   },
   container: {
     flex: 1,
@@ -161,6 +149,15 @@ const styles = StyleSheet.create({
     fontSize: 18,
     paddingHorizontal: 12,
   },
+  inputsContainer: {
+    position: 'relative',
+  },
+  iconContainer: {
+    position: 'absolute',
+    right: 15,
+    bottom: 33,
+    zIndex: 1,
+  },
   logoFb:{
     width: 27,
     height: 33,
@@ -178,24 +175,6 @@ const styles = StyleSheet.create({
     left: '50%',
     marginLeft: -13.5,
     marginTop: -26.5, 
-  },
-  modalText: {
-    margin: 5,
-    textAlign: 'center',
-    fontSize: 16,
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
   },
   signUpButtonFb: {
     justifyContent: 'center',
