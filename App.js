@@ -29,12 +29,15 @@ import {
 } from 'react-native';
 import {StatusBarStyle} from 'react-native';
 
-// import { Provider } from 'react-redux';
-// import { configureStore } from '@reduxjs/toolkit';
-// import user from './reducers/user';
 // import message from './reducers/message';
 // import accommodation from './reducers/accommodation';*/
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import user from './reducers/user';
 
+const store = configureStore({
+  reducer: { user },
+});
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialTopTabNavigator();
@@ -85,6 +88,7 @@ const TabNavigator = () => {
 export default function App() {
 
   return (
+  <Provider store={store}>
     <NavigationContainer>
       <StatusBar
         animated={true}
@@ -107,6 +111,7 @@ export default function App() {
       <Stack.Screen name="TabNavigator" component={TabNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
+  </Provider>
   )
 }
 
