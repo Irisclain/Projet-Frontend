@@ -1,6 +1,9 @@
 // import React from "react";
-import { NavigationContainer } from '@react-navigation/native';
-import { useNavigation } from '@react-navigation/native';
+import { 
+  useNavigation, 
+  NavigationContainer,
+  useNavigationContainerRef,
+} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -28,12 +31,20 @@ import {
   View,
 } from 'react-native';
 import {StatusBarStyle} from 'react-native';
-
-// import { Provider } from 'react-redux';
-// import { configureStore } from '@reduxjs/toolkit';
+import currentRoute  from './reducers/currentRoute';
+import currentAccommodation from './reducers/currentAccommodation';
+import { configureStore } from '@reduxjs/toolkit';
+import { Provider } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 // import user from './reducers/user';
 // import message from './reducers/message';
-// import accommodation from './reducers/accommodation';*/
+// import accommodation from './reducers/accommodation';
+
+
+const store = configureStore({
+  reducer: { currentRoute, currentAccommodation },
+});
 
 
 const Stack = createNativeStackNavigator();
@@ -55,26 +66,37 @@ const TabNavigator = () => {
   );
 };
 
-    // <Provider store={store}>
-    // </Provider>
+ 
     // ESSAYER : 
     // <SafeAreaProvider store={store}>
     // </SafeAreaProvider>
 
 
     const Header = () => {
-      const navigation = useNavigation();
-    
-      return (
-        <View>
-        <ImageBackground source={require('./assets/Fond-banniere.png')} style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.navigate('MyAccommodations')} activeOpacity={0.3}>
-            <Image source={require('./assets/Logo-banniere.png')} style={styles.logo} />
-          </TouchableOpacity>
-          <Text style={styles.accommodationTitle}></Text>        
-        </ImageBackground>
-        </View>
-      );
+      const currentRoute = useSelector((state) => state.currentRoute.value);      
+      // console.log ('nom de la page : ', currentRoute)
+
+      const navigation=useNavigation();
+      const navigationRef = useNavigationContainerRef();
+      if (currentRoute==='Home'){
+        return ;
+      } else {
+        let destination = 'MyAccommodations';
+        if (currentRoute==='ownerSignup' || currentRoute==='serviceProviderSignup'){
+          destination = 'Home';
+        }
+        
+        return (
+          <View>
+          <ImageBackground source={require('./assets/Fond-banniere.png')} style={styles.header}>
+            <TouchableOpacity onPress={() => navigation.navigate(destination)} activeOpacity={0.3}>
+              <Image source={require('./assets/Logo-banniere.png')} style={styles.logo} />
+            </TouchableOpacity>
+            <Text style={styles.currentAccommodationTitle}></Text>        
+          </ImageBackground>
+          </View>
+        );
+        }
     };    
 
 
@@ -85,15 +107,9 @@ const TabNavigator = () => {
 export default function App() {
 
   return (
+    <Provider store={store}>
     <NavigationContainer>
-      <StatusBar
-        animated={true}
-        backgroundColor="#61dafb"
-        //barStyle={statusBarStyle}
-        //showHideTransition={statusBarTransition}
-        //hidden={hidden}
-      />
-      {/* <Header navigation={navigation} accommodation=''/> */}
+      <StatusBar animated={false} backgroundColor="#000"/>
       <Header/>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Home" component={HomeScreen} />
@@ -101,12 +117,14 @@ export default function App() {
       <Stack.Screen name="ServiceProviderSignUp" component={ServiceProviderSignUpScreen} />
       <Stack.Screen name="MyAccommodations" component={MyAccommodationsScreen} />
       <Stack.Screen name="AddAccommodation" component={AddAccommodationScreen} />
+      <Stack.Screen name="OneAccommodation" component={OneAccommodationScreen} />
       {/* <Stack.Screen name="ServiceProviders" component={ServiceProvidersScreen} options={{ title: 'Prestations' }} /> */}
       <Stack.Screen name="Message" component={MessageScreen} />
       <Stack.Screen name="Chat" component={ChatScreen} />
       <Stack.Screen name="TabNavigator" component={TabNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
+    </Provider>
   )
 }
 
@@ -127,7 +145,7 @@ const styles = StyleSheet.create({
     width: 180,
     height: 50,
   },
-  accommodationTitle:{
+  currentAccommodationTitle:{
     color: 'white',
     fontSize: 14,
     fontWeight: 'bold',
