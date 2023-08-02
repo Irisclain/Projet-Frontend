@@ -49,7 +49,29 @@ const distributeurs = [
   },
 ];
 
-const pickImage = async () => {
+
+const getSelectedItems2 = (data) => {
+  const selectedItems2 = [];
+  data.forEach((section) => {
+    section.data.forEach((item) => {
+      if (item.selected) {
+        selectedItems2.push(item.name);
+        // setFormData({ ... formData, distribution: selectedItems2 });
+        // ;
+      }
+    });
+  });
+  return selectedItems2;
+  
+};
+
+export default function AddAccommodationScreen({ navigation }) {
+  const [selectAllCont, setSelectAllCont] = useState(false);
+  const [image, setImage] = useState(null);
+  const [dataCont, setDataCont] = useState(distributeurs);
+  const selectedItems2 = getSelectedItems2(dataCont);
+
+  const pickImage = async () => {
   // No permissions request is necessary for launching the image library
   let result = await ImagePicker.launchImageLibraryAsync({
     mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -58,7 +80,7 @@ const pickImage = async () => {
     quality: 1,
   });
 
-  console.log(result);
+  
 
   if (!result.canceled) {
     setImage(result.assets[0].uri);
@@ -66,27 +88,15 @@ const pickImage = async () => {
   }
 };
 
-export default function AddAccommodationScreen({ navigation }) {
-  const [selectAllCont, setSelectAllCont] = useState(false);
-  const [image, setImage] = useState(null);
-  const [dataCont, setDataCont] = useState(distributeurs);
-  
-  // const [name, setName] = useState('');
-  // const [address, setAddress] = useState('');
-  // const [description, setDescription] = useState('');
-  // const [planning, setPlanning] = useState('');
-  // const [price, setPrice] = useState('');
-  // const [channels, setChannels] = useState('');
-
   const [formData, setFormData] = useState({
     name: "",
     picture: "",
     address: "",
     description: "",
     price: "",
-    distribution: "",
+    distribution:"",
   });
-  // const dispatch = useDispatch();
+  
 
   const handleNewAccommodation = () => {
     fetch(`${BACKEND_ADDRESS}/accommodation`, {
@@ -116,7 +126,7 @@ export default function AddAccommodationScreen({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
   const handlePressOpen = () => {
     setModalVisible((prevState) =>!prevState);
-    console.log(handlePressOpen);
+  
   };
  
 
@@ -127,12 +137,12 @@ export default function AddAccommodationScreen({ navigation }) {
       !updatedData[sectionIndex].data[itemIndex].selected;
     const allSelected = updatedData[sectionIndex].data.every(
       (item) => item.selected
-      
+     
     );
     updatedData[sectionIndex].selectedAll = allSelected;
     setSelectAllCont(allSelected);
     setDataCont(updatedData);
-    
+     setFormData({ ...formData, distribution: selectedItems2 });console.log(selectedItems2);
   };
 
   return (
@@ -217,7 +227,7 @@ export default function AddAccommodationScreen({ navigation }) {
         >
           <Text style={styles.closeButtonText}>X</Text>
         </TouchableOpacity>
-                <SectionList
+                <SectionList 
                   sections={distributeurs}
                   keyExtractor={(item, index) => item + index}
                   renderItem={({ item, index }) => (
@@ -225,6 +235,11 @@ export default function AddAccommodationScreen({ navigation }) {
                       <TouchableOpacity
                         onPress={() => {
                           handleItemSelection2(index);
+                          {selectedItems2.map((name, index) => (
+                            <Text key={index} >
+                              {name}
+                            </Text>
+                          ))}                           
                         }}
                         style={styles.checkbox}
                       >
@@ -240,16 +255,15 @@ export default function AddAccommodationScreen({ navigation }) {
                 />
               </View>
             </View>
-          </TouchableOpacity>
-          
-        </Modal>
-        
+          </TouchableOpacity>        
+        </Modal>      
         <Button title="Submit" onPress={() => handleNewAccommodation()} />
       </View>
       <Footer navigation={navigation} messageButton={true} />
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   picturename: {
     flexDirection: "row",
