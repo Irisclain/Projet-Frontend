@@ -29,11 +29,8 @@ const distributeurs = [
     ],
     selectedAll: false,
   },
-];
-
-
-
-export default function AgenciesScreen({ navigation }) {
+  
+];export default function AgenciesScreen({ navigation }) {
   const [dataCont, setDataCont] = useState(distributeurs);
   
   const handleItemSelection2 = (itemIndex) => {
@@ -42,9 +39,11 @@ export default function AgenciesScreen({ navigation }) {
     updatedData[sectionIndex].data[itemIndex].selected = !updatedData[sectionIndex].data[itemIndex].selected;
     setDataCont(updatedData);
   };
+
+  
   return (
       <SafeAreaView style={styles.container}>
-        <Text>Ou voulez-vous que votre annonce apparaisse ?</Text>
+        <Text style={styles.title}>Ou voulez-vous que votre annonce apparaisse ?</Text>
         <SectionList
             sections={distributeurs}
             keyExtractor={(item, index) => item + index}
@@ -58,7 +57,6 @@ export default function AgenciesScreen({ navigation }) {
                       size={40}
                     />
                   </TouchableOpacity>
-                  <Text style={styles.modalTitle}>{item.name}</Text>
                   <Image source={item.image} style={styles.image} />
                 </View>
               </View>
@@ -77,21 +75,32 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     backgroundColor: '#fff',
   },
+  title: {
+    fontFamily: 'Futura',
+    fontSize: 30,
+    fontWeight: '600',
+    marginTop:50,
+    marginHorizontal: 10,
+    marginVertical: 10,
+  },
   image: {
-    width: 300,
-    height: 80,
-    marginLeft: 0,
+    marginLeft:40,
+    width: 270,
+    height: 150,
+    resizeMode: 'contain',
   },
   modalTitle: {
     fontSize: 10,
     marginHorizontal: 10,
+    marginVertical: 10,
   },
   item: {
-    borderRadius: 30,
-    padding: 20,
-    marginVertical: 8,
+    borderRadius: 10,
+    padding: 10,
+    marginVertical: 10,
   },
   checkboxContainer: {
+    height: 80,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -99,7 +108,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 8,
     width: '100%',
-    marginTop: 30,
+    marginTop: 20,
     backgroundColor: '#fbe29c',
     borderRadius: 1,
   },
