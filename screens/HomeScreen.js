@@ -10,6 +10,10 @@ import {LinearGradient} from 'expo-linear-gradient';
 import {
   SafeAreaView,
 } from 'react-native-safe-area-context';
+import { useDispatch } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { updateCurrentRoute } from '../reducers/currentRoute';
+import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
 //import FontAwesome from 'react-native-vector-icons/FontAwesome';
 //import Footer from '../components/Footer';
 // import { useDispatch, useSelector } from 'react-redux';
@@ -18,7 +22,14 @@ import {
 
 
 
+
 export default function HomeScreen({ navigation }) {
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    dispatch(updateCurrentRoute('Home'));    
+  }, []);
+  
   const handleOwnerSignUp = () => {
       navigation.navigate('OwnerSignUp');
   };

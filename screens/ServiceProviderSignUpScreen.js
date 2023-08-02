@@ -1,5 +1,4 @@
 import React from "react";
-import { useState } from 'react';
 import {
   Image,
   SafeAreaView,
@@ -13,9 +12,20 @@ import {
   Alert,
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { updateCurrentRoute } from '../reducers/currentRoute';
+import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
+import { addUser } from '../reducers/user';
 
 
 export default function ServiceProviderSignUpScreen({ navigation }) {
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    dispatch(updateCurrentRoute('ServiceProviderSignUp'));    
+  }, []);
+
   const [modalVisible, setModalVisible] = useState(false);
   const [presta, setPresta] = useState('');
 

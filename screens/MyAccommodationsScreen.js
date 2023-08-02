@@ -1,5 +1,4 @@
 import React from "react";
-import { useState, useEffect } from 'react';
 import {LinearGradient} from 'expo-linear-gradient';
 import {
   Dimensions,
@@ -14,6 +13,10 @@ import {
   Button,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { updateCurrentRoute } from '../reducers/currentRoute';
+import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
   
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 // import { useDispatch, useSelector } from 'react-redux';
@@ -26,6 +29,11 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 
 export default function MyAccommodationsScreen() {
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    dispatch(updateCurrentRoute('MyAccommodations'));    
+  }, []);
 
   // const accommodationSchema = mongoose.Schema({
   //   name: String,
