@@ -155,7 +155,7 @@ export default function MyAccommodationsScreen() {
         dispatch(updateCurrentAccommodation(id));
       }
       return (
-        <TouchableOpacity onPress={() => handleWorkOnOneAccommodation({id: data._id, name:data.name, picture: data.picture,})} style={styles.accommodationContainer} key={i}>
+        <TouchableOpacity onPress={() => handleWorkOnOneAccommodation(data)} style={styles.accommodationContainer} key={i}>
           <Image
           source={{ uri:data.picture }}
           style={styles.accommodationPicture}
