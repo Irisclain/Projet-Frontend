@@ -32,6 +32,9 @@ const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
 export default function MyAccommodationsScreen() {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
+
+  const users = useSelector(state => state.user.value);
+  //console.log(users[0].firstname);
   
   useEffect(() => {
     if (isFocused) {      
@@ -157,7 +160,8 @@ export default function MyAccommodationsScreen() {
       return (
         <TouchableOpacity onPress={() => handleWorkOnOneAccommodation(data)} style={styles.accommodationContainer} key={i}>
           <Image
-          source={{ uri:data.picture }}
+          // pour éviter le warning uri
+         source={data.picture ? { uri: data.picture } : require("../assets/faux-appart-1.jpg")}
           style={styles.accommodationPicture}
           />
           <View style={styles.accommodationText}>
@@ -195,7 +199,7 @@ export default function MyAccommodationsScreen() {
    
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Mes Hébergements</Text>
+      <Text style={styles.title}>Les Hébergements de {users[0].firstname}</Text>
       <View style={styles.scroll}>
         <ScrollView>
           {accommodations} 
@@ -225,7 +229,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
   title: {
-    fontSize:30, marginTop:10, marginBottom:22, fontWeight: '600', color: '#FF7A00',
+    fontSize:28, marginTop:10, marginBottom:22, fontWeight: '600', fontStyle:'italic', color: '#FF7A00',
   },
   scroll: {
     height:Dimensions.get('window').height-300,
