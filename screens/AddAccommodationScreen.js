@@ -66,7 +66,7 @@ const getSelectedItems2 = (data) => {
 };
 
 export default function AddAccommodationScreen({ navigation }) {
-  const [selectAllCont, setSelectAllCont] = useState(false);
+  
   const [image, setImage] = useState(null);
   const [dataCont, setDataCont] = useState(distributeurs);
   const selectedItems2 = getSelectedItems2(dataCont);
@@ -109,7 +109,8 @@ export default function AddAccommodationScreen({ navigation }) {
       .then((response) => {
         if (response.ok) {
           console.log("hébergement enregistré avec succès!");
-          // dispatch(addAccommodation(formData));
+          
+          setFormData({...formData, distribution: []});
           navigation.navigate("MyAccommodations");
         } else {
           console.error("Erreur lors de l'enregistrement de l'hébergement");
@@ -132,45 +133,58 @@ export default function AddAccommodationScreen({ navigation }) {
 
   const handleItemSelection2 = (itemIndex) => {
     const updatedData = [...dataCont];
-    // const sectionIndex = 0;
+    const sectionIndex = 0;
     // c'est le bordel
-    // updatedData[sectionIndex].data[itemIndex].selected =
-    //   !updatedData[sectionIndex].data[itemIndex].selected;
+    
+    updatedData[sectionIndex].data[itemIndex].selected =
+      !updatedData[sectionIndex].data[itemIndex].selected;
     // const allSelected = updatedData[sectionIndex].data.every(
     //   (item) => item.selected
      
     // );
     // updatedData[sectionIndex].selectedAll = allSelected;
-    // setSelectAllCont(allSelected);
-    setDataCont(updatedData);
+    // setSelectAllCont(allSelected),
+    // setDataCont(updatedData);
     //nouveau départ pour une nouvelle vie
     switch (itemIndex) {
       case 0:
-        const newFormDataBooking = {
-          ...formData, distribution: [...formData.distribution , "Booking"]
-        }
-        setFormData(newFormDataBooking);
+        if (!formData.distribution.includes("Booking")) {
+          const newFormDataBooking = {
+            ...formData,
+            distribution: [...formData.distribution, "Booking"],
+          };
+          setFormData(newFormDataBooking);
+        };
         break;
-        case 1:
+      case 1:
+        if (!formData.distribution.includes("Airbnb")) {
           const newFormDataAirbnb = {
-            ...formData, distribution: [...formData.distribution , "Airbnb"]
-          }
+            ...formData,
+            distribution: [...formData.distribution, "Airbnb"],
+          };
           setFormData(newFormDataAirbnb);
+        }
         break;
-        case 2:
+      case 2:
+        if (!formData.distribution.includes("Expedia")) {
           const newFormDataExpedia = {
-            ...formData, distribution: [...formData.distribution , "Expedia"]
-          }
+            ...formData,
+            distribution: [...formData.distribution, "Expedia"],
+          };
           setFormData(newFormDataExpedia);
+        }
         break;
       default:
         break;
     }
-    // console.log('selecteditems', selectedItems2);
-    // setFormData({ ...formData, distribution: selectedItems2 });
   };
   
+    // console.log('selecteditems', selectedItems2);
+    // setFormData({ ...formData, distribution: selectedItems2 });
+
+  
 console.log(formData);
+
   return (
     <View style={styles.container}>
       <Text
@@ -229,7 +243,7 @@ console.log(formData);
           style={styles.input}
         />
 
-        <TextInput style={styles.distriInput}>Canaux de distributions : </TextInput>
+        <Text style={styles.distriInput}>Canaux de distributions : </Text>
         <View style={styles.buttons}>
           <TouchableOpacity onPress={handlePressOpen}>
             <FontAwesome name="angle-down" color="black" size={25} />
@@ -323,7 +337,6 @@ const styles = StyleSheet.create({
     
   },
   centeredView: {
-   
     position: 'absolute',
     width: 150,
     top: 350,
@@ -409,7 +422,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   modalView: {
-    // marginTop: 350,
+
     backgroundColor: "white",
     borderRadius: 20,
     shadowColor: "#000",
@@ -430,7 +443,6 @@ const styles = StyleSheet.create({
     borderRadius: 1,
   },
   textButton: {
-    //fontFamily: 'Futura',
     height: 30,
     fontWeight: "600",
     fontSize: 16,

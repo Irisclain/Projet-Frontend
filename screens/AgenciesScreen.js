@@ -113,7 +113,6 @@ const styles = StyleSheet.create({
     borderRadius: 1,
   },
   textButton: {
-    //fontFamily: 'Futura',
     height: 30,
     fontWeight: '600',
     fontSize: 16,
