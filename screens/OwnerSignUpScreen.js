@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import FontAwesome from'react-native-vector-icons/FontAwesome';
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateCurrentRoute } from '../reducers/currentRoute';
 import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
 import { addUser } from '../reducers/user';
@@ -21,8 +21,12 @@ export default function OwnerSignUpScreen({ navigation }) {
   const dispatch = useDispatch();
   
   useEffect(() => {
-    dispatch(updateCurrentRoute('OwnerSignUp'));    
+    dispatch(updateCurrentRoute('OwnerSignUp'));  
+    dispatch(updateCurrentAccommodation({}));  
   }, []);
+
+  const users = useSelector((state) => state.user.value);
+  console.log(users);
 
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -49,7 +53,7 @@ export default function OwnerSignUpScreen({ navigation }) {
       body: JSON.stringify(formData),
     })
       .then((response) => {
-        if (response.ok) {
+        if (response.result) {
           console.log('Utilisateur enregistré avec succès!');
           dispatch(addUser(formData));
           navigation.navigate('MyAccommodations');
@@ -61,6 +65,7 @@ export default function OwnerSignUpScreen({ navigation }) {
         console.error('Erreur lors de l\'enregistrement de l\'utilisateur:', error);
       });
   };
+  console.log()
   
   return (
       <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>

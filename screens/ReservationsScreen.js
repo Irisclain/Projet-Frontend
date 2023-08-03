@@ -1,5 +1,8 @@
 import React from "react";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateCurrentRoute } from '../reducers/currentRoute';
+import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
 import {
   SafeAreaView,
   ScrollView,
@@ -22,6 +25,11 @@ const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
 
 
 export default function ReservationsScreen({ navigation }) {
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    dispatch(updateCurrentRoute('Reservation'));
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -51,7 +59,6 @@ const styles = StyleSheet.create({
     borderRadius: 1,
   },
   textButton: {
-    //fontFamily: 'Futura',
     height: 30,
     fontWeight: '600',
     fontSize: 16,

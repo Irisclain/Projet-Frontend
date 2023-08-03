@@ -1,6 +1,5 @@
 import React from "react";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import {
   SafeAreaView,
   ScrollView,
@@ -24,7 +23,8 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 // import {  } from '../reducers/user';
 // import {  } from '../reducers/accommodations';
 // import {  } from '../reducers/messages';
-const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
+const BACKEND_ADDRESS = 'https://stay-backend.vercel.app'; 
+//'https://stay-backend.vercel.app';
 
 const distributeurs = [
   {
@@ -65,6 +65,7 @@ export default function AddAccommodationScreen({ navigation }) {
   const [data, setData] = useState(distributeurs);
   const selectedItems = getSelectedItems(data);
 
+
   //icone photo nouvel hébergement
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -81,10 +82,11 @@ export default function AddAccommodationScreen({ navigation }) {
     }
   };
 
+const objectId = '64ca37d51d15d3410f974fa7';
 //etat pour l'enregistrement de l'hébergement
   const [formData, setFormData] = useState({
     name: "",
-    picture: "",
+    picture: "photo",
     address: "",
     description: "",
     price: "",
@@ -100,10 +102,11 @@ export default function AddAccommodationScreen({ navigation }) {
       },
       body: JSON.stringify(formData),
     })
+    .then (response => response.json())
       .then((response) => {
-        if (response.ok) {
+        console.log(response);
+        if (response.result) {
           console.log("hébergement enregistré avec succès!");
-
           setFormData({ ...formData, distribution: [] });
           navigation.navigate("MyAccommodations");
         } else {
@@ -111,10 +114,7 @@ export default function AddAccommodationScreen({ navigation }) {
         }
       })
       .catch((error) => {
-        console.error(
-          "Erreur lors de l'enregistrement de l'hébergement:",
-          error
-        );
+        console.error("Erreur lors de l'enregistrement de l'hébergement:", error);
       });
   };
 

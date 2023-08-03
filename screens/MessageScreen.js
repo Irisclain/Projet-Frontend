@@ -1,11 +1,15 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View, SectionList, Modal } from 'react-native';
 import {LinearGradient} from 'expo-linear-gradient';
 import FontAwesome from'react-native-vector-icons/FontAwesome';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateCurrentRoute } from '../reducers/currentRoute';
+import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
 
 const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
 
-const DATA = [
+//fausseDBhébergements
+const accommodationsData = [
   {
     title: 'Mes hébergements',
     data: [
@@ -18,6 +22,7 @@ const DATA = [
   },
 ];
 
+//fausseDBcontacts
 const contactsData = [
   {
     title: 'Mes contacts',
@@ -31,62 +36,70 @@ const contactsData = [
   },
 ];
 
-const getSelectedItems1 = (data) => {
-  const selectedItems1 = [];
+// fonction pour obtenir uniquement le nom de l'accomodation quand le logement est selectionné
+const getSelectedItemsAccommodations = (data) => {
+  const selectedItemsAccommodations = [];
   data.forEach((section) => {
     section.data.forEach((item) => {
       if (item.selected) {
-        selectedItems1.push(item.name);
+        selectedItemsAccommodations.push(item.name);
       }
     });
   });
-  return selectedItems1;
+  return selectedItemsAccommodations;
 };
-
-const getSelectedItems2 = (data) => {
-  const selectedItems2 = [];
+// fonction pour obtenir uniquement le nom de du contact quand le contact est selectionné
+const getSelectedItemsContacts = (data) => {
+  const selectedItemsContacts = [];
   data.forEach((section) => {
     section.data.forEach((item) => {
       if (item.selected) {
-        selectedItems2.push(item.name);
+        selectedItemsContacts.push(item.name);
       }
     });
   });
-  return selectedItems2;
+  return selectedItemsContacts;
 };
 
 export default function MessageScreen({ navigation }) {
-  const [modal1Visible, setModal1Visible] = useState(false);
-  const [modal2Visible, setModal2Visible] = useState(false);
-  const [dataAccom, setDataAccom] = useState(DATA);
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    dispatch(updateCurrentRoute('Message'));
+    dispatch(updateCurrentAccommodation({}));
+  }, []);
+
+  const [modalAccomodationVisible, setModalAccommodationVisible] = useState(false);
+  const [modalContactsVisible, setModalContactsVisible] = useState(false);
+  const [dataAccom, setDataAccom] = useState(accommodationsData);
   const [dataCont, setDataCont] = useState(contactsData);
   const [selectAllAccom, setSelectAllAccom] = useState(false);
   const [selectAllCont, setSelectAllCont] = useState(false);
 
-  const selectedItems1 = getSelectedItems1(dataAccom);
-  const selectedItems2 = getSelectedItems2(dataCont);
+  const selectedItemsAccommodations = getSelectedItemsAccommodations(dataAccom);
+  const selectedItemsContacts = getSelectedItemsContacts(dataCont);
 
+  //au clic sur send message envoie sur le chat
   const handleNavigation = () => {
-    //const username = randomUsernames[Math.floor(Math.random() * randomUsernames.length)];
     const username = 'Iris';
-
     navigation.navigate('Chat', { username });
   };
 
-  const handlePress1 = (e) => {
-    setModal1Visible(true);
+//pour les modales
+  const handlePressAccommodations = (e) => {
+    setModalAccommodationVisible(true);
   };
 
-  const handleClose1 = () => {
-    setModal1Visible(false);
+  const handleCloseAccommodations = () => {
+    setModalAccomodationVisible(false);
   };
 
-  const handlePress2 = (e) => {
-    setModal2Visible(true);
+  const handlePressContacts = (e) => {
+    setModalContactsVisible(true);
   };
 
-  const handleClose2 = () => {
-    setModal2Visible(false);
+  const handleCloseContacts = () => {
+    setModalContactsVisible(false);
   };
 
   //console.log(modalVisible)
