@@ -12,22 +12,24 @@ import {LinearGradient} from 'expo-linear-gradient';
 import {
   SafeAreaView,
 } from 'react-native-safe-area-context';
+import { useDispatch } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { updateCurrentRoute } from '../reducers/currentRoute';
+import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
 import {useState} from'react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useDispatch } from 'react-redux';
 
-const BACKEND_ADDRESS = 'http://192.168.1.77:3000';
+
 
 
 export default function HomeScreen({ navigation }) {
-  const [showPassword, setShowPassword] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [formData, setFormData] = useState({
-    username: '',
-    password: '',
-  });
   const dispatch = useDispatch();
-
+  
+  useEffect(() => {
+    dispatch(updateCurrentRoute('Home'));    
+  }, []);
+  
   const handleOwnerSignUp = () => {
       navigation.navigate('OwnerSignUp');
   };
