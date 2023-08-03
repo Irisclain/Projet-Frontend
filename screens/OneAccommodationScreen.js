@@ -18,7 +18,7 @@ import Footer from '../components/Footer';
 // import {  } from '../reducers/messages';
 
 
-
+const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
 
 
 export default function OneAccommodationScreen({ navigation }) {

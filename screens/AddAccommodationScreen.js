@@ -24,7 +24,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 // import {  } from '../reducers/user';
 // import {  } from '../reducers/accommodations';
 // import {  } from '../reducers/messages';
-const BACKEND_ADDRESS = "http://192.168.1.6:3000";
+const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
 
 const distributeurs = [
   {
@@ -45,29 +45,27 @@ const distributeurs = [
         selected: false,
       },
     ],
-    selectedAll: false,
   },
 ];
 
-const getSelectedItems2 = (data) => {
-  const selectedItems2 = [];
-  data.forEach((section) => {
-    section.data.forEach((item) => {
-      if (item.selected) {
-        selectedItems2.push(item.name);
-        // setFormData({ ... formData, distribution: selectedItems2 });
-        // ;
-      }
-    });
-  });
-  return selectedItems2;
-};
+// const getSelectedItems2 = (data) => {
+//   const selectedItems2 = [];
+//   data.forEach((section) => {
+//     section.data.forEach((item) => {
+//       if (item.selected) {
+//         selectedItems.push(item.name);
+//       }
+//     });
+//   });
+//   return selectedItems2;
+// };
 
 export default function AddAccommodationScreen({ navigation }) {
   const [image, setImage] = useState(null);
-  const [dataCont, setDataCont] = useState(distributeurs);
-  const selectedItems2 = getSelectedItems2(dataCont);
+  const [data, setData] = useState(distributeurs);
+  const selectedItems = getSelectedItems(data);
 
+  //icone photo nouvel hébergement
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -83,6 +81,7 @@ export default function AddAccommodationScreen({ navigation }) {
     }
   };
 
+//etat pour l'enregistrement de l'hébergement
   const [formData, setFormData] = useState({
     name: "",
     picture: "",
@@ -119,58 +118,54 @@ export default function AddAccommodationScreen({ navigation }) {
       });
   };
 
+  //état pour rendre le modal visible ou non
   const [modalVisible, setModalVisible] = useState(false);
+  
+  //ouvrir le modal
   const handlePressOpen = () => {
     setModalVisible((prevState) => !prevState);
   };
+ 
+// fonction pour les séléctions de la modale
+  const handleItemSelection = (itemIndex) => {
+    const selectedList = [...formData.distribution]; // selectedList= tableau distribution
+    const updatedData = [...data];// updatedData= tableau distributeurs
 
-  const handleItemSelection2 = (itemIndex) => {
-    const updatedData = [...dataCont];
-    const sectionIndex = 0;
-    // c'est le bordel
-
-    updatedData[sectionIndex].data[itemIndex].selected =
-      !updatedData[sectionIndex].data[itemIndex].selected;
-    // const allSelected = updatedData[sectionIndex].data.every(
-    //   (item) => item.selected
-
-    // );
-    // updatedData[sectionIndex].selectedAll = allSelected;
-    // setSelectAllCont(allSelected),
-    // setDataCont(updatedData);
-    //nouveau départ pour une nouvelle vie
-    switch (itemIndex) {
-      case 0:
-        if (!formData.distribution.includes("Booking")) {
-          const newFormDataBooking = {
-            ...formData,
-            distribution: [...formData.distribution, "Booking"],
-          };
-          setFormData(newFormDataBooking);
-        }
-        break;
-      case 1:
-        if (!formData.distribution.includes("Airbnb")) {
-          const newFormDataAirbnb = {
-            ...formData,
-            distribution: [...formData.distribution, "Airbnb"],
-          };
-          setFormData(newFormDataAirbnb);
-        }
-        break;
-      case 2:
-        if (!formData.distribution.includes("Expedia")) {
-          const newFormDataExpedia = {
-            ...formData,
-            distribution: [...formData.distribution, "Expedia"],
-          };
-          setFormData(newFormDataExpedia);
-        }
-        break;
-      default:
-        break;
-    }
-  };
+      switch (itemIndex) {
+        case 0:
+          if (!selectedList.includes("Booking")) {
+            selectedList.push("Booking"); // on ajoute Booking à la liste si il n'est pas déjà présent
+          } else {
+            const index = selectedList.indexOf("Booking");
+            selectedList.splice(index, 1); // On l'enlève si il est déjà là
+          }
+          updatedData[0].data[0].selected =  selectedList.includes("Booking");//dans la data de Bookin, on selectionne si la liste inclus Booking
+          break;
+        case 1:
+          if (!selectedList.includes("Airbnb")) {
+            selectedList.push("Airbnb"); // on ajoute Airbnb à la liste si il n'est pas déjà présent
+          } else {
+            const index = selectedList.indexOf("Airbnb");
+            selectedList.splice(index, 1); // On l'enlève si il est déjà là
+          }
+          updatedData[0].data[1].selected =  selectedList.includes("Airbnb");//dans la data de Airbnb, on selectionne si la liste inclus Airbnb
+          break;
+        case 2:
+          if (!selectedList.includes("Expedia")) {
+            selectedList.push("Expedia"); // Aon ajoute Expedia à la liste si il n'est pas déjà présent
+          } else {
+            const index = selectedList.indexOf("Expedia");
+            selectedList.splice(index, 1); // On l'enlève si il est déjà là
+          }
+          updatedData[0].data[2].selected =  selectedList.includes("Expedia");//dans la data de Expedia, on selectionne si la liste inclus Expedia
+          break;
+        default:
+          break;
+      }
+    
+      setFormData({ ...formData, distribution: selectedList }); // update de formData avec la selectedList à jour
+    };    
+  
 
   // console.log('selecteditems', selectedItems2);
   // setFormData({ ...formData, distribution: selectedItems2 });

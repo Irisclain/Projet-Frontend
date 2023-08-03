@@ -3,6 +3,8 @@ import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View, Dimensions, Mod
 import { Calendar } from 'react-native-calendars';
 import { Circle, Rect, Svg } from 'react-native-svg';
 
+const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
+
 const ServiceProvidersScreen = ({ navigation }) => {
   const renderLegend = () => {
     const legends = [
