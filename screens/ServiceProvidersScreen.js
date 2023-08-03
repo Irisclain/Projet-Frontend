@@ -5,6 +5,8 @@ import { Calendar } from 'react-native-calendars';
 import { Circle, Rect, Svg } from 'react-native-svg';
 import { Picker } from '@react-native-picker/picker';
 
+const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
+
 const ServiceProvidersScreen = ({ navigation }) => {
   const [selectedDates, setSelectedDates] = useState({});
   const [selectedTaskStatus, setSelectedTaskStatus] = useState('Tous');
@@ -200,7 +202,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    marginTop: Platform.OS === 'android' ? 37 : 0,
+    //marginTop: Platform.OS === 'android' ? 37 : 0,
     backgroundColor: '#DDD',
   },
   button: {
@@ -220,6 +222,7 @@ const styles = StyleSheet.create({
      color: 'white',
      fontSize: 20,
      textAlign: 'center',
+
   },
   buttonsContainer: {
     flexDirection: 'row',
@@ -227,6 +230,7 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: "-50%",
    
+
   },
   filterButton: {
     paddingVertical: 10,

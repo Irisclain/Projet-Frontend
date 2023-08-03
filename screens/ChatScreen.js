@@ -1,4 +1,8 @@
-import { useEffect, useState } from 'react';
+
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateCurrentRoute } from '../reducers/currentRoute';
+import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -15,9 +19,16 @@ import FontAwesome from'react-native-vector-icons/FontAwesome';
 import {LinearGradient} from 'expo-linear-gradient';
 
 const pusher = new Pusher('4c35491e793ed55ea5db', { cluster: 'eu' });
-const BACKEND_ADDRESS = 'http://localhost:3000';
+const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
 
 export default function ChatScreen({ navigation, route: { params } }) {
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    dispatch(updateCurrentRoute('Chat'));
+    dispatch(updateCurrentAccommodation({}));
+  }, []);
+  
   const [messages, setMessages] = useState([]);
   const [messageText, setMessageText] = useState('');
 
@@ -64,11 +75,6 @@ export default function ChatScreen({ navigation, route: { params } }) {
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-          <View style={styles.bannerbackground}/>
-      <Image source={require('../assets/Fond-banniere.png')} style={styles.blackBanner} />
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={require('../assets/Logo-banniere.png')} style={styles.bannerImage} />
-        </TouchableOpacity>
           
       <LinearGradient
      colors={['#CD43FD', '#FF7A00', '#FAB26F', '#FFE279']}
@@ -123,7 +129,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
     paddingTop: 40,
-    marginTop: 25,
+    //marginTop: 25,
   },
   bannerbackground: {
     position: 'absolute',
@@ -152,7 +158,7 @@ const styles = StyleSheet.create({
     marginBottom: -10,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-    marginTop: 60,
+    marginTop: 10,
   },
   content: {
     width: '90%',

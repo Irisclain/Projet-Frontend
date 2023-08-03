@@ -1,6 +1,8 @@
 // import React from "react";
-import { NavigationContainer } from '@react-navigation/native';
-import { useNavigation } from '@react-navigation/native';
+import { 
+  useNavigation, 
+  NavigationContainer,
+} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -21,29 +23,39 @@ import {
   Dimensions,
   Image,
   ImageBackground,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-
-// import { Provider } from 'react-redux';
-// import { configureStore } from '@reduxjs/toolkit';
-// import user from './reducers/user';
+import { configureStore } from '@reduxjs/toolkit';
+import { Provider } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {StatusBarStyle} from 'react-native';
+import currentRoute  from './reducers/currentRoute';
+import currentAccommodation from './reducers/currentAccommodation';
+import user from './reducers/user';
 // import message from './reducers/message';
 // import accommodation from './reducers/accommodation';*/
 
+const store = configureStore({
+  reducer: { currentAccommodation, currentRoute, user },
+});
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialTopTabNavigator();
-//  tabBarOptions={{ style: styles.tabBar }}
 const TabNavigator = () => {
   return (
-    <Tab.Navigator screenOptions={() => ({
+    <Tab.Navigator 
+    screenOptions={{
       tabBarActiveTintColor: '#FF7A00',
-      tabBarInactiveTintColor: '#CD43FD',
-      tabBarStyle: {marginTop: -10, marginBottom:12}
-    })}>
+      tabBarInactiveTintColor: 'black',
+      style: { marginTop: -10, marginBottom: 12 },
+      tabBarIndicatorStyle: { backgroundColor: '#FF7A00' },
+    }}
+    >
       <Tab.Screen name="Reservations" component={ReservationsScreen} options={{  title: 'Réservations' }} />
       <Tab.Screen name="Agencies" component={AgenciesScreen} options={{  title: 'Distribution' }} />
       <Tab.Screen name="ServiceProviders" component={ServiceProvidersScreen} options={{  title: 'Prestations' }} />
@@ -51,27 +63,51 @@ const TabNavigator = () => {
   );
 };
 
-    // <Provider store={store}>
-    // </Provider>
+ 
     // ESSAYER : 
     // <SafeAreaProvider store={store}>
     // </SafeAreaProvider>
 
 
-    const Header = () => {
-      const navigation = useNavigation();
-    
-      return (
-        <View>
-        <ImageBackground source={require('./assets/Fond-banniere.png')} style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.navigate('MyAccommodations')} activeOpacity={0.3}>
-            <Image source={require('./assets/Logo-banniere.png')} style={styles.logo} />
-          </TouchableOpacity>
-          <Text style={styles.accommodationTitle}></Text>        
-        </ImageBackground>
-        </View>
-      );
-    };    
+      const Header = () => {
+      const currentRoute = useSelector((state) => state.currentRoute.value);
+      const currentAccommodation = useSelector((state) => state.currentAccommodation.value); 
+      console.log ('nom de la page : ', currentRoute);
+      console.log ('nom de l\'hébergement : ', currentAccommodation);
+
+      const navigation=useNavigation();
+      if (currentRoute==='Home'){
+        return ;
+      } else {
+        let destination = 'MyAccommodations';
+        if (currentRoute==='OwnerSignUp' || currentRoute==='ServiceProviderSignUp'){
+          destination = 'Home';
+        }
+        let src;
+        let currentAccommodationName;
+        if (currentAccommodation.name){
+          src=currentAccommodation.picture;
+          currentAccommodationName=currentAccommodation.name.substring(0, 28);
+        };
+        
+        return (
+          <View>
+          <ImageBackground source={require('./assets/Fond-banniere.png')} style={styles.header}>
+            <TouchableOpacity onPress={() => navigation.navigate(destination)} activeOpacity={0.3}>
+              <Image source={require('./assets/Logo-banniere.png')} style={styles.logo} />
+            </TouchableOpacity>            
+            <TouchableOpacity onPress={() => navigation.navigate('OneAccommodation')} activeOpacity={0.3} style={styles.currentAccommodationContainer}>
+              <Text style={styles.currentAccommodationTitle}>{currentAccommodationName}</Text>
+              <Image
+                style={styles.currentAccommodationImage}
+                source={{ uri:src }}
+              />
+            </TouchableOpacity>
+          </ImageBackground>
+          </View>
+        );
+        }
+    };     
 
 
 
@@ -81,21 +117,24 @@ const TabNavigator = () => {
 export default function App() {
 
   return (
+  <Provider store={store}>
     <NavigationContainer>
- {/* <Header navigation={navigation} accommodation=''/> */}
-<Header/>
-<Stack.Navigator screenOptions={{ headerShown: false }}>
-<Stack.Screen name="Home" component={HomeScreen} />
-<Stack.Screen name="OwnerSignUp" component={OwnerSignUpScreen} />
-<Stack.Screen name="ServiceProviderSignUp" component={ServiceProviderSignUpScreen} />
-<Stack.Screen name="MyAccommodations" component={MyAccommodationsScreen} options={{ tabBarShowLabel: false, style: styles.labelHidden }} />
-<Stack.Screen name="AddAccommodation" component={AddAccommodationScreen} />
-{/* <Stack.Screen name="ServiceProviders" component={ServiceProvidersScreen} options={{ title: 'Prestations' }} /> */}
-<Stack.Screen name="Message" component={MessageScreen} />
-<Stack.Screen name="Chat" component={ChatScreen} />
-<Stack.Screen name="TabNavigator" component={TabNavigator} />
-</Stack.Navigator>
-</NavigationContainer>
+      <StatusBar animated={false} backgroundColor="#000"/>
+      <Header/>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="OwnerSignUp" component={OwnerSignUpScreen} />
+      <Stack.Screen name="ServiceProviderSignUp" component={ServiceProviderSignUpScreen} />
+      <Stack.Screen name="MyAccommodations" component={MyAccommodationsScreen} />
+      <Stack.Screen name="AddAccommodation" component={AddAccommodationScreen} />
+      <Stack.Screen name="OneAccommodation" component={OneAccommodationScreen} />
+      {/* <Stack.Screen name="ServiceProviders" component={ServiceProvidersScreen} options={{ title: 'Prestations' }} /> */}
+      <Stack.Screen name="Message" component={MessageScreen} />
+      <Stack.Screen name="Chat" component={ChatScreen} />
+      <Stack.Screen name="TabNavigator" component={TabNavigator} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  </Provider>
   )
 }
 
@@ -108,7 +147,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingTop:12,
     paddingBottom:12,
-    marginTop: Platform.OS === "android"? 37 : 0,
   },
   logo:{
     top: 5,
@@ -116,23 +154,38 @@ const styles = StyleSheet.create({
     width: 180,
     height: 50,
   },
-  accommodationTitle:{
+  currentAccommodationContainer:{
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: 50,
     color: 'white',
     fontSize: 14,
-    fontWeight: 'bold',
+    margin: 6,
+    marginLeft:18,
+    marginRight:0,
+    padding: 0,
+    paddingRight: 0,
+    borderRadius: 6,
+    borderWidth: 0,
+    borderColor: '#FAB26F',
+    backgroundColor: '#222',
+    width: Dimensions.get('window').width - 198,   
+  },
+  currentAccommodationTitle:{
+    color: 'white',
+    fontSize: 14,
     textAlign: 'center',
     justifyContent: 'center',
-    marginRight: 20,
+    width: 120,   
   },
-  labelHidden: {
-    height: 0,
-    width: 0,
-    overflow: 'hidden',
-  },
-  tabBar: {
-    backgroundColor:'red',
-    borderWidth:1,
-    borderColor: 'green',
-  },
+  currentAccommodationImage:{
+    width: 72,
+    height: 48,
+    borderTopRightRadius: 5,
+    borderBottomRightRadius: 5,
+    margin: 0,
+    marginLeft: 3,
+  }
 });
 
