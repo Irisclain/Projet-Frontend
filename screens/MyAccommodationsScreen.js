@@ -17,6 +17,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateCurrentRoute } from '../reducers/currentRoute';
 import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
+import { useIsFocused } from '@react-navigation/native';
   
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 // import { useDispatch, useSelector } from 'react-redux';
@@ -30,11 +31,14 @@ const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
 
 export default function MyAccommodationsScreen() {
   const dispatch = useDispatch();
+  const isFocused = useIsFocused();
   
   useEffect(() => {
-    dispatch(updateCurrentRoute('MyAccommodations'));
-    dispatch(updateCurrentAccommodation({}));
-  }, []);
+    if (isFocused) {      
+      dispatch(updateCurrentRoute('MyAccommodations'));  
+      dispatch(updateCurrentAccommodation({}));
+    }
+  }, [isFocused]);
 
   const [accommodationsData, setAccommodationsData] = useState([]);
   

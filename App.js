@@ -83,11 +83,13 @@ const TabNavigator = () => {
         if (currentRoute==='OwnerSignUp' || currentRoute==='ServiceProviderSignUp'){
           destination = 'Home';
         }
-        let src;
+        let currentAccommodationSrc;
         let currentAccommodationName;
+        let currentAccommodationContainerStyle;
         if (currentAccommodation.name){
-          src=currentAccommodation.picture;
+          currentAccommodationSrc=currentAccommodation.picture;
           currentAccommodationName=currentAccommodation.name.substring(0, 28);
+          currentAccommodationContainerStyle = styles.currentAccommodationContainer;
         };
         
         return (
@@ -96,11 +98,11 @@ const TabNavigator = () => {
             <TouchableOpacity onPress={() => navigation.navigate(destination)} activeOpacity={0.3}>
               <Image source={require('./assets/Logo-banniere.png')} style={styles.logo} />
             </TouchableOpacity>            
-            <TouchableOpacity onPress={() => navigation.navigate('OneAccommodation')} activeOpacity={0.3} style={styles.currentAccommodationContainer}>
+            <TouchableOpacity onPress={() => navigation.navigate('OneAccommodation')} activeOpacity={0.3} style={currentAccommodationContainerStyle}>
               <Text style={styles.currentAccommodationTitle}>{currentAccommodationName}</Text>
               <Image
                 style={styles.currentAccommodationImage}
-                source={{ uri:src }}
+                source={{ uri:currentAccommodationSrc }}
               />
             </TouchableOpacity>
           </ImageBackground>
