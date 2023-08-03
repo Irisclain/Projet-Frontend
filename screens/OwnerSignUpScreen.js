@@ -32,6 +32,11 @@ export default function OwnerSignUpScreen({ navigation }) {
     email: '',
     password: '',
     role: 'propriétaire',
+    services: {
+      prestation: '',
+      company: '',
+      address: '',
+      position: ''},
   });
 
 
