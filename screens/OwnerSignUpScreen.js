@@ -15,7 +15,7 @@ import { updateCurrentRoute } from '../reducers/currentRoute';
 import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
 import { addUser } from '../reducers/user';
 
-const BACKEND_ADDRESS = 'http://192.168.1.77:3000';
+const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
 
 export default function OwnerSignUpScreen({ navigation }) {
   const dispatch = useDispatch();

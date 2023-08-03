@@ -3,7 +3,7 @@ import {LinearGradient} from 'expo-linear-gradient';
 import FontAwesome from'react-native-vector-icons/FontAwesome';
 import { useState } from 'react';
 
-const BACKEND_ADDRESS = 'http://localhost:3000';
+const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
 
 const DATA = [
   {

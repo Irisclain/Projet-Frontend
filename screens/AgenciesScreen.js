@@ -30,7 +30,11 @@ const distributeurs = [
     selectedAll: false,
   },
   
-];export default function AgenciesScreen({ navigation }) {
+];
+
+const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
+
+export default function AgenciesScreen({ navigation }) {
   const [dataCont, setDataCont] = useState(distributeurs);
   
   const handleItemSelection2 = (itemIndex) => {
