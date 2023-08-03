@@ -12,11 +12,9 @@ import {LinearGradient} from 'expo-linear-gradient';
 import {
   SafeAreaView,
 } from 'react-native-safe-area-context';
-import { useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { updateCurrentRoute } from '../reducers/currentRoute';
 import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
-import {useState} from'react';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useDispatch } from 'react-redux';
 

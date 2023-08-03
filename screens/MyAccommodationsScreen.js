@@ -49,7 +49,7 @@ export default function MyAccommodationsScreen() {
   useEffect(() => {
     let owner = '64ca37d51d15d3410f974fa7'; // Il faudra prendre le user en Store. Pour l'instant, c'est Maxime
 
-    fetch(`http://192.168.1.54:3000/accommodation/${owner}`)
+    fetch(`http://192.168.1.6:3000/accommodation/${owner}`)
       .then(response => response.json())
       .then(data => {
         //console.log('allDatas : ', data);

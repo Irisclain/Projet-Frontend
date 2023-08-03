@@ -98,7 +98,7 @@ export default function AddAccommodationScreen({ navigation }) {
   });
   
 
-  const handleNewAccommodation = () => {
+  const handleNewAccommodation = () => {console.log(formData);
     fetch(`${BACKEND_ADDRESS}/accommodation`, {
       method: "POST",
       headers: {
@@ -132,19 +132,45 @@ export default function AddAccommodationScreen({ navigation }) {
 
   const handleItemSelection2 = (itemIndex) => {
     const updatedData = [...dataCont];
-    const sectionIndex = 0;
-    updatedData[sectionIndex].data[itemIndex].selected =
-      !updatedData[sectionIndex].data[itemIndex].selected;
-    const allSelected = updatedData[sectionIndex].data.every(
-      (item) => item.selected
+    // const sectionIndex = 0;
+    // c'est le bordel
+    // updatedData[sectionIndex].data[itemIndex].selected =
+    //   !updatedData[sectionIndex].data[itemIndex].selected;
+    // const allSelected = updatedData[sectionIndex].data.every(
+    //   (item) => item.selected
      
-    );
-    updatedData[sectionIndex].selectedAll = allSelected;
-    setSelectAllCont(allSelected);
+    // );
+    // updatedData[sectionIndex].selectedAll = allSelected;
+    // setSelectAllCont(allSelected);
     setDataCont(updatedData);
-     setFormData({ ...formData, distribution: selectedItems2 });console.log(selectedItems2);
+    //nouveau départ pour une nouvelle vie
+    switch (itemIndex) {
+      case 0:
+        const newFormDataBooking = {
+          ...formData, distribution: [...formData.distribution , "Booking"]
+        }
+        setFormData(newFormDataBooking);
+        break;
+        case 1:
+          const newFormDataAirbnb = {
+            ...formData, distribution: [...formData.distribution , "Airbnb"]
+          }
+          setFormData(newFormDataAirbnb);
+        break;
+        case 2:
+          const newFormDataExpedia = {
+            ...formData, distribution: [...formData.distribution , "Expedia"]
+          }
+          setFormData(newFormDataExpedia);
+        break;
+      default:
+        break;
+    }
+    // console.log('selecteditems', selectedItems2);
+    // setFormData({ ...formData, distribution: selectedItems2 });
   };
-
+  
+console.log(formData);
   return (
     <View style={styles.container}>
       <Text
