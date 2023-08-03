@@ -69,7 +69,7 @@ export default function ServiceProviderSignUpScreen({ navigation }) {
       body: JSON.stringify(formData),
     })
       .then((response) => {
-        if (response.ok) {
+        if (response.result) {
           console.log('Utilisateur enregistré avec succès!');
           dispatch(addUser(formData));
           navigation.navigate('MyAccommodations');

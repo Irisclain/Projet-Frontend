@@ -25,6 +25,9 @@ export default function OwnerSignUpScreen({ navigation }) {
     dispatch(updateCurrentAccommodation({}));  
   }, []);
 
+  const users = useSelector((state) => state.user.value);
+  console.log(users);
+
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     firstname: '',
@@ -50,7 +53,7 @@ export default function OwnerSignUpScreen({ navigation }) {
       body: JSON.stringify(formData),
     })
       .then((response) => {
-        if (response.ok) {
+        if (response.result) {
           console.log('Utilisateur enregistré avec succès!');
           dispatch(addUser(formData));
           navigation.navigate('MyAccommodations');
@@ -62,6 +65,7 @@ export default function OwnerSignUpScreen({ navigation }) {
         console.error('Erreur lors de l\'enregistrement de l\'utilisateur:', error);
       });
   };
+  console.log()
   
   return (
       <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
