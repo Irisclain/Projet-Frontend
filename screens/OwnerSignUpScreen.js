@@ -21,7 +21,8 @@ export default function OwnerSignUpScreen({ navigation }) {
   const dispatch = useDispatch();
   
   useEffect(() => {
-    dispatch(updateCurrentRoute('OwnerSignUp'));    
+    dispatch(updateCurrentRoute('OwnerSignUp'));  
+    dispatch(updateCurrentAccommodation({}));  
   }, []);
 
   const users = useSelector((state) => state.user.value);

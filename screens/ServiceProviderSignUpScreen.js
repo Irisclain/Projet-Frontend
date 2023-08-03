@@ -13,10 +13,10 @@ import {
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateCurrentRoute } from '../reducers/currentRoute';
 import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
 import { addUser } from '../reducers/user';
-import { useDispatch } from 'react-redux';
 
 const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
 
@@ -24,7 +24,8 @@ export default function ServiceProviderSignUpScreen({ navigation }) {
   const dispatch = useDispatch();
   
   useEffect(() => {
-    dispatch(updateCurrentRoute('ServiceProviderSignUp'));    
+    dispatch(updateCurrentRoute('ServiceProviderSignUp'));  
+    dispatch(updateCurrentAccommodation({}));  
   }, []);
 
   const [modalVisible, setModalVisible] = useState(false);

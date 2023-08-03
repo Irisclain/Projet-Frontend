@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  value: 0,
+  //value: {id:null, name:null, picture:null, name:null },
+  value: {},
 };
 
 export const currentAccommodationSlice = createSlice({
