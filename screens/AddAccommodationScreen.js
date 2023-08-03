@@ -45,32 +45,30 @@ const distributeurs = [
         selected: false,
       },
     ],
-    selectedAll: false,
   },
 ];
 
 
-const getSelectedItems2 = (data) => {
-  const selectedItems2 = [];
+const getSelectedItems = (data) => {
+  const selectedItems = [];
   data.forEach((section) => {
     section.data.forEach((item) => {
       if (item.selected) {
-        selectedItems2.push(item.name);
-        // setFormData({ ... formData, distribution: selectedItems2 });
-        // ;
+        selectedItems.push(item.name);
       }
     });
   });
-  return selectedItems2;
+  return selectedItems;
   
 };
 
 export default function AddAccommodationScreen({ navigation }) {
   
   const [image, setImage] = useState(null);
-  const [dataCont, setDataCont] = useState(distributeurs);
-  const selectedItems2 = getSelectedItems2(dataCont);
+  const [data, setData] = useState(distributeurs);
+  const selectedItems = getSelectedItems(data);
 
+  //icone photo nouvel hébergement
   const pickImage = async () => {
   // No permissions request is necessary for launching the image library
   let result = await ImagePicker.launchImageLibraryAsync({
@@ -80,14 +78,13 @@ export default function AddAccommodationScreen({ navigation }) {
     quality: 1,
   });
 
-  
-
   if (!result.canceled) {
     setImage(result.assets[0].uri);
     setFormData({ ...formData, picture: result.assets[0].uri });
   }
 };
 
+//etat pour l'enregistrement de l'hébergement
   const [formData, setFormData] = useState({
     name: "",
     picture: "",
@@ -97,7 +94,7 @@ export default function AddAccommodationScreen({ navigation }) {
     distribution:"",
   });
   
-
+//dispatch pour l'enregistrement de l'hébergement
   const handleNewAccommodation = () => {console.log(formData);
     fetch(`${BACKEND_ADDRESS}/accommodation`, {
       method: "POST",
@@ -124,63 +121,55 @@ export default function AddAccommodationScreen({ navigation }) {
       });
   };
 
+  //état pour rendre le modal visible ou non
   const [modalVisible, setModalVisible] = useState(false);
+  
+  //ouvrir le modal
   const handlePressOpen = () => {
     setModalVisible((prevState) =>!prevState);
   
   };
  
+// fonction pour les séléctions de la modale
+  const handleItemSelection = (itemIndex) => {
+    const selectedList = [...formData.distribution]; // selectedList= tableau distribution
+    const updatedData = [...data];// updatedData= tableau distributeurs
 
-  const handleItemSelection2 = (itemIndex) => {
-    const updatedData = [...dataCont];
-    const sectionIndex = 0;
-    // c'est le bordel
+      switch (itemIndex) {
+        case 0:
+          if (!selectedList.includes("Booking")) {
+            selectedList.push("Booking"); // on ajoute Booking à la liste si il n'est pas déjà présent
+          } else {
+            const index = selectedList.indexOf("Booking");
+            selectedList.splice(index, 1); // On l'enlève si il est déjà là
+          }
+          updatedData[0].data[0].selected =  selectedList.includes("Booking");//dans la data de Bookin, on selectionne si la liste inclus Booking
+          break;
+        case 1:
+          if (!selectedList.includes("Airbnb")) {
+            selectedList.push("Airbnb"); // on ajoute Airbnb à la liste si il n'est pas déjà présent
+          } else {
+            const index = selectedList.indexOf("Airbnb");
+            selectedList.splice(index, 1); // On l'enlève si il est déjà là
+          }
+          updatedData[0].data[1].selected =  selectedList.includes("Airbnb");//dans la data de Airbnb, on selectionne si la liste inclus Airbnb
+          break;
+        case 2:
+          if (!selectedList.includes("Expedia")) {
+            selectedList.push("Expedia"); // Aon ajoute Expedia à la liste si il n'est pas déjà présent
+          } else {
+            const index = selectedList.indexOf("Expedia");
+            selectedList.splice(index, 1); // On l'enlève si il est déjà là
+          }
+          updatedData[0].data[2].selected =  selectedList.includes("Expedia");//dans la data de Expedia, on selectionne si la liste inclus Expedia
+          break;
+        default:
+          break;
+      }
     
-    updatedData[sectionIndex].data[itemIndex].selected =
-      !updatedData[sectionIndex].data[itemIndex].selected;
-    // const allSelected = updatedData[sectionIndex].data.every(
-    //   (item) => item.selected
-     
-    // );
-    // updatedData[sectionIndex].selectedAll = allSelected;
-    // setSelectAllCont(allSelected),
-    // setDataCont(updatedData);
-    //nouveau départ pour une nouvelle vie
-    switch (itemIndex) {
-      case 0:
-        if (!formData.distribution.includes("Booking")) {
-          const newFormDataBooking = {
-            ...formData,
-            distribution: [...formData.distribution, "Booking"],
-          };
-          setFormData(newFormDataBooking);
-        };
-        break;
-      case 1:
-        if (!formData.distribution.includes("Airbnb")) {
-          const newFormDataAirbnb = {
-            ...formData,
-            distribution: [...formData.distribution, "Airbnb"],
-          };
-          setFormData(newFormDataAirbnb);
-        }
-        break;
-      case 2:
-        if (!formData.distribution.includes("Expedia")) {
-          const newFormDataExpedia = {
-            ...formData,
-            distribution: [...formData.distribution, "Expedia"],
-          };
-          setFormData(newFormDataExpedia);
-        }
-        break;
-      default:
-        break;
-    }
-  };
+      setFormData({ ...formData, distribution: selectedList }); // update de formData avec la selectedList à jour
+    };    
   
-    // console.log('selecteditems', selectedItems2);
-    // setFormData({ ...formData, distribution: selectedItems2 });
 
   
 console.log(formData);
@@ -274,8 +263,8 @@ console.log(formData);
                     <View style={styles.item}>
                       <TouchableOpacity
                         onPress={() => {
-                          handleItemSelection2(index);
-                          {selectedItems2.map((name, index) => (
+                          handleItemSelection(index);
+                          {selectedItems.map((name, index) => (
                             <Text key={index} >
                               {name}
                             </Text>
