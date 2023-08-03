@@ -71,8 +71,10 @@ const TabNavigator = () => {
 
 
     const Header = () => {
-      const currentRoute = useSelector((state) => state.currentRoute.value);      
-      console.log ('nom de la page : ', currentRoute)
+      const currentRoute = useSelector((state) => state.currentRoute.value);
+      const currentAccommodation = useSelector((state) => state.currentAccommodation.value); 
+      console.log ('nom de la page : ', currentRoute);
+      console.log ('nom de l\'hébergement : ', currentAccommodation.id);
 
       const navigation=useNavigation();
       const navigationRef = useNavigationContainerRef();
