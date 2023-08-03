@@ -24,16 +24,14 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 // import {  } from '../reducers/accommodations';
 // import {  } from '../reducers/messages';
 
-
-
-
-
 export default function MyAccommodationsScreen() {
   const dispatch = useDispatch();
   
   useEffect(() => {
-    dispatch(updateCurrentRoute('MyAccommodations'));    
+    dispatch(updateCurrentRoute('MyAccommodations'));
+    dispatch(updateCurrentAccommodation({}));
   }, []);
+
   const [accommodationsData, setAccommodationsData] = useState([]);
   
   // const accommodationSchema = mongoose.Schema({
@@ -144,16 +142,14 @@ export default function MyAccommodationsScreen() {
 
     const accommodations = accommodationsData.map((data, i) => {
       // console.log(data.picture)
-
-
-    const handleWorkOnOneAccommodation = (id) => {
-      navigation.navigate('TabNavigator');
-      dispatch(updateCurrentAccommodation({id}));
-    }
+      const handleWorkOnOneAccommodation = (id) => {
+        navigation.navigate('TabNavigator');
+        dispatch(updateCurrentAccommodation(id));
+      }
       return (
-        <TouchableOpacity onPress={() => handleWorkOnOneAccommodation({id: data._id})} style={styles.accommodationContainer} key={i}>
+        <TouchableOpacity onPress={() => handleWorkOnOneAccommodation({id: data._id, name:data.name, picture: data.picture,})} style={styles.accommodationContainer} key={i}>
           <Image
-          source={{ uri:data.picture.toString() }}
+          source={{ uri:data.picture }}
           style={styles.accommodationPicture}
           />
           <View style={styles.accommodationText}>

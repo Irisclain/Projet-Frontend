@@ -76,7 +76,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   title: {
-    fontFamily: 'Futura',
     fontSize: 30,
     fontWeight: '600',
     marginTop:50,

@@ -2,7 +2,6 @@
 import { 
   useNavigation, 
   NavigationContainer,
-  useNavigationContainerRef,
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
@@ -70,14 +69,13 @@ const TabNavigator = () => {
     // </SafeAreaProvider>
 
 
-    const Header = () => {
+      const Header = () => {
       const currentRoute = useSelector((state) => state.currentRoute.value);
       const currentAccommodation = useSelector((state) => state.currentAccommodation.value); 
       console.log ('nom de la page : ', currentRoute);
-      console.log ('nom de l\'hébergement : ', currentAccommodation.id);
+      console.log ('nom de l\'hébergement : ', currentAccommodation);
 
       const navigation=useNavigation();
-      const navigationRef = useNavigationContainerRef();
       if (currentRoute==='Home'){
         return ;
       } else {
@@ -85,14 +83,26 @@ const TabNavigator = () => {
         if (currentRoute==='OwnerSignUp' || currentRoute==='ServiceProviderSignUp'){
           destination = 'Home';
         }
+        let src;
+        let currentAccommodationName;
+        if (currentAccommodation.name){
+          src=currentAccommodation.picture;
+          currentAccommodationName=currentAccommodation.name.substring(0, 28);
+        };
         
         return (
           <View>
           <ImageBackground source={require('./assets/Fond-banniere.png')} style={styles.header}>
             <TouchableOpacity onPress={() => navigation.navigate(destination)} activeOpacity={0.3}>
               <Image source={require('./assets/Logo-banniere.png')} style={styles.logo} />
+            </TouchableOpacity>            
+            <TouchableOpacity onPress={() => navigation.navigate('OneAccommodation')} activeOpacity={0.3} style={styles.currentAccommodationContainer}>
+              <Text style={styles.currentAccommodationTitle}>{currentAccommodationName}</Text>
+              <Image
+                style={styles.currentAccommodationImage}
+                source={{ uri:src }}
+              />
             </TouchableOpacity>
-            <Text style={styles.currentAccommodationTitle}></Text>        
           </ImageBackground>
           </View>
         );
@@ -137,7 +147,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingTop:12,
     paddingBottom:12,
-    //marginTop: Platform.OS === "android"? 37 : 0,
   },
   logo:{
     top: 5,
@@ -145,13 +154,38 @@ const styles = StyleSheet.create({
     width: 180,
     height: 50,
   },
+  currentAccommodationContainer:{
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: 50,
+    color: 'white',
+    fontSize: 14,
+    margin: 6,
+    marginLeft:18,
+    marginRight:0,
+    padding: 0,
+    paddingRight: 0,
+    borderRadius: 6,
+    borderWidth: 0,
+    borderColor: '#FAB26F',
+    backgroundColor: '#222',
+    width: Dimensions.get('window').width - 198,   
+  },
   currentAccommodationTitle:{
     color: 'white',
     fontSize: 14,
-    fontWeight: 'bold',
     textAlign: 'center',
     justifyContent: 'center',
-    marginRight: 20,
+    width: 120,   
   },
+  currentAccommodationImage:{
+    width: 72,
+    height: 48,
+    borderTopRightRadius: 5,
+    borderBottomRightRadius: 5,
+    margin: 0,
+    marginLeft: 3,
+  }
 });
 
