@@ -48,17 +48,17 @@ const distributeurs = [
   },
 ];
 
-// const getSelectedItems2 = (data) => {
-//   const selectedItems2 = [];
-//   data.forEach((section) => {
-//     section.data.forEach((item) => {
-//       if (item.selected) {
-//         selectedItems.push(item.name);
-//       }
-//     });
-//   });
-//   return selectedItems2;
-// };
+const getSelectedItems = (data) => {
+  const selectedItems = [];
+  data.forEach((section) => {
+    section.data.forEach((item) => {
+      if (item.selected) {
+        selectedItems.push(item.name);
+      }
+    });
+  });
+  return selectedItems;
+};
 
 export default function AddAccommodationScreen({ navigation }) {
   const [image, setImage] = useState(null);
@@ -88,7 +88,7 @@ export default function AddAccommodationScreen({ navigation }) {
     address: "",
     description: "",
     price: "",
-    distribution: "",
+    distribution: [],
   });
 
   const handleNewAccommodation = () => {
@@ -257,9 +257,9 @@ export default function AddAccommodationScreen({ navigation }) {
                   <View style={styles.item}>
                     <TouchableOpacity
                       onPress={() => {
-                        handleItemSelection2(index);
+                        handleItemSelection(index);
                         {
-                          selectedItems2.map((name, index) => (
+                          selectedItems.map((name, index) => (
                             <Text key={index}>{name}</Text>
                           ));
                         }
