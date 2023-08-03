@@ -1,4 +1,8 @@
-import { useEffect, useState } from 'react';
+
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateCurrentRoute } from '../reducers/currentRoute';
+import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -15,9 +19,16 @@ import FontAwesome from'react-native-vector-icons/FontAwesome';
 import {LinearGradient} from 'expo-linear-gradient';
 
 const pusher = new Pusher('4c35491e793ed55ea5db', { cluster: 'eu' });
-const BACKEND_ADDRESS = 'http://localhost:3000';
+const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
 
 export default function ChatScreen({ navigation, route: { params } }) {
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    dispatch(updateCurrentRoute('Chat'));
+    dispatch(updateCurrentAccommodation({}));
+  }, []);
+  
   const [messages, setMessages] = useState([]);
   const [messageText, setMessageText] = useState('');
 

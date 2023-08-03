@@ -1,5 +1,8 @@
 import React from "react";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateCurrentRoute } from '../reducers/currentRoute';
+import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
 import {
   SafeAreaView,
   ScrollView,
@@ -30,7 +33,17 @@ const distributeurs = [
     selectedAll: false,
   },
   
-];export default function AgenciesScreen({ navigation }) {
+];
+
+const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
+
+export default function AgenciesScreen({ navigation }) {
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    dispatch(updateCurrentRoute('Agencies'));
+  }, []);
+
   const [dataCont, setDataCont] = useState(distributeurs);
   
   const handleItemSelection2 = (itemIndex) => {
@@ -112,7 +125,6 @@ const styles = StyleSheet.create({
     borderRadius: 1,
   },
   textButton: {
-    //fontFamily: 'Futura',
     height: 30,
     fontWeight: '600',
     fontSize: 16,

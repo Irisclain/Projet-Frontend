@@ -13,8 +13,8 @@ import {
   Button,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateCurrentRoute } from '../reducers/currentRoute';
 import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
   
@@ -23,6 +23,10 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 // import {  } from '../reducers/user';
 // import {  } from '../reducers/accommodations';
 // import {  } from '../reducers/messages';
+
+
+const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
+
 
 export default function MyAccommodationsScreen() {
   const dispatch = useDispatch();
@@ -47,7 +51,7 @@ export default function MyAccommodationsScreen() {
   useEffect(() => {
     let owner = '64ca37d51d15d3410f974fa7'; // Il faudra prendre le user en Store. Pour l'instant, c'est Maxime
 
-    fetch(`http://192.168.1.54:3000/accommodation/${owner}`)
+    fetch(`${BACKEND_ADDRESS}/accommodation/${owner}`)
       .then(response => response.json())
       .then(data => {
         //console.log('allDatas : ', data);

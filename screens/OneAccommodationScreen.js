@@ -1,5 +1,8 @@
 import React from "react";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateCurrentRoute } from '../reducers/currentRoute';
+import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
 import {
   SafeAreaView,
   ScrollView,
@@ -18,10 +21,16 @@ import Footer from '../components/Footer';
 // import {  } from '../reducers/messages';
 
 
-
+const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
 
 
 export default function OneAccommodationScreen({ navigation }) {
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    dispatch(updateCurrentRoute('OnneAccommodation'));
+    dispatch(updateCurrentAccommodation({}));
+  }, []);
 
   return (
       <SafeAreaView style={styles.container}>

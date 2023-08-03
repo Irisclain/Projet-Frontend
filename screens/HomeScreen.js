@@ -13,13 +13,13 @@ import {
   SafeAreaView,
 } from 'react-native-safe-area-context';
 import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateCurrentRoute } from '../reducers/currentRoute';
 import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { useDispatch } from 'react-redux';
 
 
-const BACKEND_ADDRESS = 'http://192.168.1.77:3000';
+const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
 
 export default function HomeScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -31,7 +31,8 @@ export default function HomeScreen({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
   
   useEffect(() => {
-    dispatch(updateCurrentRoute('Home'));    
+    dispatch(updateCurrentRoute('Home'));  
+    dispatch(updateCurrentAccommodation({}));  
   }, []);
   
   const handleOwnerSignUp = () => {

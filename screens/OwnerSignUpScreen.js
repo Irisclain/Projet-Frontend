@@ -10,18 +10,19 @@ import {
 } from 'react-native';
 import FontAwesome from'react-native-vector-icons/FontAwesome';
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateCurrentRoute } from '../reducers/currentRoute';
 import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
 import { addUser } from '../reducers/user';
 
-const BACKEND_ADDRESS = 'http://192.168.1.77:3000';
+const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
 
 export default function OwnerSignUpScreen({ navigation }) {
   const dispatch = useDispatch();
   
   useEffect(() => {
-    dispatch(updateCurrentRoute('OwnerSignUp'));    
+    dispatch(updateCurrentRoute('OwnerSignUp'));  
+    dispatch(updateCurrentAccommodation({}));  
   }, []);
 
   const [showPassword, setShowPassword] = useState(false);

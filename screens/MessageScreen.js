@@ -1,9 +1,12 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View, SectionList, Modal } from 'react-native';
 import {LinearGradient} from 'expo-linear-gradient';
 import FontAwesome from'react-native-vector-icons/FontAwesome';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateCurrentRoute } from '../reducers/currentRoute';
+import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
 
-const BACKEND_ADDRESS = 'http://localhost:3000';
+const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
 
 const DATA = [
   {
@@ -56,6 +59,13 @@ const getSelectedItems2 = (data) => {
 };
 
 export default function MessageScreen({ navigation }) {
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    dispatch(updateCurrentRoute('Message'));
+    dispatch(updateCurrentAccommodation({}));
+  }, []);
+
   const [modal1Visible, setModal1Visible] = useState(false);
   const [modal2Visible, setModal2Visible] = useState(false);
   const [dataAccom, setDataAccom] = useState(DATA);
