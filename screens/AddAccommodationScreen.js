@@ -49,7 +49,6 @@ const distributeurs = [
   },
 ];
 
-
 const getSelectedItems2 = (data) => {
   const selectedItems2 = [];
   data.forEach((section) => {
@@ -62,31 +61,27 @@ const getSelectedItems2 = (data) => {
     });
   });
   return selectedItems2;
-  
 };
 
 export default function AddAccommodationScreen({ navigation }) {
-  
   const [image, setImage] = useState(null);
   const [dataCont, setDataCont] = useState(distributeurs);
   const selectedItems2 = getSelectedItems2(dataCont);
 
   const pickImage = async () => {
-  // No permissions request is necessary for launching the image library
-  let result = await ImagePicker.launchImageLibraryAsync({
-    mediaTypes: ImagePicker.MediaTypeOptions.All,
-    allowsEditing: true,
-    aspect: [4, 3],
-    quality: 1,
-  });
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
 
-  
-
-  if (!result.canceled) {
-    setImage(result.assets[0].uri);
-    setFormData({ ...formData, picture: result.assets[0].uri });
-  }
-};
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+      setFormData({ ...formData, picture: result.assets[0].uri });
+    }
+  };
 
   const [formData, setFormData] = useState({
     name: "",
@@ -94,11 +89,11 @@ export default function AddAccommodationScreen({ navigation }) {
     address: "",
     description: "",
     price: "",
-    distribution:"",
+    distribution: "",
   });
-  
 
-  const handleNewAccommodation = () => {console.log(formData);
+  const handleNewAccommodation = () => {
+    console.log(formData);
     fetch(`${BACKEND_ADDRESS}/accommodation`, {
       method: "POST",
       headers: {
@@ -109,8 +104,8 @@ export default function AddAccommodationScreen({ navigation }) {
       .then((response) => {
         if (response.ok) {
           console.log("hébergement enregistré avec succès!");
-          
-          setFormData({...formData, distribution: []});
+
+          setFormData({ ...formData, distribution: [] });
           navigation.navigate("MyAccommodations");
         } else {
           console.error("Erreur lors de l'enregistrement de l'hébergement");
@@ -126,21 +121,19 @@ export default function AddAccommodationScreen({ navigation }) {
 
   const [modalVisible, setModalVisible] = useState(false);
   const handlePressOpen = () => {
-    setModalVisible((prevState) =>!prevState);
-  
+    setModalVisible((prevState) => !prevState);
   };
- 
 
   const handleItemSelection2 = (itemIndex) => {
     const updatedData = [...dataCont];
     const sectionIndex = 0;
     // c'est le bordel
-    
+
     updatedData[sectionIndex].data[itemIndex].selected =
       !updatedData[sectionIndex].data[itemIndex].selected;
     // const allSelected = updatedData[sectionIndex].data.every(
     //   (item) => item.selected
-     
+
     // );
     // updatedData[sectionIndex].selectedAll = allSelected;
     // setSelectAllCont(allSelected),
@@ -154,7 +147,7 @@ export default function AddAccommodationScreen({ navigation }) {
             distribution: [...formData.distribution, "Booking"],
           };
           setFormData(newFormDataBooking);
-        };
+        }
         break;
       case 1:
         if (!formData.distribution.includes("Airbnb")) {
@@ -178,12 +171,11 @@ export default function AddAccommodationScreen({ navigation }) {
         break;
     }
   };
-  
-    // console.log('selecteditems', selectedItems2);
-    // setFormData({ ...formData, distribution: selectedItems2 });
 
-  
-console.log(formData);
+  // console.log('selecteditems', selectedItems2);
+  // setFormData({ ...formData, distribution: selectedItems2 });
+
+  console.log(formData);
 
   return (
     <View style={styles.container}>
@@ -249,54 +241,49 @@ console.log(formData);
             <FontAwesome name="angle-down" color="black" size={25} />
           </TouchableOpacity>
         </View>
-        <Modal style={{borderWidth:3}}
+        <Modal
+          style={{ borderWidth: 3 }}
           animationType="none"
           transparent={true}
           visible={modalVisible}
         >
-          <TouchableOpacity
-          
-            activeOpacity={1}
-            onPressOut={() => setModalVisible(false)}
-          >
-            <View  style={styles.centeredView}>
-              <View style={styles.modalView}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
               <TouchableOpacity
-          style={styles.closeButton}
-          onPress={() => setModalVisible(false)}
-        >
-          <Text style={styles.closeButtonText}>X</Text>
-        </TouchableOpacity>
-                <SectionList 
-                  sections={distributeurs}
-                  keyExtractor={(item, index) => item + index}
-                  renderItem={({ item, index }) => (
-                    <View style={styles.item}>
-                      <TouchableOpacity
-                        onPress={() => {
-                          handleItemSelection2(index);
-                          {selectedItems2.map((name, index) => (
-                            <Text key={index} >
-                              {name}
-                            </Text>
-                          ))}                           
-                        }}
-                        style={styles.checkbox}
-                      >
-                        <FontAwesome
-                          name={item.selected ? "check-square-o" : "square-o"}
-                          color={item.selected ? "green" : "black"}
-                          size={20}
-                        />
-                      </TouchableOpacity>
-                      <Image source={item.image} style={styles.img} />
-                    </View>
-                  )}
-                />
-              </View>
+                style={styles.closeButton}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={styles.closeButtonText}>X</Text>
+              </TouchableOpacity>
+              <SectionList
+                sections={distributeurs}
+                keyExtractor={(item, index) => item + index}
+                renderItem={({ item, index }) => (
+                  <View style={styles.item}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        handleItemSelection2(index);
+                        {
+                          selectedItems2.map((name, index) => (
+                            <Text key={index}>{name}</Text>
+                          ));
+                        }
+                      }}
+                      style={styles.checkbox}
+                    >
+                      <FontAwesome
+                        name={item.selected ? "check-square-o" : "square-o"}
+                        color={item.selected ? "green" : "black"}
+                        size={20}
+                      />
+                    </TouchableOpacity>
+                    <Image source={item.image} style={styles.img} />
+                  </View>
+                )}
+              />
             </View>
-          </TouchableOpacity>        
-        </Modal>      
+          </View>
+        </Modal>
         <Button title="Submit" onPress={() => handleNewAccommodation()} />
       </View>
       <Footer navigation={navigation} messageButton={true} />
@@ -312,9 +299,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   closeButtonText: {
-    left:10,
-    top:10,
-        fontSize: 20,
+    left: 10,
+    top: 10,
+    fontSize: 20,
   },
   img: {
     marginLeft: 20,
@@ -330,14 +317,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  modalcontainer:{
+  modalcontainer: {
     height: 300,
     width: 300,
-    borderWidth:3,
-    
+    borderWidth: 3,
   },
   centeredView: {
-    position: 'absolute',
+    position: "absolute",
     width: 150,
     top: 350,
     left: 270,
@@ -422,7 +408,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   modalView: {
-
     backgroundColor: "white",
     borderRadius: 20,
     shadowColor: "#000",
