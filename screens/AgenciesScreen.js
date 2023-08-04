@@ -39,40 +39,15 @@ const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
 
 export default function AgenciesScreen({ navigation }) {
   const dispatch = useDispatch();
+  const selectedAccommodation = useSelector(state => state.currentAccommodation.value);
+  console.log(selectedAccommodation.distribution);
   
   useEffect(() => {
     dispatch(updateCurrentRoute('Agencies'));
-    fetchAccommodations();
   }, []);
 
   
-  const [dataCont, setDataCont] = useState(distributeurs);
   const [distributeurs, setDistributeurs] = useState([]);
-
-  console.log(distributeurs);
-
- 
-  const fetchAccommodations = async () => {
-    try {
-      const response = await fetch(`${BACKEND_ADDRESS}/accommodation`);
-      const data = await response.json();
-
-      if (data && data.accommodationList) {
-        const cleanedData = data.accommodationList.map((accommodation) => ({
-          data: accommodation.distribution.map((distr) => ({
-            selected: false,
-            name: distr.trim(),
-          })),
-          selectedAll: false,
-        }));
-        setDistributeurs(cleanedData);
-      } else {
-        console.log("Les données ne sont pas au format attendu.");
-      }
-    } catch (error) {
-      console.error("Erreur lors de la récupération des distributeurs :", error);
-    }
-  };
 
   
   const handleItemSelection = (itemIndex, sectionIndex) => {
@@ -85,15 +60,11 @@ export default function AgenciesScreen({ navigation }) {
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Où voulez-vous que votre annonce apparaisse ?</Text>
       <FlatList
-        data={distributeurs}
+        data={selectedAccommodation.distribution}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <View style={styles.item}>
-            <View style={styles.checkboxContainer}>
-              {item.data.map((distributor, index) => (
-                <Text key={index}>{distributor.name}</Text>
-              ))}
-            </View>
+            <Text>{item}</Text>
           </View>
         )}
       />
