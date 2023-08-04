@@ -25,6 +25,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateCurrentRoute } from '../reducers/currentRoute';
 import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
 import { useIsFocused } from '@react-navigation/native';
+import {LinearGradient} from 'expo-linear-gradient';
 // import {  } from '../reducers/user';
 // import {  } from '../reducers/accommodations';
 // import {  } from '../reducers/messages';
@@ -98,22 +99,22 @@ export default function AddAccommodationScreen({ navigation }) {
 
   //icone photo nouvel hébergement
   const pickImage = async () => {
-  // No permissions request is necessary for launching the image library
-  let result = await ImagePicker.launchImageLibraryAsync({
-    mediaTypes: ImagePicker.MediaTypeOptions.All,
-    allowsEditing: true,
-    aspect: [4, 3],
-    quality: 1,
-  });
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
 
-  if (!result.canceled) {
-    setImage(result.assets[0].uri);
-    setFormData({ ...formData, picture: result.assets[0].uri });
-  }
-};
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+      setFormData({ ...formData, picture: result.assets[0].uri });
+    }
+  };
 
-const objectId = '64ca37d51d15d3410f974fa7';
-//etat pour l'enregistrement de l'hébergement
+  const objectId = '64ca37d51d15d3410f974fa7';
+  //etat pour l'enregistrement de l'hébergement
   const [formData, setFormData] = useState(currentAccommodation);
   
 //dispatch pour l'enregistrement de l'hébergement
@@ -151,18 +152,40 @@ console.log(formData);
 
       
       <View style={styles.accommodationContainer}>
-        <Text>ESSAI</Text>
-        <Image
-          source={{ uri:currentAccommodation.picture }}
-          style={styles.accommodationPicture}
-        />
-        <View style={styles.accommodationText}>
+          <TouchableOpacity onPress={pickImage}>
+            {image ? (
+              <Image source={{ uri: image }} />
+            ) : (
+              <Image
+                source={{ uri:currentAccommodation.picture }}
+                style={styles.accommodationPicture}
+              />
+            )}
+          </TouchableOpacity>
+       
+        <View style={styles.titleContainer}>
+          <TextInput
+            value={formData.name}
+            onChangeText={(text) => setFormData({ ...formData, name: text })}
+            style={styles.inputTitle}
+            multiline={true}
+          />
+          <View style={styles.priceContainer}>
+            <View style={styles.priceEuros}>
+              <TextInput
+                value={formData.price.toString()}
+                onChangeText={(number) => setFormData({ ...formData, price: number })}
+                style={styles.inputPrice}
+              />
+              <Text style={styles.textPrice}> €</Text>
+            </View>
+            <Text style={styles.textNight}>/nuit</Text>
+          </View>
+        </View>
         <TextInput
-          value={formData.name}
-          onChangeText={(text) => setFormData({ ...formData, name: text })}
-          placeholder={currentAccommodation.name}
-          style={styles.inputTitle}
-          multiline={true}
+          value={formData.address}
+          onChangeText={(text) => setFormData({ ...formData, address: text })}
+          style={styles.inputAdress}
         />
         <TextInput
           value={formData.description}
@@ -170,71 +193,19 @@ console.log(formData);
           style={styles.inputDescription}
           multiline={true}
         />
-          <Text>{data.description}...</Text> 
-        </View>
       </View>
-
-      
-      
+          <Text style={styles.submitSuggestion}>Modifiez l'annonce en appuyant sur n'importe quel élément</Text>
 
 
 
-
-
-
-      
-
-
-
-
-
-      <Text style={styles.title}>{currentAccommodation.name}</Text>
-      <View style={styles.container1}>
-        <View style={styles.picturename}>
-          <TouchableOpacity onPress={pickImage} style={styles.inputphoto}>
-            {image ? (
-              <Image source={{ uri: image }} style={styles.image} />
-            ) : (
-              <FontAwesomeIcon name="image" style={styles.icon} />
-            )}
-          </TouchableOpacity>
-
-          <TextInput
-            value={formData.name}
-            onChangeText={(text) => setFormData({ ...formData, name: text })}
-            placeholder="Nom du bien ..."
-            style={styles.inputname}
-          />
-        </View>
-        {!image && <Text>Ajouter une photo</Text>}
-        <TextInput
-          value={formData.address}
-          onChangeText={(text) => setFormData({ ...formData, address: text })}
-          placeholder="Adresse ..."
-          style={styles.input}
-        />
-        <TextInput
-          value={formData.description}
-          onChangeText={(text) =>
-            setFormData({ ...formData, description: text })
-          }
-          placeholder="Description ..."
-          style={styles.input}
-        />
-        <TextInput
-          value={formData.planning}
-          onChangeText={(text) => setFormData({ ...formData, planning: text })}
-          placeholder="Planning"
-          style={styles.input}
-        />
-        <TextInput
-          value={formData.price}
-          onChangeText={(number) => setFormData({ ...formData, price: number })}
-          placeholder="Tarif ..."
-          style={styles.input}
-        />    
-        <Button title="Submit" onPress={() => handleNewAccommodation()} />
-      </View>
+          <LinearGradient
+            colors={['#CD43FD', '#FF7A00', '#FAB26F', '#FFE279']}
+            start={{ x: 0.0, y: 1.0 }} end={{ x: 1.0, y: 1.0 }}
+            style={styles.signInButtonConnexion}>
+            <TouchableOpacity onPress={() => handleNewAccommodation()}>
+              <Text style={styles.submitButton}>Enregistrer les modifications</Text>
+            </TouchableOpacity>
+          </LinearGradient>
       <Footer navigation={navigation} messageButton={true} />
     </View>
   );
@@ -253,12 +224,130 @@ const styles = StyleSheet.create({
   title: {
     fontSize:30, marginTop:10, marginBottom:22, fontWeight: '600', color: '#FF7A00',
   },
+  accommodationContainer: {    
+    display: 'flex',
+    flexDirection:'column',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: Dimensions.get('window').width-30, 
+    backgroundColor: 'white',
+    padding: 0,
+    borderWidth:1,
+    borderColor: '#FF7A00',
+    borderRadius:12,
+    margin:0,
+    marginBottom:3,
+    marginTop:12,
+  },
+  accommodationPicture: {
+      width: Dimensions.get('window').width-32,
+      height: Dimensions.get('window').width-160,
+      borderTopLeftRadius:11,
+      borderTopRightRadius:11,
+      marginBottom:12,
+  },
+  titleContainer: { 
+    display: 'flex',
+    flexDirection:'row',
+    justifyContent: 'space-between',
+    margin:12,
+    marginTop:0,
+    width: Dimensions.get('window').width-54,
+  },
   inputTitle: {
     fontSize:22, 
+    fontWeight: 'bold', color: '#FF7A00',
+    margin:0,
+    width: Dimensions.get('window').width-54-62-6,
+  },
+  priceContainer: { 
+    display: 'flex',
+    flexDirection:'column',
+    justifyContent: 'space-between',
+    marginRight:0,
+    marginLeft:6,
+    padding: 6,
+    paddingLeft: 10,
+    paddingRight: 10,
+    borderRadius : 12,
+    backgroundColor: '#DDD',
+    width:62
+  },
+  priceEuros:{
+    display: 'flex',
+    flexDirection:'row',
+    justifyContent: 'space-between',
+    fontSize: 20,
+  },
+  inputPrice:{
+    margin: 0,
+    padding: 0,
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#FF7A00',
+  },
+  textPrice:{
+    margin: 0,
+    padding: 0,
+    paddingTop: 3,
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  textNight:{
+    fontStyle: 'italic',
+    marginTop: -3,
+  },
+  inputDescription: {
+    fontSize:16, 
     margin:12,
-    marginTop:10, marginBottom:22,
-    fontWeight: '400', color: '#FF7A00',
-    //width: Dimensions.get('window').width-100,
+    marginTop:0,
+  },
+  submitSuggestion:{
+    fontSize:12,
+    fontStyle: 'italic', 
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  signInButtonConnexion: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#d4d4d4',
+    alignSelf: 'center',
+    width: Dimensions.get('window').width-54,
+    height: 50,
+    borderRadius: 22,
+    margin: 0,
+    marginTop: 12,
+    shadowColor: '#868686',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.20,
+    shadowRadius: 15,
+    elevation: 4,
+  },
+  submitButton:{
+    height: 46,
+    borderRadius:20,
+    borderWidth:0,
+    borderColor: '#FF7A00',
+    textAlign: 'center',
+    width: Dimensions.get('window').width-58,
+    fontSize: 18,
+    padding: 10,
+    color: '#FFF',
+  },
+  inputAdress: {
+    fontSize:16, 
+    margin:12,
+    marginTop:0,
+    fontStyle: 'italic',
+    textAlign: 'left',
+    width: Dimensions.get('window').width-54,
+    fontWeight: 'bold',
   },
   picturename: {
     flexDirection: "row",
