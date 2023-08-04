@@ -170,7 +170,7 @@ const objectId = '64ca37d51d15d3410f974fa7';
   // console.log('selecteditems', selectedItems2);
   // setFormData({ ...formData, distribution: selectedItems2 });
 
-  console.log(formData);
+  
 
   return (
     <View style={styles.container}>

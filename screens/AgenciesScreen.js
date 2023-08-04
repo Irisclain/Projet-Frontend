@@ -18,10 +18,12 @@ import {
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+
 // import { useDispatch, useSelector } from 'react-redux';
 // import {  } from '../reducers/user';
 // import {  } from '../reducers/accommodations';
 // import {  } from '../reducers/messages';
+ 
 
 const distributeurs = [
   {
@@ -40,6 +42,7 @@ const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
 export default function AgenciesScreen({ navigation }) {
   const dispatch = useDispatch();
   
+  
   useEffect(() => {
     dispatch(updateCurrentRoute('Agencies'));
   }, []);
@@ -53,7 +56,24 @@ export default function AgenciesScreen({ navigation }) {
     setDataCont(updatedData);
   };
 
-  
+
+//essay fetch bd pour recup formdata.distribution 
+// 1. Lire l'état currentAccomodation (useSelector)
+// const selectDistri = useSelector(state => state.currentAccommodation.value);
+// console.log("selectDistri",selectDistri);
+// 2. Récupérer l'accomodation qui correspond à l'id
+// 3. Lire son champ distribution 
+// 4. mettre en état coché les distributions correspondantesCours: useEffect, useSelector dans redux, fetch
+fetch(`${BACKEND_ADDRESS}/accommodation`)
+.then(response => response.json())
+.then((response) => {
+  if (response) {
+    console.log("response",response);
+  dispatch(formData.distributions)
+  } else {
+
+}});
+
   return (
       <SafeAreaView style={styles.container}>
         <Text style={styles.title}>Ou voulez-vous que votre annonce apparaisse ?</Text>

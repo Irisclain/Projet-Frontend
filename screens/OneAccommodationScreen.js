@@ -173,21 +173,6 @@ console.log(formData);
           <Text>{data.description}...</Text> 
         </View>
       </View>
-
-      
-      
-
-
-
-
-
-
-      
-
-
-
-
-
       <Text style={styles.title}>{currentAccommodation.name}</Text>
       <View style={styles.container1}>
         <View style={styles.picturename}>
