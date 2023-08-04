@@ -20,6 +20,7 @@ import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
 import { useIsFocused } from '@react-navigation/native';
   
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Footer from '../components/Footer';
 // import { useDispatch, useSelector } from 'react-redux';
 // import {  } from '../reducers/user';
 // import {  } from '../reducers/accommodations';
@@ -221,6 +222,7 @@ export default function MyAccommodationsScreen() {
           </LinearGradient>
         </TouchableOpacity>
         </View>
+        <Footer navigation={navigation} messageButton={true} />
     </SafeAreaView>
   );
 }
@@ -242,7 +244,7 @@ const styles = StyleSheet.create({
   },
   containerbutton:{
     paddingTop:40,
-    marginBottom:200,
+    marginBottom:-10,
     display: 'flex',
     flexDirection:'column',
     alignItems:'center',    
