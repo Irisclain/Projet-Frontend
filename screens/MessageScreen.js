@@ -86,8 +86,8 @@ export default function MessageScreen({ navigation }) {
         })
         .then(data => {
           console.log(data.name);
-          // Mettez à jour l'état de vos données d'hébergements ici
-          setDataAccom(data.data); // Supposons que la clé 'accommodationList' contienne les hébergements
+          
+          setDataAccom(data.data);
         })
         .catch(error => {
           console.error('Erreur lors de la récupération des données d\'hébergement :', error);
@@ -102,8 +102,7 @@ export default function MessageScreen({ navigation }) {
         })
         .then(data => {
           console.log(data.username);
-          // Mettez à jour l'état de vos données d'hébergements ici
-          setDataAccom(data.username); // Supposons que la clé 'accommodationList' contienne les hébergements
+          setDataAccom(data.username);
         })
         .catch(error => {
           console.error('Erreur lors de la récupération des données d\'hébergement :', error);
@@ -146,6 +145,8 @@ export default function MessageScreen({ navigation }) {
 
   const selectedItemsAccommodations = getSelectedItemsAccommodations(dataAccom);
   const selectedItemsContacts = getSelectedItemsContacts(dataCont);
+
+  console.log(dataAccom);
 
   //au clic sur send message envoie sur le chat
   const handleNavigation = () => {
