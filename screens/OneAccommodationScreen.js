@@ -71,12 +71,11 @@ const getSelectedItems = (data) => {
 export default function AddAccommodationScreen({ navigation }) {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
-  
-  const currentAccommodation = useSelector((state) => state.currentAccommodation.value); 
-  
+  const currentAccommodation = useSelector((state) => state.currentAccommodation.value);;
+
   useEffect(() => {
     if (isFocused) {      
-      dispatch(updateCurrentRoute('OneAccommodation')); 
+      dispatch(updateCurrentRoute('OneAccommodation'));
       // dispatch(updateCurrentAccommodation(
       //   {
       //   "_id": "64ca3ea77b6e67041bbc7c8e", 
@@ -90,6 +89,7 @@ export default function AddAccommodationScreen({ navigation }) {
       //   }
       // ));
     }
+    return
   }, [isFocused]);
 
   const [image, setImage] = useState(null);
@@ -113,15 +113,16 @@ export default function AddAccommodationScreen({ navigation }) {
     }
   };
 
-  const objectId = '64ca37d51d15d3410f974fa7';
-  //etat pour l'enregistrement de l'hébergement
+  //const objectId = '64ca37d51d15d3410f974fa7';
+  //etat pour la modification de l'hébergement
   const [formData, setFormData] = useState(currentAccommodation);
   
-//dispatch pour l'enregistrement de l'hébergement
-  const handleNewAccommodation = () => {
+//dispatch pour la modification de l'hébergement
+  const handleUpdateAccommodation = () => {
     console.log(formData);
-    fetch(`${BACKEND_ADDRESS}/accommodation`, {
-      method: "POST",
+    //fetch(`${BACKEND_ADDRESS}/accommodation/update/${trouverl'ID ???}`, {
+    fetch(`${BACKEND_ADDRESS}/accommodation/update`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
@@ -133,7 +134,14 @@ export default function AddAccommodationScreen({ navigation }) {
         if (response.result) {
           console.log("hébergement enregistré avec succès!");
           setFormData({ ...formData, distribution: [] });
-          navigation.navigate("MyAccommodations");
+          //navigation.navigate("MyAccommodations");
+          dispatch(updateCurrentAccommodation({formData}));
+
+
+
+
+
+
         } else {
           console.error("Erreur lors de l'enregistrement de l'hébergement");
         }
@@ -153,14 +161,10 @@ console.log(formData);
       
       <View style={styles.accommodationContainer}>
           <TouchableOpacity onPress={pickImage}>
-            {image ? (
-              <Image source={{ uri: image }} />
-            ) : (
               <Image
-                source={{ uri:currentAccommodation.picture }}
+                source={{ uri:formData.picture }}
                 style={styles.accommodationPicture}
               />
-            )}
           </TouchableOpacity>
        
         <View style={styles.titleContainer}>
@@ -202,7 +206,7 @@ console.log(formData);
             colors={['#CD43FD', '#FF7A00', '#FAB26F', '#FFE279']}
             start={{ x: 0.0, y: 1.0 }} end={{ x: 1.0, y: 1.0 }}
             style={styles.signInButtonConnexion}>
-            <TouchableOpacity onPress={() => handleNewAccommodation()}>
+            <TouchableOpacity onPress={() => handleUpdateAccommodation()}>
               <Text style={styles.submitButton}>Enregistrer les modifications</Text>
             </TouchableOpacity>
           </LinearGradient>
