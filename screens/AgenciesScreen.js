@@ -18,12 +18,10 @@ import {
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Footer from '../components/Footer';
-
 // import { useDispatch, useSelector } from 'react-redux';
 // import {  } from '../reducers/user';
 // import {  } from '../reducers/accommodations';
 // import {  } from '../reducers/messages';
- 
 
 const distributeurs = [
   {
@@ -44,7 +42,6 @@ export default function AgenciesScreen({ navigation }) {
   const selectedAccommodation = useSelector(state => state.currentAccommodation.value);
   console.log(selectedAccommodation.distribution);
   
-  
   useEffect(() => {
     dispatch(updateCurrentRoute('Agencies'));
   }, []);
@@ -52,64 +49,16 @@ export default function AgenciesScreen({ navigation }) {
   
   const [distributeurs, setDistributeurs] = useState([]);
 
-<<<<<<< HEAD
-  console.log(distributeurs);
-
- 
-  const fetchAccommodations = async () => {
-    try {
-      const response = await fetch(`${BACKEND_ADDRESS}/accommodation`);
-      const data = await response.json();
-
-      if (data && data.accommodationList) {
-        const cleanedData = data.accommodationList.map((accommodation) => ({
-          data: accommodation.distribution.map((distr) => ({
-            selected: false,
-            name: distr.trim(),
-          })),
-          selectedAll: false,
-        }));
-        setDistributeurs(cleanedData);
-      } else {
-        console.log("Les données ne sont pas au format attendu.");
-      }
-    } catch (error) {
-      console.error("Erreur lors de la récupération des distributeurs :", error);
-    }
-  };
-
-<<<<<<< HEAD
-
-//essay fetch bd pour recup formdata.distribution 
-// 1. Lire l'état currentAccomodation (useSelector)
-// const selectDistri = useSelector(state => state.currentAccommodation.value);
-// console.log("selectDistri",selectDistri);
-// 2. Récupérer l'accomodation qui correspond à l'id
-// 3. Lire son champ distribution 
-// 4. mettre en état coché les distributions correspondantesCours: useEffect, useSelector dans redux, fetch
-fetch(`${BACKEND_ADDRESS}/accommodation`)
-.then(response => response.json())
-.then((response) => {
-  if (response) {
-    console.log("response",response);
-  dispatch(formData.distributions)
-  } else {
-
-}});
-=======
-=======
->>>>>>> 2726b8acc1066181b01158d352d09b42a1740140
   
   const handleItemSelection = (itemIndex, sectionIndex) => {
     const updatedData = [...distributeurs];
     updatedData[sectionIndex].data[itemIndex].selected = !updatedData[sectionIndex].data[itemIndex].selected;
     setDistributeurs(updatedData);
   };
->>>>>>> 8d1d0c947703a105692899aa9831d9d880aa5973
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Où voulez-vous que votre annonce apparaisse ?</Text>
+      <Text style={styles.title}>OÃ¹ voulez-vous que votre annonce apparaisse ?</Text>
       <FlatList
         data={selectedAccommodation.distribution}
         keyExtractor={(item, index) => index.toString()}
@@ -149,31 +98,4 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginVertical: 10,
   },
-  item: {
-    borderRadius: 10,
-    padding: 10,
-    marginVertical: 10,
-  },
-  checkboxContainer: {
-    height: 80,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  button: {
-    alignItems: 'center',
-    paddingTop: 8,
-    width: '100%',
-    marginTop: 20,
-    backgroundColor: '#fbe29c',
-    borderRadius: 1,
-  },
-  textButton: {
-    height: 30,
-    fontWeight: '600',
-    fontSize: 16,
-  },
-  checkboxContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-});
+... (28 lignes restantes)

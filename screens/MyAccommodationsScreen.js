@@ -20,6 +20,14 @@ import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
 import { useIsFocused } from '@react-navigation/native';
   
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+<<<<<<< HEAD
+=======
+import Footer from '../components/Footer';
+// import { useDispatch, useSelector } from 'react-redux';
+// import {  } from '../reducers/user';
+// import {  } from '../reducers/accommodations';
+// import {  } from '../reducers/messages';
+>>>>>>> c090809fc75b14675fbe1892c007851580a602e4
 
 
 const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
@@ -97,6 +105,7 @@ export default function MyAccommodationsScreen() {
           </LinearGradient>
         </TouchableOpacity>
         </View>
+        <Footer navigation={navigation} messageButton={true} />
     </SafeAreaView>
   );
 }
@@ -118,7 +127,7 @@ const styles = StyleSheet.create({
   },
   containerbutton:{
     paddingTop:40,
-    marginBottom:200,
+    marginBottom:-10,
     display: 'flex',
     flexDirection:'column',
     alignItems:'center',    
