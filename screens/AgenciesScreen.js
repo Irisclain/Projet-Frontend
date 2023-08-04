@@ -41,17 +41,18 @@ const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
 
 export default function AgenciesScreen({ navigation }) {
   const dispatch = useDispatch();
+  const selectedAccommodation = useSelector(state => state.currentAccommodation.value);
+  console.log(selectedAccommodation.distribution);
   
   
   useEffect(() => {
     dispatch(updateCurrentRoute('Agencies'));
-    fetchAccommodations();
   }, []);
 
   
-  const [dataCont, setDataCont] = useState(distributeurs);
   const [distributeurs, setDistributeurs] = useState([]);
 
+<<<<<<< HEAD
   console.log(distributeurs);
 
  
@@ -96,6 +97,8 @@ fetch(`${BACKEND_ADDRESS}/accommodation`)
 
 }});
 =======
+=======
+>>>>>>> 2726b8acc1066181b01158d352d09b42a1740140
   
   const handleItemSelection = (itemIndex, sectionIndex) => {
     const updatedData = [...distributeurs];
@@ -108,15 +111,11 @@ fetch(`${BACKEND_ADDRESS}/accommodation`)
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Où voulez-vous que votre annonce apparaisse ?</Text>
       <FlatList
-        data={distributeurs}
+        data={selectedAccommodation.distribution}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <View style={styles.item}>
-            <View style={styles.checkboxContainer}>
-              {item.data.map((distributor, index) => (
-                <Text key={index}>{distributor.name}</Text>
-              ))}
-            </View>
+            <Text>{item}</Text>
           </View>
         )}
       />
