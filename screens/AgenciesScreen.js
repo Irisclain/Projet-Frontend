@@ -13,10 +13,10 @@ import {
   View,
   SectionList,
   Image,
+  FlatList,
 
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Header from '../components/Header';
 import Footer from '../components/Footer';
 // import { useDispatch, useSelector } from 'react-redux';
 // import {  } from '../reducers/user';
@@ -39,45 +39,37 @@ const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
 
 export default function AgenciesScreen({ navigation }) {
   const dispatch = useDispatch();
+  const selectedAccommodation = useSelector(state => state.currentAccommodation.value);
+  console.log(selectedAccommodation.distribution);
   
   useEffect(() => {
     dispatch(updateCurrentRoute('Agencies'));
   }, []);
 
-  const [dataCont, setDataCont] = useState(distributeurs);
   
-  const handleItemSelection2 = (itemIndex) => {
-    const updatedData = [...dataCont];
-    const sectionIndex = 0;
-    updatedData[sectionIndex].data[itemIndex].selected = !updatedData[sectionIndex].data[itemIndex].selected;
-    setDataCont(updatedData);
-  };
+  const [distributeurs, setDistributeurs] = useState([]);
 
   
+  const handleItemSelection = (itemIndex, sectionIndex) => {
+    const updatedData = [...distributeurs];
+    updatedData[sectionIndex].data[itemIndex].selected = !updatedData[sectionIndex].data[itemIndex].selected;
+    setDistributeurs(updatedData);
+  };
+
   return (
-      <SafeAreaView style={styles.container}>
-        <Text style={styles.title}>Ou voulez-vous que votre annonce apparaisse ?</Text>
-        <SectionList
-            sections={distributeurs}
-            keyExtractor={(item, index) => item + index}
-            renderItem={({ item, index }) => (
-              <View style={styles.item}>
-                <View style={styles.checkboxContainer}>
-                  <TouchableOpacity onPress={() => handleItemSelection2(index)} style={styles.checkbox}>
-                    <FontAwesome
-                      name={item.selected ? 'check-square-o' : 'square-o'}
-                      color={item.selected ? 'green' : 'black'}
-                      size={40}
-                    />
-                  </TouchableOpacity>
-                  <Image source={item.image} style={styles.image} />
-                </View>
-              </View>
-            )}
-            
-          />
-        <Footer navigation={navigation} messageButton={true}/>
-      </SafeAreaView>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Où voulez-vous que votre annonce apparaisse ?</Text>
+      <FlatList
+        data={selectedAccommodation.distribution}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => (
+          <View style={styles.item}>
+            <Text>{item}</Text>
+          </View>
+        )}
+      />
+      <Footer navigation={navigation} messageButton={true} />
+    </SafeAreaView>
   );
 }
 
@@ -128,5 +120,9 @@ const styles = StyleSheet.create({
     height: 30,
     fontWeight: '600',
     fontSize: 16,
+  },
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });

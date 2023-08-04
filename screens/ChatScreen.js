@@ -82,7 +82,7 @@ export default function ChatScreen({ navigation, route: { params } }) {
      style={styles.header}
    >
       <View style={styles.banner}>
-        <Text style={styles.greetingText}>To : {params.username}</Text>
+        <Text style={styles.greetingText}>To: {params.username}</Text>
       </View>
       </LinearGradient>
 

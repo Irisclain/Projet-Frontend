@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     width: '100%',
-    marginTop: "-50%",
+    marginTop: "-40%",
    
 
   },

@@ -13,27 +13,34 @@ import {
   SafeAreaView,
 } from 'react-native-safe-area-context';
 import { useState, useEffect } from 'react';
+import { useIsFocused } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateCurrentRoute } from '../reducers/currentRoute';
 import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {addUser} from '../reducers/user';
 
 
 const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
 
 export default function HomeScreen({ navigation }) {
   const dispatch = useDispatch();
+  const isFocused = useIsFocused();
   const [formData, setFormData] = useState({
     username: '',
     password: '',
   });
   const [modalVisible, setModalVisible] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  const users = useSelector(state => state.user.value);
   
   useEffect(() => {
-    dispatch(updateCurrentRoute('Home'));  
-    dispatch(updateCurrentAccommodation({}));  
-  }, []);
+    if (isFocused) {      
+      dispatch(updateCurrentRoute('Home'));  
+      dispatch(updateCurrentAccommodation({}));
+    }
+  }, [isFocused]);
   
   const handleOwnerSignUp = () => {
       navigation.navigate('OwnerSignUp');
@@ -62,6 +69,7 @@ export default function HomeScreen({ navigation }) {
       if (data.result) {
             console.log('Connexion réussie!');
             navigation.navigate('MyAccommodations');
+            dispatch(addUser(formData));
           } else {
             console.error('Utilisateur inconnu');
           }
@@ -78,7 +86,6 @@ export default function HomeScreen({ navigation }) {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
           setModalVisible(!modalVisible);
         }}>
         <View style={styles.centeredView}>
