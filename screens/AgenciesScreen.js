@@ -13,10 +13,10 @@ import {
   View,
   SectionList,
   Image,
+  FlatList,
 
 } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Header from '../components/Header';
 import Footer from '../components/Footer';
 // import { useDispatch, useSelector } from 'react-redux';
 // import {  } from '../reducers/user';
@@ -42,42 +42,63 @@ export default function AgenciesScreen({ navigation }) {
   
   useEffect(() => {
     dispatch(updateCurrentRoute('Agencies'));
+    fetchAccommodations();
   }, []);
 
-  const [dataCont, setDataCont] = useState(distributeurs);
   
-  const handleItemSelection2 = (itemIndex) => {
-    const updatedData = [...dataCont];
-    const sectionIndex = 0;
-    updatedData[sectionIndex].data[itemIndex].selected = !updatedData[sectionIndex].data[itemIndex].selected;
-    setDataCont(updatedData);
+  const [dataCont, setDataCont] = useState(distributeurs);
+  const [distributeurs, setDistributeurs] = useState([]);
+
+  console.log(distributeurs);
+
+ 
+  const fetchAccommodations = async () => {
+    try {
+      const response = await fetch(`${BACKEND_ADDRESS}/accommodation`);
+      const data = await response.json();
+
+      if (data && data.accommodationList) {
+        const cleanedData = data.accommodationList.map((accommodation) => ({
+          data: accommodation.distribution.map((distr) => ({
+            selected: false,
+            name: distr.trim(),
+          })),
+          selectedAll: false,
+        }));
+        setDistributeurs(cleanedData);
+      } else {
+        console.log("Les données ne sont pas au format attendu.");
+      }
+    } catch (error) {
+      console.error("Erreur lors de la récupération des distributeurs :", error);
+    }
   };
 
   
+  const handleItemSelection = (itemIndex, sectionIndex) => {
+    const updatedData = [...distributeurs];
+    updatedData[sectionIndex].data[itemIndex].selected = !updatedData[sectionIndex].data[itemIndex].selected;
+    setDistributeurs(updatedData);
+  };
+
   return (
-      <SafeAreaView style={styles.container}>
-        <Text style={styles.title}>Ou voulez-vous que votre annonce apparaisse ?</Text>
-        <SectionList
-            sections={distributeurs}
-            keyExtractor={(item, index) => item + index}
-            renderItem={({ item, index }) => (
-              <View style={styles.item}>
-                <View style={styles.checkboxContainer}>
-                  <TouchableOpacity onPress={() => handleItemSelection2(index)} style={styles.checkbox}>
-                    <FontAwesome
-                      name={item.selected ? 'check-square-o' : 'square-o'}
-                      color={item.selected ? 'green' : 'black'}
-                      size={40}
-                    />
-                  </TouchableOpacity>
-                  <Image source={item.image} style={styles.image} />
-                </View>
-              </View>
-            )}
-            
-          />
-        <Footer navigation={navigation} messageButton={true}/>
-      </SafeAreaView>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Où voulez-vous que votre annonce apparaisse ?</Text>
+      <FlatList
+        data={distributeurs}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => (
+          <View style={styles.item}>
+            <View style={styles.checkboxContainer}>
+              {item.data.map((distributor, index) => (
+                <Text key={index}>{distributor.name}</Text>
+              ))}
+            </View>
+          </View>
+        )}
+      />
+      <Footer navigation={navigation} messageButton={true} />
+    </SafeAreaView>
   );
 }
 
@@ -128,5 +149,9 @@ const styles = StyleSheet.create({
     height: 30,
     fontWeight: '600',
     fontSize: 16,
+  },
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });

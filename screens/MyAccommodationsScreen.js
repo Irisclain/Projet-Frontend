@@ -200,8 +200,8 @@ export default function MyAccommodationsScreen() {
   return (
     <SafeAreaView style={styles.container}>
      <Text style={styles.title}>
-     {users && users[0] && users[0].firstname
-    ? `Les Hébergements de ${users[0].firstname}`
+     {users && users[0] && users[0].username
+    ? `Les Hébergements de ${users[0].username}`
     : 'Mes Hébergements'}
       </Text>
       <View style={styles.scroll}>
