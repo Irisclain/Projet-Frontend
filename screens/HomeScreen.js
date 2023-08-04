@@ -13,6 +13,7 @@ import {
   SafeAreaView,
 } from 'react-native-safe-area-context';
 import { useState, useEffect } from 'react';
+import { useIsFocused } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateCurrentRoute } from '../reducers/currentRoute';
 import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
@@ -23,6 +24,7 @@ const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
 
 export default function HomeScreen({ navigation }) {
   const dispatch = useDispatch();
+  const isFocused = useIsFocused();
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -31,9 +33,11 @@ export default function HomeScreen({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
   
   useEffect(() => {
-    dispatch(updateCurrentRoute('Home'));  
-    dispatch(updateCurrentAccommodation({}));  
-  }, []);
+    if (isFocused) {      
+      dispatch(updateCurrentRoute('Home'));  
+      dispatch(updateCurrentAccommodation({}));
+    }
+  }, [isFocused]);
   
   const handleOwnerSignUp = () => {
       navigation.navigate('OwnerSignUp');

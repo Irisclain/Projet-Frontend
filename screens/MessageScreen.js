@@ -36,8 +36,8 @@ const contactsData = [
   },
 ];
 
-// fonction pour obtenir uniquement le nom de l'accomodation quand le logement est selectionné
-const getSelectedItemsAccommodations = (data) => {
+// Fonction pour obtenir uniquement les noms des hébergements sélectionnés
+/* const getSelectedItemsAccommodations = (data) => {
   const selectedItemsAccommodations = [];
   data.forEach((section) => {
     section.data.forEach((item) => {
@@ -47,9 +47,9 @@ const getSelectedItemsAccommodations = (data) => {
     });
   });
   return selectedItemsAccommodations;
-};
-// fonction pour obtenir uniquement le nom de du contact quand le contact est selectionné
-const getSelectedItemsContacts = (data) => {
+}; */
+// Fonction pour obtenir uniquement les noms des contacts sélectionnés
+/* const getSelectedItemsContacts = (data) => {
   const selectedItemsContacts = [];
   data.forEach((section) => {
     section.data.forEach((item) => {
@@ -59,17 +59,85 @@ const getSelectedItemsContacts = (data) => {
     });
   });
   return selectedItemsContacts;
-};
+}; */
 
 export default function MessageScreen({ navigation }) {
   const dispatch = useDispatch();
   
   useEffect(() => {
+      // Récupérer les données des hébergements depuis l'API backend
+      /* fetch(`${BACKEND_ADDRESS}/accommodation`)
+        .then((response) => response.json())
+        .then((data) => setDataAccom(data))
+        .catch((error) => console.error('Error fetching accommodations data:', error));
+  
+      // Récupérer les données des contacts depuis l'API backend
+      fetch(`${BACKEND_ADDRESS}/users`)
+        .then((response) => response.json())
+        .then((data) => setDataCont(data))
+        .catch((error) => console.error('Error fetching contacts data:', error)); */
+
+        fetch('https://stay-backend.vercel.app/accommodation')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Réponse réseau non valide');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log(data.name);
+          // Mettez à jour l'état de vos données d'hébergements ici
+          setDataAccom(data.data); // Supposons que la clé 'accommodationList' contienne les hébergements
+        })
+        .catch(error => {
+          console.error('Erreur lors de la récupération des données d\'hébergement :', error);
+        });
+
+        fetch('https://stay-backend.vercel.app/users')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Réponse réseau non valide');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log(data.username);
+          // Mettez à jour l'état de vos données d'hébergements ici
+          setDataAccom(data.username); // Supposons que la clé 'accommodationList' contienne les hébergements
+        })
+        .catch(error => {
+          console.error('Erreur lors de la récupération des données d\'hébergement :', error);
+        });
+
     dispatch(updateCurrentRoute('Message'));
     dispatch(updateCurrentAccommodation({}));
   }, []);
 
-  const [modalAccomodationVisible, setModalAccommodationVisible] = useState(false);
+  const getSelectedItemsAccommodations = (data) => {
+    const selectedItemsAccommodations = [];
+    data.forEach((section) => {
+      section.data.forEach((item) => {
+        if (item.selected) {
+          selectedItemsAccommodations.push(item.name);
+        }
+      });
+    });
+    return selectedItemsAccommodations;
+  };
+
+  const getSelectedItemsContacts = (data) => {
+    const selectedItemsContacts = [];
+    data.forEach((section) => {
+      section.data.forEach((item) => {
+        if (item.selected) {
+          selectedItemsContacts.push(item.name);
+        }
+      });
+    });
+    return selectedItemsContacts;
+  };
+  
+  const [modalAccommodationVisible, setModalAccommodationVisible] = useState(false);
   const [modalContactsVisible, setModalContactsVisible] = useState(false);
   const [dataAccom, setDataAccom] = useState(accommodationsData);
   const [dataCont, setDataCont] = useState(contactsData);
@@ -91,7 +159,7 @@ export default function MessageScreen({ navigation }) {
   };
 
   const handleCloseAccommodations = () => {
-    setModalAccomodationVisible(false);
+    setModalAccommodationVisible(false);
   };
 
   const handlePressContacts = (e) => {
@@ -104,29 +172,32 @@ export default function MessageScreen({ navigation }) {
 
   //console.log(modalVisible)
 
-
-  const handleItemSelection = (itemIndex) => {
-    const updatedData = [...dataAccom];
-    const sectionIndex = 0;
-    updatedData[sectionIndex].data[itemIndex].selected = !updatedData[sectionIndex].data[itemIndex].selected;
-    const allSelected = updatedData[sectionIndex].data.every((item) => item.selected);
-    updatedData[sectionIndex].selectedAll = allSelected;
-    setSelectAllAccom(allSelected);
-    setDataCont(updatedData);
+  // Fonctions pour gérer la sélection des éléments d'hébergements (individuels)
+  const handleItemSelectionAcccommodations = (itemIndex) => {
+    const updatedData = [...dataAccom];   // Copie du tableau 'dataAccom'.
+    const sectionIndex = 0; // Index de la section correspondant aux hébergements.
+    updatedData[sectionIndex].data[itemIndex].selected = !updatedData[sectionIndex].data[itemIndex].selected;   // Inversion de l'état de sélection de l'élément (coché ou non coché) à l'index 'itemIndex'.
+    const allSelected = updatedData[sectionIndex].data.every((item) => item.selected);   // Vérification si tous les éléments de la section sont sélectionnés.
+    updatedData[sectionIndex].selectedAll = allSelected;   // Mise à jour de l'état 'selectedAll' de la section en fonction du résultat de l'étape précedente.
+    setSelectAllAccom(allSelected);  // Mise à jour de l'état 'selectAllAccom'
+    setDataAccom(updatedData);  // Mise à jour du tableau 'dataAccom'.
   };
 
-  const handleSelectAllAccom = () => {
-    setDataAccom((prevDataAccom) => {
+  // (tous)
+  const handleSelectAllAccommodations = () => {
+    setDataAccom((prevDataAccom) => {   // Mise à jour de l'état des hébergements en créant une copie du tableau 'dataAccom'.
       const updatedData = [...prevDataAccom];
-      updatedData[0].data.forEach((item) => {
-        item.selected = !selectAllAccom;
+      updatedData[0].data.forEach((item) => {  // Parcours de tous les éléments du tableau de données d'hébergements.
+        item.selected = !selectAllAccom; // Inversion de l'état de sélection pour chaque élément (coché ou non coché)
       });
-      setSelectAllAccom(!selectAllAccom);
-      return updatedData;
+      setSelectAllAccom(!selectAllAccom); // Mise à jour de l'état 'selectAllAccom' pour refléter l'état global de sélection.
+      return updatedData; // Retour de la version mise à jour du tableau de données d'hébergements.
     });
   };
 
-  const handleItemSelection2 = (itemIndex) => {
+// Fonctions pour gérer la sélection des éléments de contacts (individuels)
+// (pour les commentaire explicatifs voir les fonctions accommodations ci-dessus.)
+  const handleItemSelectionContacts = (itemIndex) => {
     const updatedData = [...dataCont];
     const sectionIndex = 0;
     updatedData[sectionIndex].data[itemIndex].selected = !updatedData[sectionIndex].data[itemIndex].selected;
@@ -136,7 +207,8 @@ export default function MessageScreen({ navigation }) {
     setDataCont(updatedData);
   };
 
-  const handleSelectAllCont = () => {
+  //(tous)
+  const handleSelectAllContacts = () => {
     setDataCont((prevDataCont) => {
       const updatedData = [...prevDataCont];
       updatedData[0].data.forEach((item) => {
@@ -155,16 +227,16 @@ export default function MessageScreen({ navigation }) {
 
       <Text style={styles.accomodationList}>Choix du logement
       <View style={styles.iconContainer}>
-          <TouchableOpacity onPress={handlePress1} style={styles.angles}>
+          <TouchableOpacity onPress={handlePressAccommodations} style={styles.angles}>
             <FontAwesome name="angle-down" color="black" size={25} />
           </TouchableOpacity>
       </View>
       </Text>
-      <Modal visible={modal1Visible} animationType="fade" transparent>
+      <Modal visible={modalAccommodationVisible} animationType="fade" transparent>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
           <View style={styles.selectionModalContent}>
-          <TouchableOpacity onPress={handleSelectAllAccom}>
+          <TouchableOpacity onPress={handleSelectAllAccommodations}>
               <FontAwesome
                 name={selectAllAccom ? 'check-square-o' : 'square-o'}
                 color={selectAllAccom ? 'green' : 'black'}
@@ -173,12 +245,12 @@ export default function MessageScreen({ navigation }) {
           <Text style={styles.selection}>Tout séléctionner</Text>
           </View>
           <SectionList
-            sections={DATA}
+            sections={dataAccom}
             keyExtractor={(item, index) => item + index}
             renderItem={({ item, index }) => (
               <View style={styles.item}>
                 <View style={styles.checkboxContainer}>
-                  <TouchableOpacity onPress={() => handleItemSelection(index)} style={styles.checkbox}>
+                  <TouchableOpacity onPress={() => handleItemSelectionAcccommodations(index)} style={styles.checkbox}>
                     <FontAwesome
                       name={item.selected ? 'check-square-o' : 'square-o'}
                       color={item.selected ? 'green' : 'black'}
@@ -192,14 +264,14 @@ export default function MessageScreen({ navigation }) {
               <Text style={styles.modalHeader}>{title}</Text>
             )}
           />
-           <TouchableOpacity onPress={() => handleClose1()} style={styles.modalButton} activeOpacity={0.8}>
+           <TouchableOpacity onPress={() => handleCloseAccommodations()} style={styles.modalButton} activeOpacity={0.8}>
               <Text style={styles.textModalButton}>Close</Text>
             </TouchableOpacity>
           </View>
         </View>
       </Modal>
       <View style={styles.selectedItemsContainer}>
-        {selectedItems1.map((name, index) => (
+        {selectedItemsAccommodations.map((name, index) => (
           <Text key={index} style={styles.selectedItemText}>
             {name}
           </Text>
@@ -240,16 +312,16 @@ export default function MessageScreen({ navigation }) {
 
         <Text style={styles.contactList}>Choix de contacts
         <View style={styles.iconContainer}>
-          <TouchableOpacity onPress={handlePress2} style={styles.angles}>
+          <TouchableOpacity onPress={handlePressContacts} style={styles.angles}>
             <FontAwesome name="angle-down" color="black" size={25} />
           </TouchableOpacity>
         </View>
         </Text>
-        <Modal visible={modal2Visible} animationType="fade" transparent>
+        <Modal visible={modalContactsVisible} animationType="fade" transparent>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
           <View style={styles.selectionModalContent}>
-          <TouchableOpacity onPress={handleSelectAllCont}>
+          <TouchableOpacity onPress={handleSelectAllContacts}>
               <FontAwesome
                 name={selectAllCont ? 'check-square-o' : 'square-o'}
                 color={selectAllCont ? 'green' : 'black'}
@@ -264,7 +336,7 @@ export default function MessageScreen({ navigation }) {
             renderItem={({ item, index }) => (
               <View style={styles.item}>
                 <View style={styles.checkboxContainer}>
-                  <TouchableOpacity onPress={() => handleItemSelection2(index)} style={styles.checkbox}>
+                  <TouchableOpacity onPress={() => handleItemSelectionContacts(index)} style={styles.checkbox}>
                     <FontAwesome
                       name={item.selected ? 'check-square-o' : 'square-o'}
                       color={item.selected ? 'green' : 'black'}
@@ -279,14 +351,14 @@ export default function MessageScreen({ navigation }) {
               <Text style={styles.modalHeader}>{title}</Text>
             )}
           />
-           <TouchableOpacity onPress={() => handleClose2()} style={styles.modalButton} activeOpacity={0.8}>
+           <TouchableOpacity onPress={() => handleCloseContacts()} style={styles.modalButton} activeOpacity={0.8}>
               <Text style={styles.textModalButton}>Close</Text>
             </TouchableOpacity>
           </View>
         </View>
       </Modal>
       <View style={styles.selectedItemsContainer}>
-        {selectedItems2.map((name, index) => (
+        {selectedItemsContacts.map((name, index) => (
           <Text key={index} style={styles.selectedItemText}>
             {name}
           </Text>
