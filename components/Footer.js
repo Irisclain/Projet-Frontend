@@ -17,7 +17,7 @@ import { useSelector } from 'react-redux';
 
 export default function Footer(props) {
   const currentRoute = useSelector((state) => state.currentRoute.value);
-  console.log('selon le footer : ', currentRoute);
+  //console.log('selon le footer : ', currentRoute);
   
   let homeIconStyle = styles.fontawesomeIcon;
   if (currentRoute==='MyAccommodations') { homeIconStyle = 'styles.fontawesomeIconOn' } else { homeIconStyle = 'styles.fontawesomeIcon'}
@@ -72,7 +72,7 @@ export default function Footer(props) {
         </View>
       )
     } else {
-      return (        
+      return (
         <LinearGradient
         colors={['#CD43FD', '#FF7A00', '#FAB26F', '#FFE279']}
         start={{ x: 0.0, y: 1.0 }} end={{ x: 1.0, y: 1.0 }}
@@ -87,14 +87,7 @@ export default function Footer(props) {
 
   return (
     <View style={styles.footer}>
-      <LinearGradient
-      colors={['#CD43FD', '#FF7A00', '#FAB26F', '#FFE279']}
-      start={{ x: 0.0, y: 1.0 }} end={{ x: 1.0, y: 1.0 }}
-      style={styles.fontawesomeIcon}>
-        <TouchableOpacity onPress={() => props.navigation.navigate('Message')} activeOpacity={0.3}>
-            <FontAwesome name='comments' size={30} color={'#fff'}/>
-        </TouchableOpacity>
-      </LinearGradient>
+      <MessageButton />
       <MyProfileButton />
       <HomeButton />
     </View>

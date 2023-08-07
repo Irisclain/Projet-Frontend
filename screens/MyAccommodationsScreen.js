@@ -21,10 +21,6 @@ import { useIsFocused } from '@react-navigation/native';
   
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Footer from '../components/Footer';
-// import { useDispatch, useSelector } from 'react-redux';
-// import {  } from '../reducers/user';
-// import {  } from '../reducers/accommodations';
-// import {  } from '../reducers/messages';
 
 
 const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
@@ -35,7 +31,7 @@ export default function MyAccommodationsScreen() {
   const isFocused = useIsFocused();
 
   const users = useSelector(state => state.user.value);
-  //console.log(users[0].firstname);
+  console.log(users[0]);
   
   useEffect(() => {
     if (isFocused) {      
@@ -57,7 +53,7 @@ export default function MyAccommodationsScreen() {
 
   
   useEffect(() => {
-    let owner = '64ca37d51d15d3410f974fa7'; // Il faudra prendre le user en Store. Pour l'instant, c'est Maxime
+    let owner = '64d0ab5e432f8c174dfa08c7'; // Il faudra prendre le user en Store. Pour l'instant, c'est Maxime
 
     fetch(`${BACKEND_ADDRESS}/accommodation/${owner}`)
       .then(response => response.json())
@@ -173,29 +169,6 @@ export default function MyAccommodationsScreen() {
       );
     });
 
-    // const [accommodation, setAccommodation] = useState([]);
-  
-    // useEffect(() => {
-    //   const newAccommodation = (
-    //     <View>
-    //     <View style={{ height: 1, backgroundColor: 'black',marginTop:10 }} />
-    //     <View style={styles.accommodationContainer}>        
-    //       <Image source={require('../assets/icon.png')}
-    //       style={{height:120, width:130}} />
-    //       <View>
-    //         <Text style={{fontSize: 20, marginTop:-40}}>Titre du bien </Text>
-    //         <Text>Description de l'Appartement</Text> 
-    //       </View>
-    //       <TouchableOpacity onPress={() => navigation.navigate('AddAccommodationScreen')} style={styles.memobutton}>
-    //         <Text>mémo d'achats</Text>
-    //       </TouchableOpacity>
-    //     </View>
-    //     <View style={{ height: 1, backgroundColor: 'black' }} />
-    //   </View>
-    //   );
-  
-    //   setAccommodation((prevAccommodation) => [...prevAccommodation, newAccommodation]);
-    // }, []);
   
    
   return (

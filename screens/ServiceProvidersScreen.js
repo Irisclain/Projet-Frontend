@@ -12,6 +12,7 @@ import {
 import { Calendar } from 'react-native-calendars';
 import { Circle, Rect, Svg } from 'react-native-svg';
 import { Picker } from '@react-native-picker/picker';
+import Footer from "../components/Footer";
 
 const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
 
@@ -242,6 +243,7 @@ const ServiceProvidersScreen = ({ navigation }) => {
           {renderModalContent()}
         </View>
       </Modal>
+      <Footer navigation={navigation} messageButton={true} />
     </SafeAreaView>
   );
 };
