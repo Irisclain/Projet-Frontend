@@ -11,10 +11,10 @@ import {
 import FontAwesome from'react-native-vector-icons/FontAwesome';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useIsFocused } from '@react-navigation/native';
 import { updateCurrentRoute } from '../reducers/currentRoute';
 import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
-import { useIsFocused } from '@react-navigation/native';
-import { addUser } from '../reducers/user';
+import { addUser, login, logout } from '../reducers/user';
 import Footer from '../components/Footer';
 
 const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
