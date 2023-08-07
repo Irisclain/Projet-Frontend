@@ -11,6 +11,7 @@ import AgenciesScreen from './screens/AgenciesScreen';
 import ChatScreen from './screens/ChatScreen';
 import HomeScreen from './screens/HomeScreen';
 import MessageScreen from './screens/MessageScreen';
+import MyProfileScreen from './screens/MyProfileScreen';
 import MyAccommodationsScreen from './screens/MyAccommodationsScreen';
 import OneAccommodationScreen from './screens/OneAccommodationScreen';
 import OwnerSignUpScreen from './screens/OwnerSignUpScreen';
@@ -43,6 +44,7 @@ import user from './reducers/user';
 const store = configureStore({
   reducer: { currentAccommodation, currentRoute, user },
 });
+const tabBarItemStyle = Dimensions.get('window').width/4;
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialTopTabNavigator();
@@ -52,13 +54,16 @@ const TabNavigator = () => {
     screenOptions={{
       tabBarActiveTintColor: '#FF7A00',
       tabBarInactiveTintColor: 'black',
-      style: { marginTop: -10, marginBottom: 12 },
+      tabBarItemStyle: { width: Dimensions.get('window').width/4, height: 40, marginTop:-10 },
+      //style: { marginTop: -14, marginBottom: 0},
       tabBarIndicatorStyle: { backgroundColor: '#FF7A00' },
+      tabBarLabelStyle: { fontSize: 12, margin:-6 },
     }}
     >
       <Tab.Screen name="Reservations" component={ReservationsScreen} options={{  title: 'Réservations' }} />
       <Tab.Screen name="Agencies" component={AgenciesScreen} options={{  title: 'Distribution' }} />
-      <Tab.Screen name="ServiceProviders" component={ServiceProvidersScreen} options={{  title: 'Prestations' }} />
+      <Tab.Screen name="ServiceProviders" component={ServiceProvidersScreen} options={{  title: 'Prestataires' }} />
+      <Tab.Screen name="OneAccommodation" component={OneAccommodationScreen} options={{  title: 'Description' }} />
     </Tab.Navigator>
   );
 };
@@ -127,6 +132,7 @@ export default function App() {
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="OwnerSignUp" component={OwnerSignUpScreen} />
       <Stack.Screen name="ServiceProviderSignUp" component={ServiceProviderSignUpScreen} />
+      <Stack.Screen name="MyProfile" component={MyProfileScreen} />
       <Stack.Screen name="MyAccommodations" component={MyAccommodationsScreen} />
       <Stack.Screen name="AddAccommodation" component={AddAccommodationScreen} />
       <Stack.Screen name="OneAccommodation" component={OneAccommodationScreen} />
@@ -190,4 +196,3 @@ const styles = StyleSheet.create({
     marginLeft: 3,
   }
 });
-

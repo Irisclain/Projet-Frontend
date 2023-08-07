@@ -3,6 +3,7 @@ import {
   Dimensions,
   SafeAreaView,
   ScrollView,
+  KeyboardAvoidingView,
   Image,
   StyleSheet,
   Text,
@@ -136,12 +137,6 @@ export default function AddAccommodationScreen({ navigation }) {
           setFormData({ ...formData, distribution: [] });
           //navigation.navigate("MyAccommodations");
           dispatch(updateCurrentAccommodation({formData}));
-
-
-
-
-
-
         } else {
           console.error("Erreur lors de l'enregistrement de l'hébergement");
         }
@@ -168,12 +163,17 @@ console.log(formData);
           </TouchableOpacity>
        
         <View style={styles.titleContainer}>
+          <KeyboardAvoidingView>
           <TextInput
             value={formData.name}
             onChangeText={(text) => setFormData({ ...formData, name: text })}
             style={styles.inputTitle}
             multiline={true}
+            numberOfLines={2}
+            returnKeyType="done"
+            blurOnSubmit={true}
           />
+          </KeyboardAvoidingView>
           <View style={styles.priceContainer}>
             <View style={styles.priceEuros}>
               <TextInput
@@ -191,25 +191,19 @@ console.log(formData);
           onChangeText={(text) => setFormData({ ...formData, address: text })}
           style={styles.inputAdress}
         />
+        <KeyboardAvoidingView>
         <TextInput
           value={formData.description}
           onChangeText={(text) => setFormData({ ...formData, description: text })}
           style={styles.inputDescription}
           multiline={true}
         />
+        </KeyboardAvoidingView>
       </View>
           <Text style={styles.submitSuggestion}>Modifiez l'annonce en appuyant sur n'importe quel élément</Text>
-
-
-
-          <LinearGradient
-            colors={['#CD43FD', '#FF7A00', '#FAB26F', '#FFE279']}
-            start={{ x: 0.0, y: 1.0 }} end={{ x: 1.0, y: 1.0 }}
-            style={styles.signInButtonConnexion}>
-            <TouchableOpacity onPress={() => handleUpdateAccommodation()}>
-              <Text style={styles.submitButton}>Enregistrer les modifications</Text>
-            </TouchableOpacity>
-          </LinearGradient>
+          <TouchableOpacity onPress={() => handleUpdateAccommodation()}>
+            <Text style={styles.submitButton}>Enregistrer les modifications</Text>
+          </TouchableOpacity>
       <Footer navigation={navigation} messageButton={true} />
     </View>
   );
@@ -334,20 +328,21 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   submitButton:{
-    height: 46,
+    height: 40,
     borderRadius:20,
     borderWidth:0,
-    borderColor: '#FF7A00',
+    backgroundColor: '#FF7A00',
     textAlign: 'center',
     width: Dimensions.get('window').width-58,
     fontSize: 18,
-    padding: 10,
+    padding: 7,
     color: '#FFF',
   },
   inputAdress: {
     fontSize:16, 
     margin:12,
-    marginTop:0,
+    marginTop:-6,
+    marginBottom: 0,
     fontStyle: 'italic',
     textAlign: 'left',
     width: Dimensions.get('window').width-54,
