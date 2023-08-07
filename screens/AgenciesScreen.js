@@ -22,16 +22,7 @@ import Footer from "../components/Footer";
 // import {  } from '../reducers/accommodations';
 // import {  } from '../reducers/messages';
 
-const distributeurs = [
-  {
-    data: [
-      { image: require("../assets/Logo-Booking.png"), selected: false },
-      { image: require("../assets/Logo-Airbnb.png"), selected: false },
-      { image: require("../assets/Logo-Expedia.png"), selected: false },
-    ],
-    selectedAll: false,
-  },
-];
+
 
 const BACKEND_ADDRESS = "https://stay-backend.vercel.app";
 
@@ -40,7 +31,7 @@ export default function AgenciesScreen({ navigation }) {
   const selectedAccommodation = useSelector(
     (state) => state.currentAccommodation.value
   );
-  console.log(selectedAccommodation.distribution);
+  // console.log(selectedAccommodation.distribution);
 
   useEffect(() => {
     dispatch(updateCurrentRoute("Agencies"));
@@ -55,19 +46,22 @@ export default function AgenciesScreen({ navigation }) {
     setDistributeurs(updatedData);
   };
 
+  const filterDistribution = selectedAccommodation.distribution.map(item => item.replace(/["', ]|.com/g, ""));
+  console.log(filterDistribution);
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>
-        OÃ¹ voulez-vous que votre annonce apparaisse ?
+        Ou voulez-vous que votre annonce apparaisse ?
       </Text>
       <FlatList
-        data={selectedAccommodation.distribution}
+      style={styles.list}
+        data={filterDistribution}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <View style={styles.item}>
-            <Text>{item}</Text>
+            <Text style={styles.text}>{item}</Text>
           </View>
-        )}
+  )}
       />
       <Footer navigation={navigation} messageButton={true} />
     </SafeAreaView>
@@ -80,6 +74,26 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     backgroundColor: "#fff",
+  },
+  list:{
+    flexDirection:"column",
+    width:"40%",
+    
+  },
+ text: { 
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 20,
+    marginVertical: 10,
+    fontSize: 30,
+},
+  img: {
+    marginLeft: 20,
+    height: 60,
+    width: 100,
+    resizeMode: "contain",
   },
   title: {
     fontSize: 30,

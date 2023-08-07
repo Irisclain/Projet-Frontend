@@ -93,7 +93,7 @@ export default function AddAccommodationScreen({ navigation }) {
   });
 
   const handleNewAccommodation = () => {
-    console.log(formData);
+    
     fetch(`${BACKEND_ADDRESS}/accommodation`, {
       method: "POST",
       headers: {
@@ -167,7 +167,7 @@ export default function AddAccommodationScreen({ navigation }) {
 
     setFormData({ ...formData, distribution: selectedList }); // update de formData avec la selectedList à jour
   };
-
+console.log("formdata",formData.picture);
   // console.log('selecteditems', selectedItems2);
   // setFormData({ ...formData, distribution: selectedItems2 });
 
