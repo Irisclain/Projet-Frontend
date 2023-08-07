@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateCurrentRoute } from '../reducers/currentRoute';
 import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
 import { useIsFocused } from '@react-navigation/native';
-import { addUser } from '../reducers/user';
+import { addUser, login, logout } from '../reducers/user';
 import Footer from '../components/Footer';
 
 const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
@@ -45,7 +45,15 @@ export default function MyprofileScreen({ navigation }) {
       position: ''},
   });
 
-
+// const infoUser = () => {
+//   fetch(`${BACKEND_ADDRESS}/users/${users.id}`, {
+//     method: 'GET',
+    
+//     }
+//     .then((response) => response.json())
+//     .then((data) => console.log(data))
+//     .catch((error) => console.error(error))
+//     )};
   const handleNewUser = () => {
     fetch(`${BACKEND_ADDRESS}/users/signup`, {
       method: 'POST',
@@ -67,7 +75,7 @@ export default function MyprofileScreen({ navigation }) {
         console.error('Erreur lors de l\'enregistrement de l\'utilisateur:', error);
       });
   };
-  console.log()
+  
   
   return (
       <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
@@ -75,6 +83,7 @@ export default function MyprofileScreen({ navigation }) {
         <Text style={styles.title}>Mon Profil</Text>
           <View style={styles.bider}>
             <TextInput placeholder="Nom..." style={styles.inputs} value={formData.lastname} onChangeText={(text) => setFormData({ ...formData, lastname: text })}/>
+            
             <TextInput placeholder="Prénom..." style={styles.inputs} value={formData.firstname} onChangeText={(text) => setFormData({ ...formData, firstname: text })}/>
             <TextInput placeholder="Nom d'utilisateur..." style={styles.inputs} value={formData.username} onChangeText={(text) => setFormData({ ...formData, username: text })}/>
             <TextInput placeholder="Email..." style={styles.inputs} value={formData.email} onChangeText={(text) => setFormData({ ...formData, email: text })}/>
@@ -91,9 +100,7 @@ export default function MyprofileScreen({ navigation }) {
                 <FontAwesome name={showPassword ? 'eye' : 'eye-slash'} size={24} color="#a6a6a6" />
               </TouchableOpacity>
             </View>
-            <TouchableOpacity onPress={() => handleNewUser()} style={styles.button} activeOpacity={0.8}>
-                <Text style={styles.textButton}>S'inscrire</Text>
-            </TouchableOpacity>
+          
             
             <Footer navigation={navigation} messageButton={true} />
           </View>

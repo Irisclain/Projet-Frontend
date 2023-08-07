@@ -46,8 +46,27 @@ export default function AgenciesScreen({ navigation }) {
     setDistributeurs(updatedData);
   };
 
-  const filterDistribution = selectedAccommodation.distribution.map(item => item.replace(/["', ]|.com/g, ""));
-  console.log(filterDistribution);
+  const imagedistri = [
+    {
+      data: [
+        {
+          image: require("../assets/Logo-Booking.png"),
+          name: "Booking",
+          selected: false,
+        },
+        {
+          image: require("../assets/Logo-Airbnb.png"),
+          name: "Airbnb",
+          selected: false,
+        },
+        {
+          image: require("../assets/Logo-Expedia.png"),
+          name: "Expedia",
+          selected: false,
+        },
+      ],
+    },
+  ];
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>
@@ -55,7 +74,7 @@ export default function AgenciesScreen({ navigation }) {
       </Text>
       <FlatList
       style={styles.list}
-        data={filterDistribution}
+        data={selectedAccommodation.distribution}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <View style={styles.item}>
@@ -66,13 +85,14 @@ export default function AgenciesScreen({ navigation }) {
                         size={20}
                       />
             <Text style={styles.text}>{item}</Text>
+            
           </View>
   )}
       />
       <Footer navigation={navigation} messageButton={true} />
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -88,9 +108,9 @@ const styles = StyleSheet.create({
     
   },
   list:{
-    
     flexDirection:"column",
-    width:"40%",
+    marginLeft:40,
+    width:"50%",
   },
  text: { 
     display: "flex",
