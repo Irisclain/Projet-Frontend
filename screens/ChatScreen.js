@@ -28,6 +28,7 @@ export default function ChatScreen({ navigation, route }) {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user.value);
+  
 
   //console.log(contactName);
   
@@ -43,15 +44,15 @@ export default function ChatScreen({ navigation, route }) {
 
   useEffect(() => {
     (() => {
-      fetch(`${BACKEND_ADDRESS}/users`, { method: 'PUT' });
+      fetch(`${BACKEND_ADDRESS}/users/${user.username}`, { method: 'PUT' });
 
       const subscription = pusher.subscribe('chat');
       subscription.bind('pusher:subscription_succeeded', () => {
-        subscription.bind('message', handleReceiveMessage);
+      subscription.bind('message', handleReceiveMessage);
       });
     })();
 
-    return () => fetch(`${BACKEND_ADDRESS}/users`, { method: 'DELETE' });
+    return () => fetch(`${BACKEND_ADDRESS}/users/${user.username}`, { method: 'DELETE' });
   }, []);
 
   const handleReceiveMessage = (data) => {
