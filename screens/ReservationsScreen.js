@@ -381,13 +381,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   reservationItem: {
-    flexDirection: "column",
-    justifyContent: "space-between",
-    alignItems: "center",
+    // flexDirection: "column",
+    // justifyContent: "",
+    // alignItems: "center",
     paddingVertical: 10,
     borderBottomWidth: 2,
     borderBottomColor: "#ccc",
-    borderRadiusColor: "black",
+     borderRadiusColor: "black",
   },
   modalContainer: {
     flex: 1,
@@ -435,6 +435,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 5,
     marginTop: 5,
+    position: 'absolute',
+    bottom: 0,
+    right: 0
   },
   deleteButtonText: {
     color: "white",
@@ -445,7 +448,11 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 5,
-    marginTop: 5,
+    marginTop: 30,
+    position: 'absolute',
+    top: 0,
+    right: 0
+
   },
   editButtonText: {
     color: "white",
