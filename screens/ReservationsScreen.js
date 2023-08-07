@@ -12,6 +12,7 @@ import { Calendar } from "react-native-calendars";
 import { Circle, Rect, Svg } from "react-native-svg";
 import Footer from "../components/Footer";
 import DatePicker from "react-native-datepicker";
+import { StatusBar } from 'expo-status-bar';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateCurrentRoute } from '../reducers/currentRoute';
@@ -21,24 +22,10 @@ import { useNavigation } from '@react-navigation/native';
 
 const BACKEND_ADDRESS = "https://stay-backend.vercel.app";
 
-//export default function ReservationsScreen({ navigation }) {
-export default function ReservationsScreen() {
-  const dispatch = useDispatch();
-  const isFocused = useIsFocused();
-  const currentAccommodation = useSelector((state) => state.currentAccommodation.value);
-  
-  const navigation = useNavigation();
-
-
-  useEffect(() => {
-    if (isFocused) {      
-      dispatch(updateCurrentRoute('Reservations'));
-    }
-    return
-  }, [isFocused]);
-
+export default function ReservationsScreen({ navigation }) {
+  const [selectedDates, setSelectedDates] = useState({});
   const [legends, setLegends] = useState([
-    { color: "gray", label: "Réservation" },
+    { color: "grey", label: "Réservation" },
     { color: "red", label: "Indisponibilité" },
     { color: "blue", label: "Ménage" },
     { color: "green", label: "Travaux" },
@@ -46,6 +33,7 @@ export default function ReservationsScreen() {
 
   const [reservations, setReservations] = useState([]);
   const [reservationData, setReservationData] = useState({
+    nom: "",
     arrival: "",
     departure: "",
     price: "",
@@ -54,7 +42,7 @@ export default function ReservationsScreen() {
   });
   const [isModalVisible, setModalVisible] = useState(false);
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
-
+console.log(reservations)
   useEffect(() => {
     fetchReservations();
   }, []);
@@ -72,6 +60,57 @@ export default function ReservationsScreen() {
       console.error("Error fetching reservations:", error);
     }
   };
+
+
+const calculatePeriods = () => {
+  const periods = {};
+
+  for (let i = 0; i < reservations.length; i++) {
+    const reservation = reservations[i];
+    const arrival = new Date(reservation.arrival.split("T")[0]);
+    const departure = new Date(reservation.departure.split("T")[0]);
+
+    const currentDate = new Date(arrival);
+    while (currentDate <= departure) {
+      const formattedDate = currentDate.toISOString().split("T")[0];
+      if (!periods[formattedDate]) {
+        periods[formattedDate] = {
+          periods: [],
+        };
+      }
+      periods[formattedDate].periods.push({
+        color: "grey",
+        textColor: "white",
+        text: `Réservation ${i + 1}`,
+      });
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+  }
+
+  Object.keys(selectedDates).forEach((date) => {
+    if (!periods[date]) {
+      periods[date] = {
+        periods: [],
+      };
+    }
+    periods[date].periods.push({
+      color: "red",
+      textColor: "white",
+      customStyles: {
+        container: {
+          backgroundColor: "red",
+          borderRadius: 20,
+        },
+      },
+      text: "Barre rouge",
+    });
+  });
+
+  return periods;
+  };
+
+const markedDates = calculatePeriods();
+
 
   const handleCreateReservation = async () => {
     try {
@@ -200,6 +239,7 @@ export default function ReservationsScreen() {
     }));
     hideDatePicker();
   };
+  
 
   const renderLegend = () => {
     return (
@@ -224,14 +264,33 @@ export default function ReservationsScreen() {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
         {renderLegend()}
-        <Calendar style={styles.calendar} />
+        <View>
+        <Calendar
+          style={styles.calendar}
+          markingType="multi-period"
+          markedDates = {markedDates}
+          onDayPress={(day) => {
+            const selectedDate = day.dateString;
+            setSelectedDates((prevSelectedDates) => {
+              const newSelectedDates = { ...prevSelectedDates };
+              if (newSelectedDates[selectedDate]) {
+                delete newSelectedDates[selectedDate];
+              } else {
+                newSelectedDates[selectedDate] = true;
+              }
+              return newSelectedDates;
+            });
+          }}
+        />
+         <StatusBar style="auto" />
+      </View>
 
         {reservations.map((reservation) => (
           <View key={reservation._id} style={styles.reservationItem}>
             <Text>Nom : {reservation.name}</Text>
             <Text>Arrivée: {reservation.arrival}</Text>
             <Text>Départ : {reservation.departure}</Text>
-            <Text>Prix : {reservation.price}£</Text>
+            <Text>Prix : {reservation.price}€</Text>
             <Text>Status : {reservation.status}</Text>
             <Text>Distribution :{reservation.distribution}</Text>
             {/* Ajouter d'autres propriétés ici */}

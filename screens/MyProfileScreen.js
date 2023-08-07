@@ -11,9 +11,9 @@ import {
 import FontAwesome from'react-native-vector-icons/FontAwesome';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useIsFocused } from '@react-navigation/native';
 import { updateCurrentRoute } from '../reducers/currentRoute';
 import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
-import { useIsFocused } from '@react-navigation/native';
 import { addUser, login, logout } from '../reducers/user';
 import Footer from '../components/Footer';
 
@@ -45,15 +45,15 @@ export default function MyprofileScreen({ navigation }) {
       position: ''},
   });
 
-// const infoUser = () => {
-//   fetch(`${BACKEND_ADDRESS}/users/${users.id}`, {
-//     method: 'GET',
+const infoUser = () => {
+  fetch(`${BACKEND_ADDRESS}/users/${users.id}`, {
+    method: 'GET',
     
-//     }
-//     .then((response) => response.json())
-//     .then((data) => console.log(data))
-//     .catch((error) => console.error(error))
-//     )};
+    }
+    .then((response) => response.json())
+    .then((data) => console.log(data))
+    .catch((error) => console.error(error))
+    )};
   const handleNewUser = () => {
     fetch(`${BACKEND_ADDRESS}/users/signup`, {
       method: 'POST',

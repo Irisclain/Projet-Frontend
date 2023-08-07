@@ -11,20 +11,16 @@ import {
   View,
   Image,
   Button,
-} from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { updateCurrentRoute } from "../reducers/currentRoute";
-import { updateCurrentAccommodation } from "../reducers/currentAccommodation";
-import { useIsFocused } from "@react-navigation/native";
-
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import Footer from "../components/Footer";
-// import { useDispatch, useSelector } from 'react-redux';
-// import {  } from '../reducers/user';
-// import {  } from '../reducers/accommodations';
-// import {  } from '../reducers/messages';
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateCurrentRoute } from '../reducers/currentRoute';
+import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
+import { useIsFocused } from '@react-navigation/native';  
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { addUser, login, logout } from '../reducers/user';
+import Footer from '../components/Footer';
 
 const BACKEND_ADDRESS = "https://stay-backend.vercel.app";
 
@@ -32,9 +28,9 @@ export default function MyAccommodationsScreen() {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
 
-  const users = useSelector((state) => state.user.value);
-  //console.log(users[0].firstname);
-
+  const user = useSelector(state => state.user.value);
+  console.log('Tout sur l\'user : ' , user);
+  
   useEffect(() => {
     if (isFocused) {
       dispatch(updateCurrentRoute("MyAccommodations"));
@@ -45,9 +41,12 @@ export default function MyAccommodationsScreen() {
   const [accommodationsData, setAccommodationsData] = useState([]);
 
   useEffect(() => {
-    let owner = "64ca37d51d15d3410f974fa7"; // Il faudra prendre le user en Store. Pour l'instant, c'est Maxime
+    //let owner = '64d0ab5e432f8c174dfa08c7'; // Il faudra prendre le user en Store. Pour l'instant, c'est Maxime
 
-    fetch(`${BACKEND_ADDRESS}/accommodation/${owner}`)
+    ownerToken = user.token;
+
+    //fetch(`${BACKEND_ADDRESS}/accommodation/${owner}`)
+    fetch(`${BACKEND_ADDRESS}/accommodation/${ownerToken}`)
       .then((response) => response.json())
       .then((data) => {
         //console.log('allDatas : ', data);
@@ -89,9 +88,9 @@ export default function MyAccommodationsScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>
-        {users && users[0] && users[0].username
-          ? `Les Hébergements de ${users[0].username}`
-          : "Mes Hébergements"}
+        {user && user.username
+          ? `Les hébergements de ${user.username}`
+          : "Mes hébergements"}
       </Text>
       <View style={styles.scroll}>
         <ScrollView>{accommodations}</ScrollView>

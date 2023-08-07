@@ -46,27 +46,6 @@ export default function AgenciesScreen({ navigation }) {
     setDistributeurs(updatedData);
   };
 
-  const imagedistri = [
-    {
-      data: [
-        {
-          image: require("../assets/Logo-Booking.png"),
-          name: "Booking",
-          selected: false,
-        },
-        {
-          image: require("../assets/Logo-Airbnb.png"),
-          name: "Airbnb",
-          selected: false,
-        },
-        {
-          image: require("../assets/Logo-Expedia.png"),
-          name: "Expedia",
-          selected: false,
-        },
-      ],
-    },
-  ];
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>

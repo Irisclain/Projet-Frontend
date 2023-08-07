@@ -16,7 +16,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateCurrentRoute } from '../reducers/currentRoute';
 import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
-import { addUser } from '../reducers/user';
+import { addUser, login, logout } from '../reducers/user';
 
 const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
 
@@ -324,7 +324,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     alignSelf: 'center',
     marginBottom: 10,
-    marginTop: 10,
+    marginTop: 5,
   },
   textButton: {
     color: 'white',
@@ -343,6 +343,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     textDecorationLine:'underline',
     marginBottom: 10,
-    marginTop: -10,
+    marginTop: -25,
   },
 });

@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateCurrentRoute } from '../reducers/currentRoute';
 import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {addUser} from '../reducers/user';
+import { addUser, login, logout } from '../reducers/user';
 
 
 const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
@@ -66,13 +66,16 @@ export default function HomeScreen({ navigation }) {
         body: JSON.stringify(formData),
       }).then(response => response.json())
     .then(data => {
-      if (data.result) { console.log(data.result)
-            console.log('Connexion réussie!');
-            navigation.navigate('MyAccommodations');
-            dispatch(addUser(formData));
-          } else {
-            console.error('Utilisateur inconnu');
-          }
+      if (data.result) {
+        console.log('datas : ', data);
+        console.log('Connexion réussie!');
+        //dispatch(addUser(formData));
+        console.log('à logguer : ', { username: formData.username, token: data.token })
+        dispatch(login({ username: formData.username, token: data.token }));
+        navigation.navigate('MyAccommodations');
+      } else {
+        console.error('Utilisateur inconnu');
+      }
         })
         .catch((error) => {
           console.error('Erreur lors de la connexion de l\'utilisateur:', error);

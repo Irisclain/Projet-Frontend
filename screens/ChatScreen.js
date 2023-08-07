@@ -21,8 +21,15 @@ import {LinearGradient} from 'expo-linear-gradient';
 const pusher = new Pusher('4c35491e793ed55ea5db', { cluster: 'eu' });
 const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
 
-export default function ChatScreen({ navigation, route: { params } }) {
+export default function ChatScreen({ navigation, route }) {
+  const { contactName } = route.params;
+  const selectedContacts = contactName.map(contact => contact).join(', ');
+
   const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.user.value);
+
+  //console.log(contactName);
   
   useEffect(() => {
     dispatch(updateCurrentRoute('Chat'));
@@ -32,9 +39,11 @@ export default function ChatScreen({ navigation, route: { params } }) {
   const [messages, setMessages] = useState([]);
   const [messageText, setMessageText] = useState('');
 
+  console.log(messages);
+
   useEffect(() => {
     (() => {
-      fetch(`${BACKEND_ADDRESS}/users/${params.username}`, { method: 'PUT' });
+      fetch(`${BACKEND_ADDRESS}/users`, { method: 'PUT' });
 
       const subscription = pusher.subscribe('chat');
       subscription.bind('pusher:subscription_succeeded', () => {
@@ -42,32 +51,46 @@ export default function ChatScreen({ navigation, route: { params } }) {
       });
     })();
 
-    return () => fetch(`${BACKEND_ADDRESS}/users/${params.username}`, { method: 'DELETE' });
-  }, [params.username]);
+    return () => fetch(`${BACKEND_ADDRESS}/users`, { method: 'DELETE' });
+  }, []);
 
   const handleReceiveMessage = (data) => {
     console.log(data);
     setMessages(messages => [...messages, data]);
   };
 
-  console.log(messages)
+  //console.log(messageText)
 
   const handleSendMessage = () => {
     if (!messageText) {
       return;
     }
-    console.log(messages);
     const payload = {
       text: messageText,
-      username: params.username,
+      username: user.username,
       createdAt: new Date(),
       id: Math.floor(Math.random() * 100000),
     };
 
-    fetch(`${BACKEND_ADDRESS}/message`, {
+    fetch(`${BACKEND_ADDRESS}/messages`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('La réponse du réseau n\'était pas valide');
+      }
+      return response.json(); // Si votre backend renvoie une réponse JSON
+    })
+    .then(data => {
+      // Traiter la réponse en cas de succès, si nécessaire
+      console.log('Message envoyé avec succès :', data);
+      setMessageText('');
+    })
+    .catch(error => {
+      // Gérer les erreurs ici
+      console.error('Erreur lors de l\'envoi du message :', error);
     });
 
     setMessageText('');
@@ -82,7 +105,10 @@ export default function ChatScreen({ navigation, route: { params } }) {
      style={styles.header}
    >
       <View style={styles.banner}>
-        <Text style={styles.greetingText}>To: {params.username}</Text>
+        <View style={styles.greetingContainer}>
+          <Text style={styles.greetingText}>To:</Text>
+          <Text style={styles.contactsText}>{selectedContacts}</Text>
+        </View>
       </View>
       </LinearGradient>
 
@@ -95,8 +121,8 @@ export default function ChatScreen({ navigation, route: { params } }) {
         <ScrollView style={styles.scroller}>
           {
             messages.map((message, i) => (
-              <View key={i} style={[styles.messageWrapper, { ...(message.username === params.username ? styles.messageSent : styles.messageRecieved) }]}>
-                <View style={[styles.message, { ...(message.username === params.username ? styles.messageSentBg : styles.messageRecievedBg) }]}>
+              <View key={i} style={[styles.messageWrapper, { ...(message.username === user.username ? styles.messageSent : styles.messageRecieved) }]}>
+                <View style={[styles.message, { ...(message.username === user.username ? styles.messageSentBg : styles.messageRecievedBg) }]}>
                   <Text style={styles.messageText}>{message.text}</Text>
                 </View>
                 <Text style={styles.timeText}>{new Date(message.createdAt).getHours()}:{String(new Date(message.createdAt).getMinutes()).padStart(2, '0')}</Text>
@@ -154,7 +180,7 @@ const styles = StyleSheet.create({
   },
   header: {
     width: '90%',
-    height: '9%',
+    height: '15%',
     marginBottom: -10,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
@@ -178,7 +204,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
   },
-  banner: {
+ /*  banner: {
     width: '99%',
     height: '75%',
     paddingTop: 5,
@@ -191,13 +217,44 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     margin: 2,
+  }, */
+  banner: {
+    width: '99%',
+    height: '85%',
+    paddingTop: 5,
+    paddingLeft: 15,
+    paddingRight: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between', // Distribute elements horizontally
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    margin: 2,
   },
-  greetingText: {
+  /* greetingText: {
     color: 'black',
     fontWeight: 'bold',
     fontSize: 18,
     justifiyContent: 'center',
     marginBottom: 5,
+  }, */
+  contactsText: {
+    color: 'black',
+    fontSize: 18,
+    fontWeight: 'bold',
+    flexWrap: 'wrap', // Allow text to wrap within the container
+    flex: 1, // Allow the text to expand and take up available space
+  },
+  greetingContainer: {
+    flexDirection: 'row', // Arrange elements horizontally
+    alignItems: 'center', // Align elements vertically within the container
+  },
+  greetingText: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 18,
+    marginRight: 5, // Add spacing between "To:" and contact names
   },
   message: {
     paddingTop: 12,
