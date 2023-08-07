@@ -21,8 +21,15 @@ import {LinearGradient} from 'expo-linear-gradient';
 const pusher = new Pusher('4c35491e793ed55ea5db', { cluster: 'eu' });
 const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
 
-export default function ChatScreen({ navigation, route: { params } }) {
+export default function ChatScreen({ navigation, route }) {
+  const { contactName } = route.params;
+  const selectedContacts = contactName.map(contact => contact).join(', ');
+
   const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.user.value);
+
+  console.log(contactName);
   
   useEffect(() => {
     dispatch(updateCurrentRoute('Chat'));
@@ -34,7 +41,7 @@ export default function ChatScreen({ navigation, route: { params } }) {
 
   useEffect(() => {
     (() => {
-      fetch(`${BACKEND_ADDRESS}/users/${params.username}`, { method: 'PUT' });
+      fetch(`${BACKEND_ADDRESS}/users`, { method: 'PUT' });
 
       const subscription = pusher.subscribe('chat');
       subscription.bind('pusher:subscription_succeeded', () => {
@@ -42,8 +49,8 @@ export default function ChatScreen({ navigation, route: { params } }) {
       });
     })();
 
-    return () => fetch(`${BACKEND_ADDRESS}/users/${params.username}`, { method: 'DELETE' });
-  }, [params.username]);
+    return () => fetch(`${BACKEND_ADDRESS}/users`, { method: 'DELETE' });
+  }, []);
 
   const handleReceiveMessage = (data) => {
     console.log(data);
@@ -59,7 +66,7 @@ export default function ChatScreen({ navigation, route: { params } }) {
     console.log(messages);
     const payload = {
       text: messageText,
-      username: params.username,
+      username: user.username,
       createdAt: new Date(),
       id: Math.floor(Math.random() * 100000),
     };
@@ -82,7 +89,10 @@ export default function ChatScreen({ navigation, route: { params } }) {
      style={styles.header}
    >
       <View style={styles.banner}>
-        <Text style={styles.greetingText}>To: {params.username}</Text>
+        <View style={styles.greetingContainer}>
+          <Text style={styles.greetingText}>To:</Text>
+          <Text style={styles.contactsText}>{selectedContacts}</Text>
+        </View>
       </View>
       </LinearGradient>
 
@@ -192,12 +202,29 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     margin: 2,
   },
-  greetingText: {
+  /* greetingText: {
     color: 'black',
     fontWeight: 'bold',
     fontSize: 18,
     justifiyContent: 'center',
     marginBottom: 5,
+  }, */
+  contactsText: {
+    color: 'black',
+    fontSize: 18,
+    fontWeight: 'bold',
+    flexWrap: 'wrap', // Allow text to wrap within the container
+    flex: 1, // Allow the text to expand and take up available space
+  },
+  greetingContainer: {
+    flexDirection: 'row', // Arrange elements horizontally
+    alignItems: 'center', // Align elements vertically within the container
+  },
+  greetingText: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 18,
+    marginRight: 5, // Add spacing between "To:" and contact names
   },
   message: {
     paddingTop: 12,
