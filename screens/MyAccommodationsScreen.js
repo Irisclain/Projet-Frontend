@@ -43,7 +43,12 @@ export default function MyAccommodationsScreen() {
   useEffect(() => {
     //let owner = '64d0ab5e432f8c174dfa08c7'; // Il faudra prendre le user en Store. Pour l'instant, c'est Maxime
 
-    ownerToken = user.token;
+    let ownerToken = 'kZg43tvoorU8F5ypqMv5QZBYZjLC426k'
+    
+
+    if (!user) {
+      ownerToken = user.token;
+    }
 
     //fetch(`${BACKEND_ADDRESS}/accommodation/${owner}`)
     fetch(`${BACKEND_ADDRESS}/accommodation/${ownerToken}`)
