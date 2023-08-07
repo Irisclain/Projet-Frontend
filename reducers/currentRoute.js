@@ -10,6 +10,7 @@ export const currentRouteSlice = createSlice({
   reducers: {
     updateCurrentRoute: (state, action) => {
       state.value = action.payload;
+      
     },
   },
 });

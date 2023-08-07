@@ -23,7 +23,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 // import {  } from '../reducers/user';
 // import {  } from '../reducers/accommodations';
 // import {  } from '../reducers/messages';
-const BACKEND_ADDRESS = 'https://stay-backend.vercel.app'; 
+const BACKEND_ADDRESS = "https://stay-backend.vercel.app";
 //'https://stay-backend.vercel.app';
 
 const distributeurs = [
@@ -48,7 +48,6 @@ const distributeurs = [
   },
 ];
 
-
 const getSelectedItems = (data) => {
   const selectedItems = [];
   data.forEach((section) => {
@@ -59,47 +58,42 @@ const getSelectedItems = (data) => {
     });
   });
   return selectedItems;
-  
 };
 
 export default function AddAccommodationScreen({ navigation }) {
-  
   const [image, setImage] = useState(null);
   const [data, setData] = useState(distributeurs);
   const selectedItems = getSelectedItems(data);
 
-
   //icone photo nouvel hébergement
   const pickImage = async () => {
-  // No permissions request is necessary for launching the image library
-  let result = await ImagePicker.launchImageLibraryAsync({
-    mediaTypes: ImagePicker.MediaTypeOptions.All,
-    allowsEditing: true,
-    aspect: [4, 3],
-    quality: 1,
-  });
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
 
-  if (!result.canceled) {
-    setImage(result.assets[0].uri);
-    setFormData({ ...formData, picture: result.assets[0].uri });
-  }
-};
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+      setFormData({ ...formData, picture: result.assets[0].uri });
+    }
+  };
 
-const objectId = '64ca37d51d15d3410f974fa7';
-//etat pour l'enregistrement de l'hébergement
+  const objectId = "64ca37d51d15d3410f974fa7";
+  //etat pour l'enregistrement de l'hébergement
   const [formData, setFormData] = useState({
     name: "",
     picture: "photo",
     address: "",
     description: "",
-    price:"",
-    distribution:[],
-    owner: objectId,
+    price: "",
+    distribution: [],
   });
-  
-//dispatch pour l'enregistrement de l'hébergement
+
   const handleNewAccommodation = () => {
-    console.log(formData);
+    
     fetch(`${BACKEND_ADDRESS}/accommodation`, {
       method: "POST",
       headers: {
@@ -107,7 +101,7 @@ const objectId = '64ca37d51d15d3410f974fa7';
       },
       body: JSON.stringify(formData),
     })
-    .then (response => response.json())
+      .then((response) => response.json())
       .then((response) => {
         console.log(response);
         if (response.result) {
@@ -119,62 +113,63 @@ const objectId = '64ca37d51d15d3410f974fa7';
         }
       })
       .catch((error) => {
-        console.error("Erreur lors de l'enregistrement de l'hébergement:", error);
+        console.error(
+          "Erreur lors de l'enregistrement de l'hébergement:",
+          error
+        );
       });
   };
 
   //état pour rendre le modal visible ou non
   const [modalVisible, setModalVisible] = useState(false);
-  
+
   //ouvrir le modal
   const handlePressOpen = () => {
-    setModalVisible((prevState) =>!prevState);
-  
+    setModalVisible((prevState) => !prevState);
   };
- 
-// fonction pour les séléctions de la modale
+
+  // fonction pour les séléctions de la modale
   const handleItemSelection = (itemIndex) => {
     const selectedList = [...formData.distribution]; // selectedList= tableau distribution
-    const updatedData = [...data];// updatedData= tableau distributeurs
+    const updatedData = [...data]; // updatedData= tableau distributeurs
 
-      switch (itemIndex) {
-        case 0:
-          if (!selectedList.includes("Booking")) {
-            selectedList.push("Booking"); // on ajoute Booking à la liste si il n'est pas déjà présent
-          } else {
-            const index = selectedList.indexOf("Booking");
-            selectedList.splice(index, 1); // On l'enlève si il est déjà là
-          }
-          updatedData[0].data[0].selected =  selectedList.includes("Booking");//dans la data de Bookin, on selectionne si la liste inclus Booking
-          break;
-        case 1:
-          if (!selectedList.includes("Airbnb")) {
-            selectedList.push("Airbnb"); // on ajoute Airbnb à la liste si il n'est pas déjà présent
-          } else {
-            const index = selectedList.indexOf("Airbnb");
-            selectedList.splice(index, 1); // On l'enlève si il est déjà là
-          }
-          updatedData[0].data[1].selected =  selectedList.includes("Airbnb");//dans la data de Airbnb, on selectionne si la liste inclus Airbnb
-          break;
-        case 2:
-          if (!selectedList.includes("Expedia")) {
-            selectedList.push("Expedia"); // Aon ajoute Expedia à la liste si il n'est pas déjà présent
-          } else {
-            const index = selectedList.indexOf("Expedia");
-            selectedList.splice(index, 1); // On l'enlève si il est déjà là
-          }
-          updatedData[0].data[2].selected =  selectedList.includes("Expedia");//dans la data de Expedia, on selectionne si la liste inclus Expedia
-          break;
-        default:
-          break;
-      }
-    
-      setFormData({ ...formData, distribution: selectedList }); // update de formData avec la selectedList à jour
-    };    
-  
+    switch (itemIndex) {
+      case 0:
+        if (!selectedList.includes("Booking")) {
+          selectedList.push("Booking"); // on ajoute Booking à la liste si il n'est pas déjà présent
+        } else {
+          const index = selectedList.indexOf("Booking");
+          selectedList.splice(index, 1); // On l'enlève si il est déjà là
+        }
+        updatedData[0].data[0].selected = selectedList.includes("Booking"); //dans la data de Bookin, on selectionne si la liste inclus Booking
+        break;
+      case 1:
+        if (!selectedList.includes("Airbnb")) {
+          selectedList.push("Airbnb"); // on ajoute Airbnb à la liste si il n'est pas déjà présent
+        } else {
+          const index = selectedList.indexOf("Airbnb");
+          selectedList.splice(index, 1); // On l'enlève si il est déjà là
+        }
+        updatedData[0].data[1].selected = selectedList.includes("Airbnb"); //dans la data de Airbnb, on selectionne si la liste inclus Airbnb
+        break;
+      case 2:
+        if (!selectedList.includes("Expedia")) {
+          selectedList.push("Expedia"); // Aon ajoute Expedia à la liste si il n'est pas déjà présent
+        } else {
+          const index = selectedList.indexOf("Expedia");
+          selectedList.splice(index, 1); // On l'enlève si il est déjà là
+        }
+        updatedData[0].data[2].selected = selectedList.includes("Expedia"); //dans la data de Expedia, on selectionne si la liste inclus Expedia
+        break;
+      default:
+        break;
+    }
 
-  
-console.log(formData);
+    setFormData({ ...formData, distribution: selectedList }); // update de formData avec la selectedList à jour
+  };
+console.log("formdata",formData.picture);
+  // console.log('selecteditems', selectedItems2);
+  // setFormData({ ...formData, distribution: selectedItems2 });
 
   return (
     <View style={styles.container}>
@@ -240,54 +235,49 @@ console.log(formData);
             <FontAwesome name="angle-down" color="black" size={25} />
           </TouchableOpacity>
         </View>
-        <Modal style={{borderWidth:3}}
+        <Modal
+          style={{ borderWidth: 3 }}
           animationType="none"
           transparent={true}
           visible={modalVisible}
         >
-          <TouchableOpacity
-          
-            activeOpacity={1}
-            onPressOut={() => setModalVisible(false)}
-          >
-            <View  style={styles.centeredView}>
-              <View style={styles.modalView}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
               <TouchableOpacity
-          style={styles.closeButton}
-          onPress={() => setModalVisible(false)}
-        >
-          <Text style={styles.closeButtonText}>X</Text>
-        </TouchableOpacity>
-                <SectionList 
-                  sections={distributeurs}
-                  keyExtractor={(item, index) => item + index}
-                  renderItem={({ item, index }) => (
-                    <View style={styles.item}>
-                      <TouchableOpacity
-                        onPress={() => {
-                          handleItemSelection(index);
-                          /* {selectedItems.map((name, index) => (
-                            <Text key={index} >
-                              {name}
-                            </Text>
-                          ))}  */                          
-                        }}
-                        style={styles.checkbox}
-                      >
-                        <FontAwesome
-                          name={item.selected ? "check-square-o" : "square-o"}
-                          color={item.selected ? "green" : "black"}
-                          size={20}
-                        />
-                      </TouchableOpacity>
-                      <Image source={item.image} style={styles.img} />
-                    </View>
-                  )}
-                />
-              </View>
+                style={styles.closeButton}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={styles.closeButtonText}>X</Text>
+              </TouchableOpacity>
+              <SectionList
+                sections={distributeurs}
+                keyExtractor={(item, index) => item + index}
+                renderItem={({ item, index }) => (
+                  <View style={styles.item}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        handleItemSelection(index);
+                        {
+                          selectedItems.map((name, index) => (
+                            <Text key={index}>{name}</Text>
+                          ));
+                        }
+                      }}
+                      style={styles.checkbox}
+                    >
+                      <FontAwesome
+                        name={item.selected ? "check-square-o" : "square-o"}
+                        color={item.selected ? "green" : "black"}
+                        size={20}
+                      />
+                    </TouchableOpacity>
+                    <Image source={item.image} style={styles.img} />
+                  </View>
+                )}
+              />
             </View>
-          </TouchableOpacity>        
-        </Modal>      
+          </View>
+        </Modal>
         <Button title="Submit" onPress={() => handleNewAccommodation()} />
       </View>
       <Footer navigation={navigation} messageButton={true} />
@@ -303,9 +293,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   closeButtonText: {
-    left:10,
-    top:10,
-        fontSize: 20,
+    left: 10,
+    top: 10,
+    fontSize: 20,
   },
   img: {
     marginLeft: 20,
@@ -321,14 +311,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  modalcontainer:{
+  modalcontainer: {
     height: 300,
     width: 300,
-    borderWidth:3,
-    
+    borderWidth: 3,
   },
   centeredView: {
-    position: 'absolute',
+    position: "absolute",
     width: 150,
     top: 350,
     left: 270,
@@ -413,7 +402,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   modalView: {
-
     backgroundColor: "white",
     borderRadius: 20,
     shadowColor: "#000",
