@@ -55,7 +55,6 @@ const TabNavigator = () => {
       tabBarActiveTintColor: '#FF7A00',
       tabBarInactiveTintColor: 'black',
       tabBarItemStyle: { width: Dimensions.get('window').width/4, height: 40, marginTop:-10 },
-      //style: { marginTop: -14, marginBottom: 0},
       tabBarIndicatorStyle: { backgroundColor: '#FF7A00' },
       tabBarLabelStyle: { fontSize: 12, margin:-6 },
     }}
@@ -114,11 +113,7 @@ const TabNavigator = () => {
           </View>
         );
         }
-    };     
-
-
-
-
+    };
 
 
 export default function App() {
@@ -129,17 +124,18 @@ export default function App() {
       <StatusBar animated={false} backgroundColor="#000"/>
       <Header/>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="OwnerSignUp" component={OwnerSignUpScreen} />
-      <Stack.Screen name="ServiceProviderSignUp" component={ServiceProviderSignUpScreen} />
-      <Stack.Screen name="MyProfile" component={MyProfileScreen} />
-      <Stack.Screen name="MyAccommodations" component={MyAccommodationsScreen} />
-      <Stack.Screen name="AddAccommodation" component={AddAccommodationScreen} />
-      <Stack.Screen name="OneAccommodation" component={OneAccommodationScreen} />
-      {/* <Stack.Screen name="ServiceProviders" component={ServiceProvidersScreen} options={{ title: 'Prestations' }} /> */}
-      <Stack.Screen name="Message" component={MessageScreen} />
-      <Stack.Screen name="Chat" component={ChatScreen} />
-      <Stack.Screen name="TabNavigator" component={TabNavigator} />
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="OwnerSignUp" component={OwnerSignUpScreen} />
+        <Stack.Screen name="ServiceProviderSignUp" component={ServiceProviderSignUpScreen} />
+        <Stack.Screen name="MyProfile" component={MyProfileScreen} />
+        <Stack.Screen name="MyAccommodations" component={MyAccommodationsScreen} />
+        <Stack.Screen name="AddAccommodation" component={AddAccommodationScreen} />
+        <Stack.Screen name="OneAccommodation" component={OneAccommodationScreen} />
+        <Stack.Screen name="Reservations" component={ReservationsScreen} />
+        <Stack.Screen name="ServiceProviders" component={ServiceProvidersScreen} />
+        <Stack.Screen name="Message" component={MessageScreen} />
+        <Stack.Screen name="Chat" component={ChatScreen} />
+        <Stack.Screen name="TabNavigator" component={TabNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
   </Provider>

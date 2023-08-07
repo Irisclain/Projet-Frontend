@@ -11,20 +11,16 @@ import {
   View,
   Image,
   Button,
-} from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { updateCurrentRoute } from "../reducers/currentRoute";
-import { updateCurrentAccommodation } from "../reducers/currentAccommodation";
-import { useIsFocused } from "@react-navigation/native";
-
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import Footer from "../components/Footer";
-// import { useDispatch, useSelector } from 'react-redux';
-// import {  } from '../reducers/user';
-// import {  } from '../reducers/accommodations';
-// import {  } from '../reducers/messages';
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateCurrentRoute } from '../reducers/currentRoute';
+import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
+import { useIsFocused } from '@react-navigation/native';
+  
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Footer from '../components/Footer';
 
 const BACKEND_ADDRESS = "https://stay-backend.vercel.app";
 
@@ -32,9 +28,9 @@ export default function MyAccommodationsScreen() {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
 
-  const users = useSelector((state) => state.user.value);
-  //console.log(users[0].firstname);
-
+  const users = useSelector(state => state.user.value);
+  console.log(users[0]);
+  
   useEffect(() => {
     if (isFocused) {
       dispatch(updateCurrentRoute("MyAccommodations"));
@@ -45,7 +41,7 @@ export default function MyAccommodationsScreen() {
   const [accommodationsData, setAccommodationsData] = useState([]);
 
   useEffect(() => {
-    let owner = "64ca37d51d15d3410f974fa7"; // Il faudra prendre le user en Store. Pour l'instant, c'est Maxime
+    let owner = '64d0ab5e432f8c174dfa08c7'; // Il faudra prendre le user en Store. Pour l'instant, c'est Maxime
 
     fetch(`${BACKEND_ADDRESS}/accommodation/${owner}`)
       .then((response) => response.json())
@@ -75,17 +71,17 @@ export default function MyAccommodationsScreen() {
               : require("../assets/faux-appart-1.jpg")
           }
           style={styles.accommodationPicture}
-        />
-        <View style={styles.accommodationText}>
-          <Text style={styles.accommodationTitle}>
-            {data.name.substring(0, 20)}...
-          </Text>
-          <Text>{data.description.substring(0, 86)}...</Text>
-        </View>
-      </TouchableOpacity>
-    );
-  });
+          />
+          <View style={styles.accommodationText}>
+            <Text style={styles.accommodationTitle}>{data.name.substring(0, 20)}...</Text>
+            <Text>{data.description.substring(0, 86)}...</Text> 
+          </View>
+        </TouchableOpacity>
+      );
+    });
 
+  
+   
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>

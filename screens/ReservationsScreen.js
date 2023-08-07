@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   ScrollView,
@@ -14,11 +13,16 @@ import { Circle, Rect, Svg } from "react-native-svg";
 import Footer from "../components/Footer";
 import DatePicker from "react-native-datepicker";
 import { StatusBar } from 'expo-status-bar';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateCurrentRoute } from '../reducers/currentRoute';
+import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
+import { useIsFocused } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 const BACKEND_ADDRESS = "https://stay-backend.vercel.app";
 
 export default function ReservationsScreen({ navigation }) {
-  const [selectedDates, setSelectedDates] = useState({});
   const [legends, setLegends] = useState([
     { color: "grey", label: "Réservation" },
     { color: "red", label: "Indisponibilité" },
@@ -410,7 +414,7 @@ const markedDates = calculatePeriods();
         </View>
       </Modal>
 
-      <Footer />
+      <Footer navigation={navigation} messageButton={true} />
     </SafeAreaView>
   );
 }

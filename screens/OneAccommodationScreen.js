@@ -20,18 +20,15 @@ import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { useNavigation } from "@react-navigation/native";
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { updateCurrentRoute } from "../reducers/currentRoute";
-import { updateCurrentAccommodation } from "../reducers/currentAccommodation";
-import { useIsFocused } from "@react-navigation/native";
-import { LinearGradient } from "expo-linear-gradient";
-// import {  } from '../reducers/user';
-// import {  } from '../reducers/accommodations';
-// import {  } from '../reducers/messages';
-const BACKEND_ADDRESS = "https://stay-backend.vercel.app";
-//'https://stay-backend.vercel.app';
+import { useNavigation } from '@react-navigation/native';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateCurrentRoute } from '../reducers/currentRoute';
+import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
+import { useIsFocused } from '@react-navigation/native';
+import {LinearGradient} from 'expo-linear-gradient';
+
+const BACKEND_ADDRESS = 'https://stay-backend.vercel.app'; 
 
 const distributeurs = [
   {
@@ -64,31 +61,17 @@ const getSelectedItems = (data) => {
       }
     });
   });
-  return selectedItems;
+  return selectedItems;  
 };
 
 export default function AddAccommodationScreen({ navigation }) {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
-  const currentAccommodation = useSelector(
-    (state) => state.currentAccommodation.value
-  );
+  const currentAccommodation = useSelector((state) => state.currentAccommodation.value);
 
   useEffect(() => {
-    if (isFocused) {
-      dispatch(updateCurrentRoute("OneAccommodation"));
-      // dispatch(updateCurrentAccommodation(
-      //   {
-      //   "_id": "64ca3ea77b6e67041bbc7c8e",
-      //   "address": "45 rue des Chats Volants, Paris",
-      //   "description": "EXEMPLE 1 DE LA BDD --- Charmant appartement situé au cœur de la ville, à quelques pas des boutiques, restaurants et attractions locales. Cet espace confortable offre une chambre spacieuse, une cuisine entièrement équipée et un salon lumineux. Profitez de vues pittoresques depuis le balcon privé ou détendez-vous dans le jardin commun. Idéal pour les voyageurs en quête de confort et de commodité.",
-      //   "distribution": ["AirBNB", "Booking.com", "Expedia"],
-      //   "name": "Appartement Cosy au Cœur de la Ville",
-      //   "owner": "64ca37d51d15d3410f974fa7",
-      //   "picture": "https://news.airbnb.com/wp-content/uploads/sites/4/2019/06/PJM020719Q202_Luxe_WanakaNZ_LivingRoom_0264-LightOn_R1.jpg?fit=3200%2C2133",
-      //   "price": 210
-      //   }
-      // ));
+    if (isFocused) {      
+      dispatch(updateCurrentRoute('OneAccommodation'));
     }
     return;
   }, [isFocused]);
