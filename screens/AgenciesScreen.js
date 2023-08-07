@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   },
   list:{
     flexDirection:"column",
-    width:"40%",
+    width:"50%",
     
   },
  text: { 

@@ -29,7 +29,7 @@ export default function ChatScreen({ navigation, route }) {
 
   const user = useSelector((state) => state.user.value);
 
-  console.log(contactName);
+  //console.log(contactName);
   
   useEffect(() => {
     dispatch(updateCurrentRoute('Chat'));
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
   },
   header: {
     width: '90%',
-    height: '9%',
+    height: '15%',
     marginBottom: -10,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
   },
-  banner: {
+ /*  banner: {
     width: '99%',
     height: '75%',
     paddingTop: 5,
@@ -196,6 +196,20 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     flexDirection: 'row',
     justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    margin: 2,
+  }, */
+  banner: {
+    width: '99%',
+    height: '85%',
+    paddingTop: 5,
+    paddingLeft: 15,
+    paddingRight: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between', // Distribute elements horizontally
     alignItems: 'center',
     backgroundColor: 'white',
     borderTopLeftRadius: 30,
