@@ -121,8 +121,8 @@ export default function MessageScreen({ navigation }) {
       </TouchableOpacity>
     );
     
-    const handleNavigation = (selectedUsername) => {
-      navigation.navigate('Chat', { username: selectedUsername });
+    const handleNavigation = () => {
+      navigation.navigate('Chat', { contactName: selectedContacts});
     };
 // Partie Contacts
 const handleSelectContacts = (contact) => {
