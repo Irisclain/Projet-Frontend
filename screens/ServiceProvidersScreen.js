@@ -67,11 +67,11 @@ const ServiceProvidersScreen = ({ navigation }) => {
   };
 
   const renderCalendar = (selectedDates, handleDayPress) => {
-    const { height } = Dimensions.get('window');
-    const calendarHeight = height * 0.6;
+    /* const { height } = Dimensions.get('window');
+    const calendarHeight = height * 0.6; */
 
     return (
-      <View style={{ height: calendarHeight }}>
+      <View /* style={{ height: calendarHeight }} */>
         <Calendar
           theme={{
             calendarBackground: 'white',
@@ -80,6 +80,7 @@ const ServiceProvidersScreen = ({ navigation }) => {
           }}
           markedDates={selectedDates}
           onDayPress={(day) => handleDayPress(day.dateString)}
+          style={styles.calendar}
         />
       </View>
     );
@@ -192,8 +193,9 @@ const ServiceProvidersScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       {renderLegend()}
-      <ScrollView style={styles.calendar}>
-        {renderCalendar(selectedDates, handleDayPress)}
+      <ScrollView>
+       {/*  < Calendar style={styles.calendar} /> */}
+         {renderCalendar(selectedDates, handleDayPress)}
 
         <View style={styles.buttonsContainer}>
           <TouchableOpacity
@@ -251,14 +253,16 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    backgroundColor: '#DDD',
+    backgroundColor: 'white',
   },
   button: {
     backgroundColor: '#fbe29c',
-    padding: 10,
+    padding: 7,
     borderRadius: 5,
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: -10,
+    width: '60%',
+    alignSelf: 'center',
   },
   text: {
     color: 'white',
@@ -269,11 +273,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     width: '100%',
-    marginTop: "-40%",
+    marginTop: 10,
   },
   filterButton: {
     paddingVertical: 10,
-    paddingHorizontal: 24,
+    paddingHorizontal: 30,
     backgroundColor: 'lightgray',
     borderRadius: 5,
     fontSize: 20,
@@ -315,6 +319,8 @@ const styles = StyleSheet.create({
   calendar: {
     borderRadius: 10,
     elevation: 4,
+    width: "85%",
+    alignSelf: 'center',
   },
 });
 
