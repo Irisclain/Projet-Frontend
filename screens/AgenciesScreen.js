@@ -59,6 +59,12 @@ export default function AgenciesScreen({ navigation }) {
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <View style={styles.item}>
+            <FontAwesome
+                        style={styles.icon}
+                        name={ "check-square-o"}
+                        color= {"green"}
+                        size={20}
+                      />
             <Text style={styles.text}>{item}</Text>
           </View>
   )}
@@ -75,18 +81,25 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     backgroundColor: "#fff",
   },
-  list:{
-    flexDirection:"column",
-    width:"50%",
+  
+  icon:{
+    marginLeft:50,
     
+    
+  },
+  list:{
+    
+    flexDirection:"column",
+    width:"40%",
   },
  text: { 
     display: "flex",
     flexDirection: "column",
-    justifyContent: "space-between",
     alignItems: "center",
-    padding: 20,
-    marginVertical: 10,
+    paddingLeft: 10,
+    paddingTop:0,
+    paddingBottom:0,
+    marginVertical: 0,
     fontSize: 30,
 },
   img: {
@@ -101,6 +114,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
     marginHorizontal: 10,
     marginVertical: 10,
+    marginBottom: 150,
   },
   image: {
     marginLeft: 40,
