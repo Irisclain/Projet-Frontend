@@ -1,8 +1,8 @@
 import React from "react";
-import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateCurrentRoute } from '../reducers/currentRoute';
-import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { updateCurrentRoute } from "../reducers/currentRoute";
+import { updateCurrentAccommodation } from "../reducers/currentAccommodation";
 import {
   SafeAreaView,
   ScrollView,
@@ -14,59 +14,54 @@ import {
   SectionList,
   Image,
   FlatList,
-
-} from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Footer from '../components/Footer';
+} from "react-native";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Footer from "../components/Footer";
 // import { useDispatch, useSelector } from 'react-redux';
 // import {  } from '../reducers/user';
 // import {  } from '../reducers/accommodations';
 // import {  } from '../reducers/messages';
 
-const distributeurs = [
-  {
-    data: [
-      { image: require('../assets/Logo-Booking.png'), selected: false },
-      { image: require('../assets/Logo-Airbnb.png'), selected: false },
-      { image: require('../assets/Logo-Expedia.png'), selected: false },
-    ],
-    selectedAll: false,
-  },
-  
-];
 
-const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
+
+const BACKEND_ADDRESS = "https://stay-backend.vercel.app";
 
 export default function AgenciesScreen({ navigation }) {
   const dispatch = useDispatch();
-  const selectedAccommodation = useSelector(state => state.currentAccommodation.value);
-  console.log(selectedAccommodation.distribution);
-  
+  const selectedAccommodation = useSelector(
+    (state) => state.currentAccommodation.value
+  );
+  // console.log(selectedAccommodation.distribution);
+
   useEffect(() => {
-    dispatch(updateCurrentRoute('Agencies'));
+    dispatch(updateCurrentRoute("Agencies"));
   }, []);
 
-  
   const [distributeurs, setDistributeurs] = useState([]);
 
-  
   const handleItemSelection = (itemIndex, sectionIndex) => {
     const updatedData = [...distributeurs];
-    updatedData[sectionIndex].data[itemIndex].selected = !updatedData[sectionIndex].data[itemIndex].selected;
+    updatedData[sectionIndex].data[itemIndex].selected =
+      !updatedData[sectionIndex].data[itemIndex].selected;
     setDistributeurs(updatedData);
   };
 
+  const filterDistribution = selectedAccommodation.distribution.map(item => item.replace(/["', ]|.com/g, ""));
+  console.log(filterDistribution);
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Où voulez-vous que votre annonce apparaisse ?</Text>
+      <Text style={styles.title}>
+        Ou voulez-vous que votre annonce apparaisse ?
+      </Text>
       <FlatList
-        data={selectedAccommodation.distribution}
+      style={styles.list}
+        data={filterDistribution}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <View style={styles.item}>
-            <Text>{item}</Text>
+            <Text style={styles.text}>{item}</Text>
           </View>
-        )}
+  )}
       />
       <Footer navigation={navigation} messageButton={true} />
     </SafeAreaView>
@@ -76,22 +71,42 @@ export default function AgenciesScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    backgroundColor: '#fff',
+    alignItems: "center",
+    justifyContent: "flex-start",
+    backgroundColor: "#fff",
+  },
+  list:{
+    flexDirection:"column",
+    width:"40%",
+    
+  },
+ text: { 
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 20,
+    marginVertical: 10,
+    fontSize: 30,
+},
+  img: {
+    marginLeft: 20,
+    height: 60,
+    width: 100,
+    resizeMode: "contain",
   },
   title: {
     fontSize: 30,
-    fontWeight: '600',
-    marginTop:50,
+    fontWeight: "600",
+    marginTop: 50,
     marginHorizontal: 10,
     marginVertical: 10,
   },
   image: {
-    marginLeft:40,
+    marginLeft: 40,
     width: 270,
     height: 150,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   modalTitle: {
     fontSize: 10,
@@ -105,24 +120,24 @@ const styles = StyleSheet.create({
   },
   checkboxContainer: {
     height: 80,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   button: {
-    alignItems: 'center',
+    alignItems: "center",
     paddingTop: 8,
-    width: '100%',
+    width: "100%",
     marginTop: 20,
-    backgroundColor: '#fbe29c',
+    backgroundColor: "#fbe29c",
     borderRadius: 1,
   },
   textButton: {
     height: 30,
-    fontWeight: '600',
+    fontWeight: "600",
     fontSize: 16,
   },
   checkboxContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
 });

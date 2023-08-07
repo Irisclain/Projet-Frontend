@@ -66,7 +66,7 @@ export default function HomeScreen({ navigation }) {
         body: JSON.stringify(formData),
       }).then(response => response.json())
     .then(data => {
-      if (data.result) {
+      if (data.result) { console.log(data.result)
             console.log('Connexion réussie!');
             navigation.navigate('MyAccommodations');
             dispatch(addUser(formData));
