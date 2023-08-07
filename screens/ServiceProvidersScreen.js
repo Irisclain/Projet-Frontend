@@ -192,7 +192,7 @@ const ServiceProvidersScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       {renderLegend()}
-      <ScrollView style={{ flex: 1, width: '100%' }}>
+      <ScrollView style={styles.calendar}>
         {renderCalendar(selectedDates, handleDayPress)}
 
         <View style={styles.buttonsContainer}>
@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     width: '100%',
-    marginTop: "-50%",
+    marginTop: "-40%",
   },
   filterButton: {
     paddingVertical: 10,
@@ -311,6 +311,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: 'center',
     marginTop: 10,
+  },
+  calendar: {
+    borderRadius: 10,
+    elevation: 4,
   },
 });
 
