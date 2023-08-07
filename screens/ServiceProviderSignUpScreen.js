@@ -324,7 +324,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     alignSelf: 'center',
     marginBottom: 10,
-    marginTop: 10,
+    marginTop: 5,
   },
   textButton: {
     color: 'white',
@@ -343,6 +343,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     textDecorationLine:'underline',
     marginBottom: 10,
-    marginTop: -10,
+    marginTop: -25,
   },
 });

@@ -46,8 +46,6 @@ export default function AgenciesScreen({ navigation }) {
     setDistributeurs(updatedData);
   };
 
-  const filterDistribution = selectedAccommodation.distribution.map(item => item.replace(/["', ]|.com/g, ""));
-  console.log(filterDistribution);
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>
@@ -55,7 +53,7 @@ export default function AgenciesScreen({ navigation }) {
       </Text>
       <FlatList
       style={styles.list}
-        data={filterDistribution}
+        data={selectedAccommodation.distribution}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <View style={styles.item}>

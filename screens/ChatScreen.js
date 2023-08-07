@@ -39,6 +39,8 @@ export default function ChatScreen({ navigation, route }) {
   const [messages, setMessages] = useState([]);
   const [messageText, setMessageText] = useState('');
 
+  console.log(messages);
+
   useEffect(() => {
     (() => {
       fetch(`${BACKEND_ADDRESS}/users`, { method: 'PUT' });
@@ -57,13 +59,12 @@ export default function ChatScreen({ navigation, route }) {
     setMessages(messages => [...messages, data]);
   };
 
-  console.log(messages)
+  //console.log(messageText)
 
   const handleSendMessage = () => {
     if (!messageText) {
       return;
     }
-    console.log(messages);
     const payload = {
       text: messageText,
       username: user.username,
@@ -71,10 +72,25 @@ export default function ChatScreen({ navigation, route }) {
       id: Math.floor(Math.random() * 100000),
     };
 
-    fetch(`${BACKEND_ADDRESS}/message`, {
+    fetch(`${BACKEND_ADDRESS}/messages`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('La réponse du réseau n\'était pas valide');
+      }
+      return response.json(); // Si votre backend renvoie une réponse JSON
+    })
+    .then(data => {
+      // Traiter la réponse en cas de succès, si nécessaire
+      console.log('Message envoyé avec succès :', data);
+      setMessageText('');
+    })
+    .catch(error => {
+      // Gérer les erreurs ici
+      console.error('Erreur lors de l\'envoi du message :', error);
     });
 
     setMessageText('');
@@ -105,8 +121,8 @@ export default function ChatScreen({ navigation, route }) {
         <ScrollView style={styles.scroller}>
           {
             messages.map((message, i) => (
-              <View key={i} style={[styles.messageWrapper, { ...(message.username === params.username ? styles.messageSent : styles.messageRecieved) }]}>
-                <View style={[styles.message, { ...(message.username === params.username ? styles.messageSentBg : styles.messageRecievedBg) }]}>
+              <View key={i} style={[styles.messageWrapper, { ...(message.username === user.username ? styles.messageSent : styles.messageRecieved) }]}>
+                <View style={[styles.message, { ...(message.username === user.username ? styles.messageSentBg : styles.messageRecievedBg) }]}>
                   <Text style={styles.messageText}>{message.text}</Text>
                 </View>
                 <Text style={styles.timeText}>{new Date(message.createdAt).getHours()}:{String(new Date(message.createdAt).getMinutes()).padStart(2, '0')}</Text>
