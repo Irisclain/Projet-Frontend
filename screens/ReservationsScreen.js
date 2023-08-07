@@ -23,6 +23,7 @@ import { useNavigation } from '@react-navigation/native';
 const BACKEND_ADDRESS = "https://stay-backend.vercel.app";
 
 export default function ReservationsScreen({ navigation }) {
+  const [selectedDates, setSelectedDates] = useState({});
   const [legends, setLegends] = useState([
     { color: "grey", label: "Réservation" },
     { color: "red", label: "Indisponibilité" },
