@@ -23,7 +23,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 // import {  } from '../reducers/user';
 // import {  } from '../reducers/accommodations';
 // import {  } from '../reducers/messages';
-const BACKEND_ADDRESS = 'https://stay-backend.vercel.app'; 
+const BACKEND_ADDRESS = "https://stay-backend.vercel.app";
 //'https://stay-backend.vercel.app';
 
 const distributeurs = [
@@ -65,7 +65,6 @@ export default function AddAccommodationScreen({ navigation }) {
   const [data, setData] = useState(distributeurs);
   const selectedItems = getSelectedItems(data);
 
-
   //icone photo nouvel hébergement
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -82,8 +81,8 @@ export default function AddAccommodationScreen({ navigation }) {
     }
   };
 
-const objectId = '64ca37d51d15d3410f974fa7';
-//etat pour l'enregistrement de l'hébergement
+  const objectId = "64ca37d51d15d3410f974fa7";
+  //etat pour l'enregistrement de l'hébergement
   const [formData, setFormData] = useState({
     name: "",
     picture: "photo",
@@ -102,7 +101,7 @@ const objectId = '64ca37d51d15d3410f974fa7';
       },
       body: JSON.stringify(formData),
     })
-    .then (response => response.json())
+      .then((response) => response.json())
       .then((response) => {
         console.log(response);
         if (response.result) {
@@ -114,63 +113,63 @@ const objectId = '64ca37d51d15d3410f974fa7';
         }
       })
       .catch((error) => {
-        console.error("Erreur lors de l'enregistrement de l'hébergement:", error);
+        console.error(
+          "Erreur lors de l'enregistrement de l'hébergement:",
+          error
+        );
       });
   };
 
   //état pour rendre le modal visible ou non
   const [modalVisible, setModalVisible] = useState(false);
-  
+
   //ouvrir le modal
   const handlePressOpen = () => {
     setModalVisible((prevState) => !prevState);
   };
- 
-// fonction pour les séléctions de la modale
+
+  // fonction pour les séléctions de la modale
   const handleItemSelection = (itemIndex) => {
     const selectedList = [...formData.distribution]; // selectedList= tableau distribution
-    const updatedData = [...data];// updatedData= tableau distributeurs
+    const updatedData = [...data]; // updatedData= tableau distributeurs
 
-      switch (itemIndex) {
-        case 0:
-          if (!selectedList.includes("Booking")) {
-            selectedList.push("Booking"); // on ajoute Booking à la liste si il n'est pas déjà présent
-          } else {
-            const index = selectedList.indexOf("Booking");
-            selectedList.splice(index, 1); // On l'enlève si il est déjà là
-          }
-          updatedData[0].data[0].selected =  selectedList.includes("Booking");//dans la data de Bookin, on selectionne si la liste inclus Booking
-          break;
-        case 1:
-          if (!selectedList.includes("Airbnb")) {
-            selectedList.push("Airbnb"); // on ajoute Airbnb à la liste si il n'est pas déjà présent
-          } else {
-            const index = selectedList.indexOf("Airbnb");
-            selectedList.splice(index, 1); // On l'enlève si il est déjà là
-          }
-          updatedData[0].data[1].selected =  selectedList.includes("Airbnb");//dans la data de Airbnb, on selectionne si la liste inclus Airbnb
-          break;
-        case 2:
-          if (!selectedList.includes("Expedia")) {
-            selectedList.push("Expedia"); // Aon ajoute Expedia à la liste si il n'est pas déjà présent
-          } else {
-            const index = selectedList.indexOf("Expedia");
-            selectedList.splice(index, 1); // On l'enlève si il est déjà là
-          }
-          updatedData[0].data[2].selected =  selectedList.includes("Expedia");//dans la data de Expedia, on selectionne si la liste inclus Expedia
-          break;
-        default:
-          break;
-      }
-    
-      setFormData({ ...formData, distribution: selectedList }); // update de formData avec la selectedList à jour
-    };    
-  
+    switch (itemIndex) {
+      case 0:
+        if (!selectedList.includes("Booking")) {
+          selectedList.push("Booking"); // on ajoute Booking à la liste si il n'est pas déjà présent
+        } else {
+          const index = selectedList.indexOf("Booking");
+          selectedList.splice(index, 1); // On l'enlève si il est déjà là
+        }
+        updatedData[0].data[0].selected = selectedList.includes("Booking"); //dans la data de Bookin, on selectionne si la liste inclus Booking
+        break;
+      case 1:
+        if (!selectedList.includes("Airbnb")) {
+          selectedList.push("Airbnb"); // on ajoute Airbnb à la liste si il n'est pas déjà présent
+        } else {
+          const index = selectedList.indexOf("Airbnb");
+          selectedList.splice(index, 1); // On l'enlève si il est déjà là
+        }
+        updatedData[0].data[1].selected = selectedList.includes("Airbnb"); //dans la data de Airbnb, on selectionne si la liste inclus Airbnb
+        break;
+      case 2:
+        if (!selectedList.includes("Expedia")) {
+          selectedList.push("Expedia"); // Aon ajoute Expedia à la liste si il n'est pas déjà présent
+        } else {
+          const index = selectedList.indexOf("Expedia");
+          selectedList.splice(index, 1); // On l'enlève si il est déjà là
+        }
+        updatedData[0].data[2].selected = selectedList.includes("Expedia"); //dans la data de Expedia, on selectionne si la liste inclus Expedia
+        break;
+      default:
+        break;
+    }
+
+    setFormData({ ...formData, distribution: selectedList }); // update de formData avec la selectedList à jour
+  };
 
   // console.log('selecteditems', selectedItems2);
   // setFormData({ ...formData, distribution: selectedItems2 });
-
-  
 
   return (
     <View style={styles.container}>
