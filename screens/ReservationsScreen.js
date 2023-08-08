@@ -13,15 +13,14 @@ import { Circle, Rect, Svg } from "react-native-svg";
 import Footer from "../components/Footer";
 import { StatusBar } from 'expo-status-bar';
 import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateCurrentRoute } from '../reducers/currentRoute';
-import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
-import { useIsFocused } from '@react-navigation/native';
-import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { updateCurrentReservation, updateSelectedDate } from '../reducers/currentReservation';
 
 const BACKEND_ADDRESS = "https://stay-backend.vercel.app";
 
 export default function ReservationsScreen({ navigation }) {
+  const dispatch = useDispatch();
+
   const [selectedDates, setSelectedDates] = useState({});
   const [selectedOptions, setSelectedOptions] = useState({});
   const [isOptionModalVisible, setOptionModalVisible] = useState(false);
@@ -45,7 +44,7 @@ export default function ReservationsScreen({ navigation }) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
   const [isModalModifVisible, setModalModifVisible] = useState(false);
-console.log(selectedOptions)
+console.log(reservations)
 
 const calculateMarkedDates = () => {
   const markedDates = {};
@@ -88,6 +87,7 @@ const calculateMarkedDates = () => {
       };
     }
   });
+  dispatch(updateSelectedDate(selectedOptions));
 
   return markedDates;
 }; 
@@ -109,6 +109,7 @@ const updateMarkedDates = () => {
       if (response.ok) {
         const data = await response.json();
         setReservations(data.reservationList);
+        dispatch(updateCurrentReservation(data.reservationList));
       } else {
         console.error("Error fetching reservations:", response.status);
       }
@@ -229,6 +230,7 @@ const updateMarkedDates = () => {
         });
         setEditMode(false);
         setModalModifVisible(false);
+        dispatch(updateCurrentReservation(reservationData));
       } else {
         console.error("Error updating reservation:", response.status);
       }
@@ -293,6 +295,7 @@ const updateMarkedDates = () => {
 
   const handleDayPress = (day) => {
         const dateString = day.dateString;
+        dispatch(updateSelectedDate(selectedOptions));
         
         if (selectedOptions[dateString]) {
           const updatedSelectedOptions = { ...selectedOptions };

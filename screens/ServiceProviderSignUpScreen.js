@@ -27,7 +27,7 @@ export default function ServiceProviderSignUpScreen({ navigation }) {
     dispatch(updateCurrentRoute('ServiceProviderSignUp'));  
     dispatch(updateCurrentAccommodation({}));  
   }, []);
-
+  const [isLoading, setIsLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -59,6 +59,16 @@ export default function ServiceProviderSignUpScreen({ navigation }) {
     setModalVisible(true);
   };
 
+  const navigateToNextScreen = async () => {
+    setIsLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 500)); // Temps de chargement simulé
+    setIsLoading(false);
+
+    navigation.navigate('LoadingSignUp'); // Affiche la page de chargement
+    await new Promise((resolve) => setTimeout(resolve, 7000)); // Temps de chargement simulé
+    navigation.navigate('MyAccommodations'); // Navigue vers la page suivante
+  };
+
   const handleNewUser = () => {
     console.log("formData:", formData);
     fetch(`${BACKEND_ADDRESS}/users/signup`, {
@@ -75,7 +85,7 @@ export default function ServiceProviderSignUpScreen({ navigation }) {
           //dispatch(addUser(formData));
           dispatch(login({ username: formData.username, token: data.token }));
           //console.log({ username: formData.username, token: data.token });
-          navigation.navigate('MyAccommodations');
+          navigateToNextScreen();
         } else {
           console.error('Erreur lors de l\'enregistrement de l\'utilisateur');
         }
