@@ -45,8 +45,7 @@ export default function MyAccommodationsScreen() {
 
     let ownerToken = 'kZg43tvoorU8F5ypqMv5QZBYZjLC426k'
     
-
-    if (!user) {
+    if (user!=={}) {
       ownerToken = user.token;
     }
 

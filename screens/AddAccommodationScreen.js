@@ -1,6 +1,11 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateCurrentRoute } from '../reducers/currentRoute';
+import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
+import { useIsFocused } from '@react-navigation/native';  
 import {
+  Dimensions,
   SafeAreaView,
   ScrollView,
   Image,
@@ -18,7 +23,7 @@ import * as ImagePicker from "expo-image-picker";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
 import Footer from "../components/Footer";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-// import { useDispatch, useSelector } from 'react-redux';
+
 
 const BACKEND_ADDRESS = "https://stay-backend.vercel.app";
 
@@ -57,6 +62,20 @@ const getSelectedItems = (data) => {
 };
 
 export default function AddAccommodationScreen({ navigation }) {
+  
+  const dispatch = useDispatch();
+  const isFocused = useIsFocused();
+
+  const user = useSelector(state => state.user.value);
+  
+  useEffect(() => {
+    if (isFocused) {
+      dispatch(updateCurrentRoute("AddAccommodation"));
+      dispatch(updateCurrentAccommodation({}));
+    }
+  }, [isFocused]);
+
+
   const [image, setImage] = useState(null);
   const [data, setData] = useState(distributeurs);
   const selectedItems = getSelectedItems(data);
@@ -76,6 +95,12 @@ export default function AddAccommodationScreen({ navigation }) {
       setFormData({ ...formData, picture: result.assets[0].uri });
     }
   };
+  
+  let ownerToken = 'kZg43tvoorU8F5ypqMv5QZBYZjLC426k'
+    
+  if (user!=={}) {
+    ownerToken = user.token;
+  }
 
   const objectId = "64ca37d51d15d3410f974fa7";
   //etat pour l'enregistrement de l'hébergement
@@ -86,6 +111,7 @@ export default function AddAccommodationScreen({ navigation }) {
     description: "",
     price: "",
     distribution: [],
+    ownerToken: ownerToken,
   });
 
   const handleNewAccommodation = () => {
@@ -101,7 +127,7 @@ export default function AddAccommodationScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((response) => {
-        console.log(response);
+        console.log('Response : ', response);
         if (response.result) {
           console.log("hébergement enregistré avec succès!");
           setFormData({ ...formData, distribution: [] });
@@ -171,17 +197,7 @@ console.log("formdata",formData.picture);
 
   return (
     <View style={styles.container}>
-      <Text
-        style={{
-          fontSize: 30,
-          marginTop: 10,
-          marginBottom: 20,
-          textDecorationLine: "underline",
-          alignItems: "center",
-        }}
-      >
-        Ajouter un Hébergement
-      </Text>
+      <Text style={styles.title}>Ajouter un Hébergement</Text>
       <View style={styles.container1}>
         <View style={styles.picturename}>
           <TouchableOpacity onPress={pickImage} style={styles.inputphoto}>
@@ -195,7 +211,7 @@ console.log("formdata",formData.picture);
           <TextInput
             value={formData.name}
             onChangeText={(text) => setFormData({ ...formData, name: text })}
-            placeholder="Nom du bien ..."
+            placeholder="Nom du bien..."
             style={styles.inputname}
           />
         </View>
@@ -203,7 +219,7 @@ console.log("formdata",formData.picture);
         <TextInput
           value={formData.address}
           onChangeText={(text) => setFormData({ ...formData, address: text })}
-          placeholder="Adresse ..."
+          placeholder="Adresse..."
           style={styles.input}
         />
         <TextInput
@@ -211,20 +227,21 @@ console.log("formdata",formData.picture);
           onChangeText={(text) =>
             setFormData({ ...formData, description: text })
           }
-          placeholder="Description ..."
+          placeholder="Description..."
           style={styles.input}
         />
-        <TextInput
+        {/* <TextInput
           value={formData.planning}
           onChangeText={(text) => setFormData({ ...formData, planning: text })}
           placeholder="Planning"
           style={styles.input}
-        />
+        /> */}
         <TextInput
           value={formData.price}
-          onChangeText={(number) => setFormData({ ...formData, price: number })}
-          placeholder="Tarif ..."
+          onChangeText={(number) => setFormData({ ...formData, price: Number(number) })}
+          placeholder="Tarif..."
           style={styles.input}
+          keyboardType="numeric"
         />
 
         <Text style={styles.distriInput}>Canaux de distributions : </Text>
@@ -284,6 +301,26 @@ console.log("formdata",formData.picture);
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "flex-start",
+    backgroundColor: "white",
+    margin: 0,
+    padding: 20,
+    width: Dimensions.get("window").width,
+  },
+  container1: {
+    justifyContent: "center",
+    padding: 20,
+  },
+  title: {
+    fontSize: 30,
+    margin: 0,
+    marginBottom: 22,
+    fontWeight: "600",
+    color: "#FF7A00",
+  },
   picturename: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -342,16 +379,6 @@ const styles = StyleSheet.create({
     color: "#868686",
     flexDirection: "row",
     justifyContent: "space-between",
-  },
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "flex-start",
-    backgroundColor: "#fff",
-  },
-  container1: {
-    justifyContent: "center",
-    padding: 20,
   },
   image: {
     width: 140,
