@@ -32,7 +32,7 @@ export default function ReservationsScreen({ navigation }) {
     { color: "blue", label: "Ménage" },
     { color: "green", label: "Dépannage" },
   ]);
-
+  const [editingReservation, setEditingReservation] = useState(null);
   const [reservations, setReservations] = useState([]);
   const [reservationData, setReservationData] = useState({
     nom: "",
@@ -44,6 +44,7 @@ export default function ReservationsScreen({ navigation }) {
   });
   const [isModalVisible, setModalVisible] = useState(false);
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
+  const [isModalModifVisible, setModalModifVisible] = useState(false);
 console.log(selectedOptions)
 
 const calculateMarkedDates = () => {
@@ -51,11 +52,13 @@ const calculateMarkedDates = () => {
 
   for (let i = 0; i < reservations.length; i++) {
     const reservation = reservations[i];
-    const arrivalDateString = reservation.arrival ? reservation.arrival.split("T")[0] : "";
-    const departureDateString = reservation.departure ? reservation.departure.split("T")[0] : "";
+    const arrivalDateString = reservation.arrival;
+    const departureDateString = reservation.departure;
     
-    const arrival = arrivalDateString ? new Date(arrivalDateString) : null;
-    const departure = departureDateString ? new Date(departureDateString) : null;
+    if (arrivalDateString && departureDateString) {
+      const arrival = new Date(arrivalDateString);
+      const departure = new Date(departureDateString);
+      
 
     const currentDate = new Date(arrival);
     while (currentDate <= departure) {
@@ -73,6 +76,7 @@ const calculateMarkedDates = () => {
       currentDate.setDate(currentDate.getDate() + 1);
     }
   }
+}
 
   Object.keys(selectedOptions).forEach((date) => {
     const color = selectedOptions[date];
@@ -89,6 +93,11 @@ const calculateMarkedDates = () => {
 }; 
 
 const periods = calculateMarkedDates();
+
+const updateMarkedDates = () => {
+  const newMarkedDates = calculateMarkedDates();
+  setMarkedDates(newMarkedDates);
+};
 
   useEffect(() => {
     fetchReservations();
@@ -139,6 +148,7 @@ const periods = calculateMarkedDates();
     } catch (error) {
       console.error("Error creating reservation:", error);
     }
+    updateMarkedDates();
   };
   //Supprimer une réservation
   const handleDeleteReservation = async (reservationId) => {
@@ -166,6 +176,7 @@ const periods = calculateMarkedDates();
     } catch (error) {
       console.error("Error deleting reservation:", error);
     }
+    updateMarkedDates();
   };
 
   // Modifier Réservation
@@ -174,43 +185,40 @@ const periods = calculateMarkedDates();
     // Ouvrir le formulaire de mise à jour avec les détails de la réservation pré-remplis
     setReservationData({
       name: reservation.name,
-      arrival: reservation.arrival,
-      departure: reservation.departure,
+      arrival: reservation.arrival.split("T")[0], // Convertir en chaîne au format ISO
+      departure: reservation.departure.split("T")[0], // Convertir en chaîne au format ISO
       price: reservation.price,
       status: reservation.status,
       distribution: reservation.distribution,
     });
+    setEditingReservation(reservation);
     setEditMode(true); // Définir le mode de modification sur vrai
-    setModalVisible(true); // Ouvrir la modal
+    setModalModifVisible(true); // Ouvrir la modal
   };
 
   const handleUpdateReservation = async () => {
     try {
+
       const response = await fetch(
-        `${BACKEND_ADDRESS}/reservation/${reservation._id}`,
+        `${BACKEND_ADDRESS}/reservation/${editingReservation._id}`, // Utilisez `reservationData._id` au lieu de `reservation._id`
         {
-          method: "PUT", 
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            ...reservationData,
-            arrival: reservationData.arrival.toISOString(), // Convertir en chaîne au format ISO
-            departure: reservationData.departure.toISOString(), // Convertir en chaîne au format ISO
-          }),
-        }); // Nouvelles données de réservation
-
+          body: JSON.stringify(reservationData),
+        }
+      );
       if (response.ok) {
-        // Mettez à jour la liste des réservations avec les nouvelles données
+        // Mise à jour de l'état local "reservations" avec les nouvelles données
         setReservations((prevReservations) =>
           prevReservations.map((prevReservation) =>
-            prevReservation._id === reservation._id
-              ? { ...prevReservation, ...reservationData }
+            prevReservation._id === editingReservation._id
+              ? { ...prevReservation, ...reservations }
               : prevReservation
           )
         );
-
-        // Réinitialisez les données de réservation et le mode de modification
+  
         setReservationData({
           name: "",
           arrival: "",
@@ -220,13 +228,14 @@ const periods = calculateMarkedDates();
           distribution: "",
         });
         setEditMode(false);
-        setModalVisible(false);
+        setModalModifVisible(false);
       } else {
         console.error("Error updating reservation:", response.status);
       }
     } catch (error) {
       console.error("Error updating reservation:", error);
     }
+    updateMarkedDates();
   };
 
   // Partie Modal
@@ -309,21 +318,21 @@ const periods = calculateMarkedDates();
         <Modal visible={isOptionModalVisible} transparent={true} animationType="slide">
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-          <Text>Choisir une option:</Text>
+          <Text style={styles.optionTitle}>Choisir une option:</Text>
           <TouchableOpacity
             onPress={() => handleOptionSelect('red')}
           >
-            <Text style={styles.optionButtonText}>Indisponibilité</Text>
+            <Text style={styles.optionButtonTextI} >Indisponibilité</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => handleOptionSelect('blue')}
           >
-            <Text style={styles.optionButtonText}>Ménage</Text>
+            <Text style={styles.optionButtonTextM}>Ménage</Text>
           </TouchableOpacity>
           <TouchableOpacity
           onPress={() => handleOptionSelect('green')}
           >
-            <Text style={styles.optionButtonText}>Dépannage</Text>
+            <Text style={styles.optionButtonTextD}>Dépannage</Text>
           </TouchableOpacity>
         </View>
         </View>
@@ -334,8 +343,8 @@ const periods = calculateMarkedDates();
         {reservations.map((reservation) => (
           <View key={reservation._id} style={styles.reservationItem}>
             <Text>Nom : {reservation.name}</Text>
-            <Text>Arrivée: {reservation.arrival.split('T')[0]}</Text>
-            <Text>Départ : {reservation.departure.split('T')[0]}</Text>
+            <Text>Arrivée: {reservation.arrival.split("T")[0]}</Text>
+            <Text>Départ : {reservation.departure.split("T")[0]}</Text>
             <Text>Prix : {reservation.price}€</Text>
             <Text>Status : {reservation.status}</Text>
             <Text>Distribution :{reservation.distribution}</Text>
@@ -367,6 +376,102 @@ const periods = calculateMarkedDates();
         </TouchableOpacity>
       </ScrollView>
 
+      {/*Pour la modal de modification*/}
+      <Modal visible={isModalModifVisible} transparent={true} animationType="slide">
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Réservation</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Nom"
+              placeholderTextColor="#999"
+              value={reservationData.name}
+              onChangeText={(text) =>
+                setReservationData((prevData) => ({
+                  ...prevData,
+                  name: text,
+                }))
+              }
+            />
+            <TextInput
+                style={styles.input}
+                placeholder="Arrivée (format : YYYY-MM-DD)"
+                placeholderTextColor="#999"
+                value={reservationData.arrival}
+                onChangeText={(date) =>
+                  setReservationData((prevData) => ({
+                    ...prevData,
+                    arrival: new Date(date), // Convertir la chaîne en instance de date ou null
+                  }))
+                }
+              />
+
+              <TextInput
+                style={styles.input}
+                placeholder="Départ (format : YYYY-MM-DD)"
+                placeholderTextColor="#999"
+                value={reservationData.departure}
+                onChangeText={(date) =>
+                  setReservationData((prevData) => ({
+                    ...prevData,
+                    departure: new Date(date), // Convertir la chaîne en instance de date ou null
+                  }))
+                }
+              />
+            <TextInput
+              style={styles.input}
+              placeholder="Prix"
+              placeholderTextColor="#999"
+              value={reservationData.price}
+              onChangeText={(text) => {
+                setReservationData((prevData) => ({
+                  ...prevData,
+                  price: text,
+                }));
+              }}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Statut"
+              placeholderTextColor="#999"
+              value={reservationData.status}
+              onChangeText={(text) =>
+                setReservationData((prevData) => ({
+                  ...prevData,
+                  status: text,
+                }))
+              }
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Distribution"
+              placeholderTextColor="#999"
+              value={reservationData.distribution}
+              onChangeText={(text) =>
+                setReservationData((prevData) => ({
+                  ...prevData,
+                  distribution: text,
+                }))
+              }
+            />
+            {/* Autres champs d'entrée */}
+            <TouchableOpacity
+              style={styles.button}
+              onPress={handleUpdateReservation}
+            >
+              <Text style={styles.textButton}>Confirmer</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => setModalModifVisible(false)}
+            >
+              <Text style={styles.textButton}>Annuler</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+{/*Modal pour la nouvelle reservation */}
       <Modal visible={isModalVisible} transparent={true} animationType="slide">
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
@@ -582,5 +687,29 @@ const styles = StyleSheet.create({
   editButtonText: {
     color: "white",
     fontWeight: "bold",
+  },
+  optionTitle: {
+    fontSize: 22,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 5,
+  },
+  optionButtonTextI:{
+    fontSize: 18,
+    textAlign: "center",
+    margin: 5,
+    color: "red"
+  },
+  optionButtonTextM:{
+    fontSize: 18,
+    textAlign: "center",
+    margin: 5,
+    color: "blue",
+  },
+  optionButtonTextD:{
+    fontSize: 18,
+    textAlign: "center",
+    margin: 5,
+    color: "green",
   }
 });
