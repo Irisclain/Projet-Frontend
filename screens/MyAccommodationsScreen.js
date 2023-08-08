@@ -45,9 +45,11 @@ export default function MyAccommodationsScreen() {
 
     let ownerToken = 'kZg43tvoorU8F5ypqMv5QZBYZjLC426k'
     
-    if (user!=={}) {
+    if (user.token!==null) {
       ownerToken = user.token;
     }
+
+    console.log('pour vérifier le passage sans connexion // ownerToken : ', ownerToken, 'user : ', user);
 
     //fetch(`${BACKEND_ADDRESS}/accommodation/${owner}`)
     fetch(`${BACKEND_ADDRESS}/accommodation/${ownerToken}`)

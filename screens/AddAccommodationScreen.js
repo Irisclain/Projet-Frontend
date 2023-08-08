@@ -98,7 +98,7 @@ export default function AddAccommodationScreen({ navigation }) {
   
   let ownerToken = 'kZg43tvoorU8F5ypqMv5QZBYZjLC426k'
     
-  if (user!=={}) {
+  if (user.token!==null) {
     ownerToken = user.token;
   }
 
@@ -245,7 +245,7 @@ console.log("formdata",formData.picture);
         />
 
         <Text style={styles.distriInput}>Canaux de distributions : </Text>
-        <View style={styles.buttons}>
+        <View style={styles.angleDownButton}>
           <TouchableOpacity onPress={handlePressOpen}>
             <FontAwesome name="angle-down" color="black" size={25} />
           </TouchableOpacity>
@@ -358,9 +358,9 @@ const styles = StyleSheet.create({
     left: 270,
     right: 20,
   },
-  buttons: {
+  angleDownButton: {
     position: "absolute",
-    marginTop: 520,
+    marginTop: 420,
     right: 35,
     top: 13,
   },
