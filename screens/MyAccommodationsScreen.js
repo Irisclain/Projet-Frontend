@@ -31,16 +31,13 @@ export default function MyAccommodationsScreen() {
   const user = useSelector(state => state.user.value);
   //console.log('Tout sur l\'user : ' , user);
   
+  const [accommodationsData, setAccommodationsData] = useState([]);
+
   useEffect(() => {
     if (isFocused) {
       dispatch(updateCurrentRoute("MyAccommodations"));
       dispatch(updateCurrentAccommodation({}));
     }
-  }, [isFocused]);
-
-  const [accommodationsData, setAccommodationsData] = useState([]);
-
-  useEffect(() => {
     //let owner = '64d0ab5e432f8c174dfa08c7'; // Il faudra prendre le user en Store. Pour l'instant, c'est Maxime
 
     let ownerToken = 'kZg43tvoorU8F5ypqMv5QZBYZjLC426k'
@@ -49,7 +46,7 @@ export default function MyAccommodationsScreen() {
       ownerToken = user.token;
     }
 
-    console.log('pour vérifier le passage sans connexion // ownerToken : ', ownerToken, 'user : ', user);
+    //console.log('pour vérifier le passage sans connexion // ownerToken : ', ownerToken, 'user : ', user);
 
     //fetch(`${BACKEND_ADDRESS}/accommodation/${owner}`)
     fetch(`${BACKEND_ADDRESS}/accommodation/${ownerToken}`)
@@ -58,7 +55,10 @@ export default function MyAccommodationsScreen() {
         //console.log('allDatas : ', data);
         setAccommodationsData(data);
       });
-  }, []);
+  
+    }, [isFocused]);
+
+
   const navigation = useNavigation();
   const accommodations = accommodationsData.map((data, i) => {
     // console.log(data.picture)
