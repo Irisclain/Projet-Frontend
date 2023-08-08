@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateCurrentRoute } from "../reducers/currentRoute";
 import { updateCurrentAccommodation } from "../reducers/currentAccommodation";
@@ -16,7 +16,8 @@ import {
 import Pusher from "pusher-js/react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { LinearGradient } from "expo-linear-gradient";
-
+import { Camera } from "expo-camera";
+import * as ImagePicker from 'expo-image-picker';
 const pusher = new Pusher("4c35491e793ed55ea5db", { cluster: "eu" });
 const BACKEND_ADDRESS = "https://stay-backend.vercel.app";
 
@@ -27,7 +28,6 @@ export default function ChatScreen({ navigation, route }) {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user.value);
-  
 
   //console.log(contactName);
 
@@ -115,6 +115,32 @@ export default function ChatScreen({ navigation, route }) {
     },
   ];
 
+  const [hasPermission, setHasPermission] = useState(null);
+  useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestPermissionsAsync();
+      setHasPermission(status === "granted");
+    })();
+  }, []);
+
+  const [type, setType] = useState(Camera.Constants.Type.back);
+  const [isCameraReady, setCameraReady] = useState(false);
+  const camRef = useRef(null);
+
+  const takePicture = async () => {
+    if (camRef.current && isCameraReady) {
+      let photo = await camRef.current.takePictureAsync();
+      console.log("photo", photo);
+    }
+  };
+  const openCamera = async () => {
+    const result = await ImagePicker.launchCameraAsync();
+  
+    if (!result.cancelled) {
+      console.log(result.uri);
+      // Faites quelque chose avec l'URI de l'image, par exemple, définissez l'état pour afficher l'image
+    }
+  }
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -177,15 +203,18 @@ export default function ChatScreen({ navigation, route }) {
             ))}
           </ScrollView>
 
-          <View style={styles.inputContainer}>
-            <TouchableOpacity style={styles.picturesButton}>
-              <FontAwesome name="image" color="grey" size={25} />
-            </TouchableOpacity>
+          <View style={styles.inputContainer}>       
+              <TouchableOpacity
+                   onPress={openCamera}
+                  style={styles.picturesButton}
+                >
+                  <FontAwesome name="image" color="grey" size={25} />
+                </TouchableOpacity>
             <TouchableOpacity
               style={styles.picturesButton}
               onPress={() => setIsModalVisible(true)}
             >
-              <FontAwesome name="plus" color="grey" size={25} />
+              <FontAwesome name="plus" color="grey" size={24} />
             </TouchableOpacity>
             <Modal
               animationType="fade"
@@ -233,10 +262,10 @@ export default function ChatScreen({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-  modalTitle:{
-paddingBottom: 10,
-paddingLeft: 30,
-fontSize: 18,
+  modalTitle: {
+    paddingBottom: 10,
+    paddingLeft: 30,
+    fontSize: 18,
   },
   centeredView: {
     position: "absolute",
@@ -253,7 +282,7 @@ fontSize: 18,
       width: 2,
       height: 2,
     },
-  
+
     shadowOpacity: 0.5,
     shadowRadius: 4,
     elevation: 100,
@@ -450,7 +479,7 @@ fontSize: 18,
   },
   picturesButton: {
     padding: 16,
-    marginRight: -5,
+    marginRight: 0,
     alignItems: "center",
     justifyContent: "center",
   },
