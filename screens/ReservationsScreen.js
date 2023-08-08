@@ -11,7 +11,6 @@ import {
 import { Calendar } from "react-native-calendars";
 import { Circle, Rect, Svg } from "react-native-svg";
 import Footer from "../components/Footer";
-import DatePicker from "react-native-datepicker";
 import { StatusBar } from 'expo-status-bar';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,7 +23,6 @@ const BACKEND_ADDRESS = "https://stay-backend.vercel.app";
 
 export default function ReservationsScreen({ navigation }) {
   const [selectedDates, setSelectedDates] = useState({});
-  const [selectedOption, setSelectedOption] = useState("");
   const [selectedOptions, setSelectedOptions] = useState({});
   const [isOptionModalVisible, setOptionModalVisible] = useState(false);
   const [markedDates, setMarkedDates] = useState({});
@@ -53,8 +51,11 @@ const calculateMarkedDates = () => {
 
   for (let i = 0; i < reservations.length; i++) {
     const reservation = reservations[i];
-    const arrival = new Date(reservation.arrival.split("T")[0]);
-    const departure = new Date(reservation.departure.split("T")[0]);
+    const arrivalDateString = reservation.arrival ? reservation.arrival.split("T")[0] : "";
+    const departureDateString = reservation.departure ? reservation.departure.split("T")[0] : "";
+    
+    const arrival = arrivalDateString ? new Date(arrivalDateString) : null;
+    const departure = departureDateString ? new Date(departureDateString) : null;
 
     const currentDate = new Date(arrival);
     while (currentDate <= departure) {
@@ -119,6 +120,7 @@ const periods = calculateMarkedDates();
 
       if (response.ok) {
         setReservationData({
+          name: "",
           arrival: "",
           departure: "",
           price: "",
@@ -167,6 +169,7 @@ const periods = calculateMarkedDates();
   const handleEditReservation = (reservation) => {
     // Ouvrir le formulaire de mise à jour avec les détails de la réservation pré-remplis
     setReservationData({
+      name: reservation.name,
       arrival: reservation.arrival,
       departure: reservation.departure,
       price: reservation.price,
@@ -202,6 +205,7 @@ const periods = calculateMarkedDates();
 
         // Réinitialisez les données de réservation et le mode de modification
         setReservationData({
+          name: "",
           arrival: "",
           departure: "",
           price: "",
@@ -360,12 +364,50 @@ const periods = calculateMarkedDates();
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Réservation</Text>
-            <DatePicker
-              style={styles.datePicker}
+            <TextInput
+              style={styles.input}
+              placeholder="Nom"
+              placeholderTextColor="#999"
+              value={reservationData.name}
+              onChangeText={(text) =>
+                setReservationData((prevData) => ({
+                  ...prevData,
+                  name: text,
+                }))
+              }
+            />
+            <TextInput
+              style={styles.input}
+              mode="date"
+              placeholder="Arrivée (format : YYYY-MM-DD)"
+              placeholderTextColor="#999"
+              value={reservationData.arrival ? reservationData.arrival.toISOString().split('T')[0] : ''}
+              onDateChange={(date) =>
+                setReservationData((prevData) => ({
+                  ...prevData,
+                  arrival: date,
+                }))
+              }
+            />
+             <TextInput
+              style={styles.input}
+              mode="date"
+              placeholder="Départ (format : YYYY-MM-DD)"
+              placeholderTextColor="#999"
+              value={reservationData.departure ? reservationData.departure.toISOString().split('T')[0] : ''}
+              onDateChange={(date) =>
+                setReservationData((prevData) => ({
+                  ...prevData,
+                  departure: date,
+                }))
+              }
+            />
+            {/* <TextInput
+              style={styles.input}
               date={reservationData.arrival}
               mode="date"
               format="YYYY-MM-DD"
-              placeholder="Arrivée"
+              placeholder="Arrivée (format : YYYY-MM-DD)"
               confirmBtnText="Confirmer"
               cancelBtnText="Annuler"
               customStyles={{
@@ -379,12 +421,12 @@ const periods = calculateMarkedDates();
               }
             />
 
-            <DatePicker
-              style={styles.datePicker}
+            <TextInput
+              style={styles.input}
               date={reservationData.departure}
               mode="date"
               format="YYYY-MM-DD"
-              placeholder="Départ"
+              placeholder="Départ (format : YYYY-MM-DD)"
               confirmBtnText="Confirmer"
               cancelBtnText="Annuler"
               customStyles={{
@@ -396,18 +438,18 @@ const periods = calculateMarkedDates();
                   departure: date,
                 }))
               }
-            />
+            />*/}
             <TextInput
               style={styles.input}
               placeholder="Prix"
               placeholderTextColor="#999"
               value={reservationData.price}
-              onChangeText={(text) =>
+              onChangeText={(text) => {
                 setReservationData((prevData) => ({
                   ...prevData,
                   price: text,
-                }))
-              }
+                }));
+              }}
             />
             <TextInput
               style={styles.input}
