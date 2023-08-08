@@ -36,7 +36,7 @@ export default function ReservationsScreen({ navigation }) {
   const [reservations, setReservations] = useState([]);
   const [reservationData, setReservationData] = useState({
     nom: "",
-    arrival: "",
+    arrival: "", // Initialisez avec la date actuelle ou une date par défaut
     departure: "",
     price: "",
     status: "",
@@ -115,7 +115,11 @@ const periods = calculateMarkedDates();
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(reservationData),
+        body: JSON.stringify({
+          ...reservationData,
+          arrival: reservationData.arrival.toISOString(), // Convertir en chaîne au format ISO
+          departure: reservationData.departure.toISOString(), // Convertir en chaîne au format ISO
+        }),
       });
 
       if (response.ok) {
@@ -189,9 +193,12 @@ const periods = calculateMarkedDates();
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(reservationData), // Nouvelles données de réservation
-        }
-      );
+          body: JSON.stringify({
+            ...reservationData,
+            arrival: reservationData.arrival.toISOString(), // Convertir en chaîne au format ISO
+            departure: reservationData.departure.toISOString(), // Convertir en chaîne au format ISO
+          }),
+        }); // Nouvelles données de réservation
 
       if (response.ok) {
         // Mettez à jour la liste des réservations avec les nouvelles données
@@ -327,8 +334,8 @@ const periods = calculateMarkedDates();
         {reservations.map((reservation) => (
           <View key={reservation._id} style={styles.reservationItem}>
             <Text>Nom : {reservation.name}</Text>
-            <Text>Arrivée: {reservation.arrival}</Text>
-            <Text>Départ : {reservation.departure}</Text>
+            <Text>Arrivée: {reservation.arrival.split('T')[0]}</Text>
+            <Text>Départ : {reservation.departure.split('T')[0]}</Text>
             <Text>Prix : {reservation.price}€</Text>
             <Text>Status : {reservation.status}</Text>
             <Text>Distribution :{reservation.distribution}</Text>
@@ -377,68 +384,30 @@ const periods = calculateMarkedDates();
               }
             />
             <TextInput
-              style={styles.input}
-              mode="date"
-              placeholder="Arrivée (format : YYYY-MM-DD)"
-              placeholderTextColor="#999"
-              value={reservationData.arrival ? reservationData.arrival.toISOString().split('T')[0] : ''}
-              onDateChange={(date) =>
-                setReservationData((prevData) => ({
-                  ...prevData,
-                  arrival: date,
-                }))
-              }
-            />
-             <TextInput
-              style={styles.input}
-              mode="date"
-              placeholder="Départ (format : YYYY-MM-DD)"
-              placeholderTextColor="#999"
-              value={reservationData.departure ? reservationData.departure.toISOString().split('T')[0] : ''}
-              onDateChange={(date) =>
-                setReservationData((prevData) => ({
-                  ...prevData,
-                  departure: date,
-                }))
-              }
-            />
-            {/* <TextInput
-              style={styles.input}
-              date={reservationData.arrival}
-              mode="date"
-              format="YYYY-MM-DD"
-              placeholder="Arrivée (format : YYYY-MM-DD)"
-              confirmBtnText="Confirmer"
-              cancelBtnText="Annuler"
-              customStyles={{
-                dateInput: styles.input,
-              }}
-              onDateChange={(date) =>
-                setReservationData((prevData) => ({
-                  ...prevData,
-                  arrival: date,
-                }))
-              }
-            />
+                style={styles.input}
+                placeholder="Arrivée (format : YYYY-MM-DD)"
+                placeholderTextColor="#999"
+                value={reservationData.arrival}
+                onChangeText={(date) =>
+                  setReservationData((prevData) => ({
+                    ...prevData,
+                    arrival: new Date(date), // Convertir la chaîne en instance de date ou null
+                  }))
+                }
+              />
 
-            <TextInput
-              style={styles.input}
-              date={reservationData.departure}
-              mode="date"
-              format="YYYY-MM-DD"
-              placeholder="Départ (format : YYYY-MM-DD)"
-              confirmBtnText="Confirmer"
-              cancelBtnText="Annuler"
-              customStyles={{
-                dateInput: styles.input,
-              }}
-              onDateChange={(date) =>
-                setReservationData((prevData) => ({
-                  ...prevData,
-                  departure: date,
-                }))
-              }
-            />*/}
+              <TextInput
+                style={styles.input}
+                placeholder="Départ (format : YYYY-MM-DD)"
+                placeholderTextColor="#999"
+                value={reservationData.departure}
+                onChangeText={(date) =>
+                  setReservationData((prevData) => ({
+                    ...prevData,
+                    departure: new Date(date), // Convertir la chaîne en instance de date ou null
+                  }))
+                }
+              />
             <TextInput
               style={styles.input}
               placeholder="Prix"

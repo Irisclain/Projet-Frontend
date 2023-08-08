@@ -12,7 +12,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  Image,
+  Modal,
 } from 'react-native';
 import Pusher from 'pusher-js/react-native';
 import FontAwesome from'react-native-vector-icons/FontAwesome';
@@ -39,6 +39,7 @@ export default function ChatScreen({ navigation, route }) {
   
   const [messages, setMessages] = useState([]);
   const [messageText, setMessageText] = useState('');
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   console.log(messages);
 
@@ -136,9 +137,22 @@ export default function ChatScreen({ navigation, route }) {
         <TouchableOpacity style={styles.picturesButton}>
             <FontAwesome name="image" color="grey" size={25} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.picturesButton}>
+          <TouchableOpacity style={styles.picturesButton} onPress={() => setIsModalVisible(true)}>
             <FontAwesome name="plus" color="grey" size={25} />
           </TouchableOpacity>
+          <Modal animationType="fade"
+            transparent={true}
+            visible={isModalVisible}
+            onRequestClose={() => {
+              setIsModalVisible(false);
+             // Fermer le modal lorsque l'utilisateur appuie en dehors du modal
+            }}>
+            <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text>Bonjour ! </Text>
+            </View>
+            </View>
+          </Modal>
           <TextInput placeholder="Message..." onChangeText={(value) => setMessageText(value)} value={messageText} style={styles.input} autoFocus />
           <TouchableOpacity onPress={() => handleSendMessage()} style={styles.sendButton}>
             <FontAwesome name="send" color="#fae4b3" size={24} />
@@ -151,6 +165,25 @@ export default function ChatScreen({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
+  centeredView: {
+      position: 'absolute',
+      bottom: 300,
+      left: 20,
+      right: 20,
+  },
+  modalView: {
+    paddingVertical: 50,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 4,
+    elevation: 100,
+  },
   container: {
     flex: 1,
     alignItems: 'center',
