@@ -78,17 +78,17 @@ export default function MyAccommodationsScreen() {
               : require("../assets/faux-appart-1.jpg")
           }
           style={styles.accommodationPicture}
-          />
-          <View style={styles.accommodationText}>
-            <Text style={styles.accommodationTitle}>{data.name.substring(0, 20)}...</Text>
-            <Text>{data.description.substring(0, 86)}...</Text> 
-          </View>
-        </TouchableOpacity>
-      );
-    });
+        />
+        <View style={styles.accommodationText}>
+          <Text style={styles.accommodationTitle}>
+            {data.name.substring(0, 20)}...
+          </Text>
+          <Text>{data.description.substring(0, 86)}...</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  });
 
-  
-   
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>

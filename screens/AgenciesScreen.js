@@ -64,13 +64,14 @@ export default function AgenciesScreen({ navigation }) {
                         size={20}
                       />
             <Text style={styles.text}>{item}</Text>
+            
           </View>
   )}
       />
       <Footer navigation={navigation} messageButton={true} />
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -86,9 +87,9 @@ const styles = StyleSheet.create({
     
   },
   list:{
-    
     flexDirection:"column",
-    width:"40%",
+    marginLeft:40,
+    width:"50%",
   },
  text: { 
     display: "flex",
