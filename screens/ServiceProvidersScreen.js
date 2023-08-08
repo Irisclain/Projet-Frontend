@@ -356,11 +356,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   taskItem: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: 'white',
-    height: 90,
+    height: 100,
     padding: 10,
     marginBottom: 10,
     borderRadius: 5,
