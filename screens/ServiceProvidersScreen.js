@@ -13,6 +13,7 @@ import { Calendar } from 'react-native-calendars';
 import { Circle, Rect, Svg } from 'react-native-svg';
 import { Picker } from '@react-native-picker/picker';
 import Footer from "../components/Footer";
+import { useSelector } from 'react-redux';
 
 const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
 
@@ -22,6 +23,12 @@ const ServiceProvidersScreen = ({ navigation }) => {
   const [tasks, setTasks] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedTaskType, setSelectedTaskType] = useState('Réservation');
+
+  const currentReservation = useSelector(state => state.currentReservation.reservationData);
+  const selectedDate = useSelector(state => state.currentReservation.selectedDate);
+
+  //console.log(currentReservation);
+  console.log(selectedDate);
 
   const fetchPrestations = async () => {
     try {

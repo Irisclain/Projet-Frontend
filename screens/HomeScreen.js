@@ -32,6 +32,7 @@ export default function HomeScreen({ navigation }) {
   });
   const [modalVisible, setModalVisible] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const users = useSelector(state => state.user.value);
   
@@ -49,8 +50,18 @@ export default function HomeScreen({ navigation }) {
       navigation.navigate('ServiceProviderSignUp');
   };
 
-  const handleConnection = () => {
-      navigation.navigate('MyAccommodations');
+  const navigateToNextScreen = async () => {
+    setIsLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 500)); // Temps de chargement simulé
+    setIsLoading(false);
+
+    navigation.navigate('LoadingSignIn'); // Affiche la page de chargement
+    await new Promise((resolve) => setTimeout(resolve, 7000)); // Temps de chargement simulé
+    navigation.navigate('MyAccommodations'); // Navigue vers la page suivante
+  };
+
+  const handleConnection = async () => {
+    navigateToNextScreen();
   };
 
   const handlePressOpen = () => {
@@ -72,7 +83,7 @@ export default function HomeScreen({ navigation }) {
         //dispatch(addUser(formData));
         //console.log('à logguer : ', { username: formData.username, token: data.token })
         dispatch(login({ username: formData.username, token: data.token }));
-        navigation.navigate('MyAccommodations');
+        navigateToNextScreen();
       } else {
         console.error('Utilisateur inconnu');
       }

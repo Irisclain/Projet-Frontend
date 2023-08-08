@@ -13,15 +13,14 @@ import { Circle, Rect, Svg } from "react-native-svg";
 import Footer from "../components/Footer";
 import { StatusBar } from 'expo-status-bar';
 import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateCurrentRoute } from '../reducers/currentRoute';
-import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
-import { useIsFocused } from '@react-navigation/native';
-import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { updateCurrentReservation, updateSelectedDate } from '../reducers/currentReservation';
 
 const BACKEND_ADDRESS = "https://stay-backend.vercel.app";
 
 export default function ReservationsScreen({ navigation }) {
+  const dispatch = useDispatch();
+
   const [selectedDates, setSelectedDates] = useState({});
   const [selectedOptions, setSelectedOptions] = useState({});
   const [isOptionModalVisible, setOptionModalVisible] = useState(false);
@@ -109,6 +108,7 @@ const updateMarkedDates = () => {
       if (response.ok) {
         const data = await response.json();
         setReservations(data.reservationList);
+        dispatch(updateCurrentReservation(reservations[0] || {}));
       } else {
         console.error("Error fetching reservations:", response.status);
       }
@@ -229,6 +229,7 @@ const updateMarkedDates = () => {
         });
         setEditMode(false);
         setModalModifVisible(false);
+        dispatch(updateCurrentReservation(reservationData));
       } else {
         console.error("Error updating reservation:", response.status);
       }
@@ -302,6 +303,7 @@ const updateMarkedDates = () => {
           setSelectedDates(dateString); 
           setOptionModalVisible(true);
         }
+        dispatch(updateSelectedDate(dateString));
       };
 
   return (

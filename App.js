@@ -18,6 +18,8 @@ import OwnerSignUpScreen from './screens/OwnerSignUpScreen';
 import ReservationsScreen from './screens/ReservationsScreen';
 import ServiceProviderSignUpScreen from './screens/ServiceProviderSignUpScreen';
 import ServiceProvidersScreen from './screens/ServiceProvidersScreen';
+import LoadingSignInScreen from './screens/LoadingSignInScreen';
+import LoadingSignUpScreen from './screens/LoadingSignUpScreen';
 // import Header from './components/Header';
 import Footer from './components/Footer';
 import {
@@ -37,12 +39,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import {StatusBarStyle} from 'react-native';
 import currentRoute  from './reducers/currentRoute';
 import currentAccommodation from './reducers/currentAccommodation';
+import currentReservation from './reducers/currentReservation';
 import user from './reducers/user';
 // import message from './reducers/message';
 // import accommodation from './reducers/accommodation';*/
 
 const store = configureStore({
-  reducer: { currentAccommodation, currentRoute, user },
+  reducer: { currentAccommodation, currentRoute, user, currentReservation },
 });
 const tabBarItemStyle = Dimensions.get('window').width/4;
 
@@ -125,8 +128,10 @@ export default function App() {
       <Header/>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="LoadingSignIn" component={LoadingSignInScreen} />
         <Stack.Screen name="OwnerSignUp" component={OwnerSignUpScreen} />
         <Stack.Screen name="ServiceProviderSignUp" component={ServiceProviderSignUpScreen} />
+        <Stack.Screen name="LoadingSignUp" component={LoadingSignUpScreen} />
         <Stack.Screen name="MyProfile" component={MyProfileScreen} />
         <Stack.Screen name="MyAccommodations" component={MyAccommodationsScreen} />
         <Stack.Screen name="AddAccommodation" component={AddAccommodationScreen} />
