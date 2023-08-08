@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Dimensions,
   Image,
   KeyboardAvoidingView,
   StyleSheet,
@@ -72,14 +73,18 @@ export default function OwnerSignUpScreen({ navigation }) {
   
   return (
       <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-         <View style={styles.haut}>
-        <Text style={styles.title}>Mon profil</Text>
-          <View style={styles.bider}>
-            <TextInput placeholder="Nom..." style={styles.inputs} value={formData.lastname} onChangeText={(text) => setFormData({ ...formData, lastname: text })}/>
-            <TextInput placeholder="Prénom..." style={styles.inputs} value={formData.firstname} onChangeText={(text) => setFormData({ ...formData, firstname: text })}/>
+        <View style={styles.inputsContainer}>
+          <View style={styles.inputLine}>
+            <TextInput placeholder="Prénom" style={styles.title} value={formData.firstname} onChangeText={(text) => setFormData({ ...formData, firstname: text })}/>
+            <Text style={styles.title}> </Text>
+            <TextInput placeholder="Nom" style={styles.title} value={formData.lastname} onChangeText={(text) => setFormData({ ...formData, lastname: text })}/>
+          </View>
+          <View style={styles.inputLine}>
+            <Text>Alias : </Text>
             <TextInput placeholder="Nom d'utilisateur..." style={styles.inputs} value={formData.username} onChangeText={(text) => setFormData({ ...formData, username: text })}/>
+          </View>
             <TextInput placeholder="Email..." style={styles.inputs} value={formData.email} onChangeText={(text) => setFormData({ ...formData, email: text })}/>
-            <View style={styles.inputsContainer}>
+            <View style={styles.passwordContainer}>
               <TextInput
                 secureTextEntry={!showPassword}
                 placeholder="*** Mot de passe ***"
@@ -96,12 +101,52 @@ export default function OwnerSignUpScreen({ navigation }) {
                 <Text style={styles.textButton}>Enregistrer les modifications</Text>
             </TouchableOpacity>
           </View>
-        </View>
       </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "flex-start",
+    backgroundColor: "white",
+    margin: 0,
+    padding: 20,
+    width: Dimensions.get("window").width,
+  },
+  title: {
+    fontSize: 30,
+    marginTop: 0,
+    marginBottom: 22,
+    fontWeight: "600",
+    color: "#FF7A00",
+    justifyContent: 'center',
+    marginBottom: 10,
+  },
+  inputLine: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 12,
+    // width: Dimensions.get("window").width - 30,
+  },
+  inputsContainer: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: Dimensions.get("window").width - 30,
+    backgroundColor: "white",
+    padding: 12,
+    borderWidth: 1,
+    borderColor: "#FF7A00",
+    borderRadius: 12,
+    margin: 0,
+    marginBottom: 3,
+    marginTop: 12,
+  },
   bider: {
     width: '100%',
     alignItems: 'center',
@@ -131,16 +176,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 30,
   },
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: 'white',
-    paddingTop: 40,
-  },
-  haut: {
-    alignItems: 'center',
-    width: '100%',
-  },
   inputs: {
     width: 280,
     height: 50, 
@@ -151,7 +186,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     paddingHorizontal: 12,
   },
-  inputsContainer: {
+  passwordContainer: {
     position: 'relative',
   },
   iconContainer: {
@@ -226,14 +261,5 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
-  },
-  title: {
-    color: '#000',
-    fontSize: 24,
-    justifyContent: 'center',
-    textAlign: 'center',
-    textDecorationLine:'underline',
-    marginBottom: 10,
-    marginTop: 40,
   },
 });
