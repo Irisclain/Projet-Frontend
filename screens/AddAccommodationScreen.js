@@ -116,7 +116,7 @@ export default function AddAccommodationScreen({ navigation }) {
 
   const handleNewAccommodation = () => {
     
-    console.log('toutes les infos : ' , formData);
+    //console.log('toutes les infos : ' , formData);
 
     fetch(`${BACKEND_ADDRESS}/accommodation`, {
       method: "POST",
@@ -127,9 +127,9 @@ export default function AddAccommodationScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((response) => {
-        console.log('Response : ', response);
+        //console.log('Response : ', response);
         if (response.result) {
-          console.log("hébergement enregistré avec succès!");
+          //console.log("hébergement enregistré avec succès!");
           setFormData({ ...formData, distribution: [] });
           navigation.navigate("MyAccommodations");
         } else {
@@ -191,31 +191,31 @@ export default function AddAccommodationScreen({ navigation }) {
 
     setFormData({ ...formData, distribution: selectedList }); // update de formData avec la selectedList à jour
   };
-console.log("formdata",formData.picture);
+  // console.log("formdata",formData.picture);
   // console.log('selecteditems', selectedItems2);
   // setFormData({ ...formData, distribution: selectedItems2 });
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Ajouter un Hébergement</Text>
-      <View style={styles.container1}>
-        <View style={styles.picturename}>
-          <TouchableOpacity onPress={pickImage} style={styles.inputphoto}>
+        <View style={styles.pictureLine}>
+          <TouchableOpacity onPress={pickImage} style={styles.inputPhoto}>
             {image ? (
               <Image source={{ uri: image }} style={styles.image} />
             ) : (
-              <FontAwesomeIcon name="image" style={styles.icon} />
+              <FontAwesome name="image" style={styles.icon} color="grey" size={30} />
             )}
+            {!image && <Text>Ajouter une photo</Text>}
           </TouchableOpacity>
+        
 
           <TextInput
             value={formData.name}
             onChangeText={(text) => setFormData({ ...formData, name: text })}
             placeholder="Nom du bien..."
-            style={styles.inputname}
+            style={styles.inputName}
           />
         </View>
-        {!image && <Text>Ajouter une photo</Text>}
         <TextInput
           value={formData.address}
           onChangeText={(text) => setFormData({ ...formData, address: text })}
@@ -239,16 +239,15 @@ console.log("formdata",formData.picture);
         <TextInput
           value={formData.price}
           onChangeText={(number) => setFormData({ ...formData, price: Number(number) })}
-          placeholder="Tarif..."
+          placeholder="Prix à la nuitée (€)..."
           style={styles.input}
           keyboardType="numeric"
         />
-
-        <Text style={styles.distriInput}>Canaux de distributions : </Text>
-        <View style={styles.angleDownButton}>
-          <TouchableOpacity onPress={handlePressOpen}>
-            <FontAwesome name="angle-down" color="black" size={25} />
-          </TouchableOpacity>
+        <View>
+        <TouchableOpacity onPress={handlePressOpen} style={styles.distriInput}>
+          <Text style={styles.distriText}>Canaux de distributions</Text>
+          <FontAwesome name="angle-down" color="grey" size={30} />
+        </TouchableOpacity>
         </View>
         <Modal
           style={{ borderWidth: 3 }}
@@ -293,8 +292,9 @@ console.log("formdata",formData.picture);
             </View>
           </View>
         </Modal>
-        <Button title="Submit" onPress={() => handleNewAccommodation()} />
-      </View>
+        <TouchableOpacity onPress={() => handleNewAccommodation()}>
+          <Text style={styles.submitButton}>Enregistrer</Text>
+        </TouchableOpacity>
       <Footer navigation={navigation} messageButton={true} />
     </View>
   );
@@ -310,10 +310,6 @@ const styles = StyleSheet.create({
     padding: 20,
     width: Dimensions.get("window").width,
   },
-  container1: {
-    justifyContent: "center",
-    padding: 20,
-  },
   title: {
     fontSize: 30,
     margin: 0,
@@ -321,11 +317,12 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#FF7A00",
   },
-  picturename: {
+  pictureLine: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 10,
+    marginBottom: 20,
+    width: Dimensions.get("window").width-40,
   },
   closeButtonText: {
     left: 10,
@@ -351,6 +348,17 @@ const styles = StyleSheet.create({
     width: 300,
     borderWidth: 3,
   },
+  submitButton:{
+    borderRadius:30,
+    borderWidth:0,
+    backgroundColor: '#FF7A00',
+    textAlign: 'center',
+    width: 260,
+    fontSize: 18,
+    padding: 10,
+    color: '#FFF',
+    marginBottom: 20,
+  },
   centeredView: {
     position: "absolute",
     width: 150,
@@ -358,27 +366,23 @@ const styles = StyleSheet.create({
     left: 270,
     right: 20,
   },
-  angleDownButton: {
-    position: "absolute",
-    marginTop: 420,
-    right: 35,
-    top: 13,
-  },
   distriInput: {
-    marginTop: 20,
-    paddingTop: 15,
-    width: 350,
+    padding:12,
+    paddingLeft:20,
+    width: Dimensions.get("window").width-40,
     height: 60,
     borderWidth: 1,
-    borderColor: "black",
+    borderColor: "#FF7A00",
     borderRadius: 10,
-    marginBottom: 10,
-    fontSize: 18,
-    paddingHorizontal: 12,
-    paddingVertical: 11,
+    marginBottom: 20,
+    fontSize: 20,
     color: "#868686",
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  distriText: {
+    fontSize: 20,
+    color: "#868686",
   },
   image: {
     width: 140,
@@ -389,37 +393,38 @@ const styles = StyleSheet.create({
   },
   icon: {
     fontSize: 70,
-    marginTop: -7,
-    paddingLeft: 2,
     color: "gray",
+    textAlign: 'center',
   },
-  inputphoto: {
-    borderRadius: 10,
-    height: 80,
-    width: 100,
-    marginTop: 10,
-    padding: 10,
+  inputPhoto: {
+    width: 114,
+    padding: 0,
   },
-  inputname: {
+  inputName: {
     borderRadius: 10,
-    marginLeft: 50,
+    marginLeft: 10,
     height: 60,
-    width: 200,
-    borderColor: "gray",
+    width: Dimensions.get("window").width-170,
+    borderColor: "#FF7A00",
     borderWidth: 1,
     marginTop: 10,
     marginBottom: 10,
-    padding: 10,
+    padding: 12,
+    paddingLeft: 20,
+    fontSize: 16,
   },
   input: {
     borderRadius: 10,
     marginLeft: 0,
     height: 60,
-    borderColor: "gray",
+    borderColor: "#FF7A00",
     borderWidth: 1,
-    marginTop: 10,
+    marginTop: 0,
     marginBottom: 20,
-    padding: 10,
+    padding: 12,
+    paddingLeft: 12,
+    fontSize: 16,
+    width: Dimensions.get("window").width-40
   },
   modalText: {
     margin: 5,

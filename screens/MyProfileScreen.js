@@ -11,24 +11,22 @@ import {
 import FontAwesome from'react-native-vector-icons/FontAwesome';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useIsFocused } from '@react-navigation/native';
 import { updateCurrentRoute } from '../reducers/currentRoute';
 import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
 import { addUser, login, logout } from '../reducers/user';
-import Footer from '../components/Footer';
 
 const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
 
-export default function MyprofileScreen({ navigation }) {
+export default function OwnerSignUpScreen({ navigation }) {
   const dispatch = useDispatch();
   
   useEffect(() => {
-    dispatch(updateCurrentRoute('MyProfile'));  
+    dispatch(updateCurrentRoute('OwnerSignUp'));  
     dispatch(updateCurrentAccommodation({}));  
   }, []);
 
-  const users = useSelector((state) => state.user.value);
-  console.log(users);
+  //const users = useSelector((state) => state.user.value);
+  //console.log(users);
 
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -45,15 +43,7 @@ export default function MyprofileScreen({ navigation }) {
       position: ''},
   });
 
-const infoUser = () => {
-  fetch(`${BACKEND_ADDRESS}/users/${users.id}`, {
-    method: 'GET',
-    
-    }
-    .then((response) => response.json())
-    .then((data) => console.log(data))
-    .catch((error) => console.error(error))
-    )};
+
   const handleNewUser = () => {
     fetch(`${BACKEND_ADDRESS}/users/signup`, {
       method: 'POST',
@@ -62,10 +52,13 @@ const infoUser = () => {
       },
       body: JSON.stringify(formData),
     })
-      .then((response) => {
-        if (response.ok) {
+    .then(response => response.json())
+    .then(data => {
+        if (data) {
           console.log('Utilisateur enregistré avec succès!');
-          dispatch(addUser(formData));
+          //dispatch(addUser(formData));
+          dispatch(login({ username: formData.username, token: data.token }));
+          //console.log({ username: formData.username, token: data.token });
           navigation.navigate('MyAccommodations');
         } else {
           console.error('Erreur lors de l\'enregistrement de l\'utilisateur');
@@ -75,15 +68,14 @@ const infoUser = () => {
         console.error('Erreur lors de l\'enregistrement de l\'utilisateur:', error);
       });
   };
-  
+  console.log()
   
   return (
       <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
          <View style={styles.haut}>
-        <Text style={styles.title}>Mon Profil</Text>
+        <Text style={styles.title}>Mon profil</Text>
           <View style={styles.bider}>
             <TextInput placeholder="Nom..." style={styles.inputs} value={formData.lastname} onChangeText={(text) => setFormData({ ...formData, lastname: text })}/>
-            
             <TextInput placeholder="Prénom..." style={styles.inputs} value={formData.firstname} onChangeText={(text) => setFormData({ ...formData, firstname: text })}/>
             <TextInput placeholder="Nom d'utilisateur..." style={styles.inputs} value={formData.username} onChangeText={(text) => setFormData({ ...formData, username: text })}/>
             <TextInput placeholder="Email..." style={styles.inputs} value={formData.email} onChangeText={(text) => setFormData({ ...formData, email: text })}/>
@@ -100,9 +92,9 @@ const infoUser = () => {
                 <FontAwesome name={showPassword ? 'eye' : 'eye-slash'} size={24} color="#a6a6a6" />
               </TouchableOpacity>
             </View>
-          
-            
-            <Footer navigation={navigation} messageButton={true} />
+            <TouchableOpacity onPress={() => handleNewUser()} style={styles.button} activeOpacity={0.8}>
+                <Text style={styles.textButton}>Enregistrer les modifications</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </KeyboardAvoidingView>
