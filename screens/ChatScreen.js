@@ -27,6 +27,7 @@ export default function ChatScreen({ navigation, route }) {
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user.value);
+  
 
   //console.log(contactName);
 
