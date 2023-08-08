@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { updateCurrentRoute } from '../reducers/currentRoute';
 import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
 
+
 const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
 
 export default function MessageScreen({ navigation }) {
