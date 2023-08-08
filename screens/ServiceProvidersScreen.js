@@ -13,22 +13,71 @@ import { Calendar } from 'react-native-calendars';
 import { Circle, Rect, Svg } from 'react-native-svg';
 import { Picker } from '@react-native-picker/picker';
 import Footer from "../components/Footer";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateSelectedDate } from '../reducers/currentReservation';
 
 const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
 
 const ServiceProvidersScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
   const [selectedDates, setSelectedDates] = useState({});
   const [selectedTaskStatus, setSelectedTaskStatus] = useState('Tous');
   const [tasks, setTasks] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedTaskType, setSelectedTaskType] = useState('Réservation');
+  const [isOptionModalVisible, setOptionModalVisible] = useState(false);
 
   const currentReservation = useSelector(state => state.currentReservation.reservationData);
   const selectedDate = useSelector(state => state.currentReservation.selectedDate);
 
-  //console.log(currentReservation);
+  console.log(currentReservation);
   console.log(selectedDate);
+  const calculateMarkedDates = () => {
+    const markedDates = {};
+  
+    for (let i = 0; i < currentReservation.length; i++) {
+      const reservation = currentReservation[i];
+      const arrivalDateString = reservation.arrival;
+      const departureDateString = reservation.departure;
+      
+      if (arrivalDateString && departureDateString) {
+        const arrival = new Date(arrivalDateString);
+        const departure = new Date(departureDateString);
+        
+  
+      const currentDate = new Date(arrival);
+      while (currentDate <= departure) {
+        const formattedDate = currentDate.toISOString().split("T")[0];
+        if (!markedDates[formattedDate]) {
+          markedDates[formattedDate] = {
+            periods: [],
+          };
+        }
+        markedDates[formattedDate].periods.push({
+          color: "grey",
+          textColor: "white",
+          text: `Réservation ${i + 1}`,
+        });
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+    }
+  }
+  
+    Object.keys(selectedDate).forEach((date) => {
+      const color = selectedDate[date];
+      if (markedDates[date]) {
+        markedDates[date].periods.push({ color });
+      } else {
+        markedDates[date] = {
+          periods: [{ color }],
+        };
+      }
+    });
+  
+    return markedDates;
+  }; 
+
+  const periods = calculateMarkedDates();
 
   const fetchPrestations = async () => {
     try {
@@ -74,34 +123,41 @@ const ServiceProvidersScreen = ({ navigation }) => {
     );
   };
 
-  const renderCalendar = (selectedDates, handleDayPress) => {
+  const renderCalendar = () => {
     /* const { height } = Dimensions.get('window');
     const calendarHeight = height * 0.6; */
 
     return (
       <View /* style={{ height: calendarHeight }} */>
         <Calendar
-          theme={{
+          /* theme={{
             calendarBackground: 'white',
             selectedDayBackgroundColor: 'green',
             selectedDayTextColor: 'white',
-          }}
-          markedDates={selectedDates}
-          onDayPress={(day) => handleDayPress(day.dateString)}
+          }} */
+          /* markedDates={selectedDates} */
+          /* onDayPress={(day) => handleDayPress(day.dateString)} */
           style={styles.calendar}
+          markingType="multi-period"
+          markedDates = {periods}
+          onDayPress={handleDayPress}
         />
       </View>
     );
   };
 
-  const handleDayPress = (date) => {
-    const newSelectedDates = { ...selectedDates };
-    if (newSelectedDates[date]) {
-      delete newSelectedDates[date];
-    } else {
-      newSelectedDates[date] = { selected: true, selectedColor: 'green' };
-    }
-    setSelectedDates(newSelectedDates);
+  const handleDayPress = (day) => {
+    const dateString = day.dateString;
+        dispatch(updateSelectedDate(selectedDate));
+        
+        if (selectedDate[dateString]) {
+          const updatedSelectedOptions = { ...selectedDate };
+          delete updatedSelectedOptions[dateString];
+          setSelectedOptions(updatedSelectedOptions);
+        } else {
+          setSelectedDates(dateString); 
+          setOptionModalVisible(true);
+        }
   };
 
   const handleCreateTask = async () => {
@@ -263,6 +319,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     backgroundColor: 'white',
+  },
+  calendar: {
+    borderRadius: 10,
+    elevation: 4,
   },
   button: {
     backgroundColor: '#fbe29c',
