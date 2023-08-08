@@ -44,7 +44,7 @@ export default function ReservationsScreen({ navigation }) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
   const [isModalModifVisible, setModalModifVisible] = useState(false);
-console.log(selectedOptions)
+console.log(reservations)
 
 const calculateMarkedDates = () => {
   const markedDates = {};
@@ -87,6 +87,7 @@ const calculateMarkedDates = () => {
       };
     }
   });
+  dispatch(updateSelectedDate(selectedOptions));
 
   return markedDates;
 }; 
@@ -108,7 +109,7 @@ const updateMarkedDates = () => {
       if (response.ok) {
         const data = await response.json();
         setReservations(data.reservationList);
-        dispatch(updateCurrentReservation(reservations[0] || {}));
+        dispatch(updateCurrentReservation(data.reservationList));
       } else {
         console.error("Error fetching reservations:", response.status);
       }
@@ -294,6 +295,7 @@ const updateMarkedDates = () => {
 
   const handleDayPress = (day) => {
         const dateString = day.dateString;
+        dispatch(updateSelectedDate(selectedOptions));
         
         if (selectedOptions[dateString]) {
           const updatedSelectedOptions = { ...selectedOptions };
@@ -303,7 +305,6 @@ const updateMarkedDates = () => {
           setSelectedDates(dateString); 
           setOptionModalVisible(true);
         }
-        dispatch(updateSelectedDate(dateString));
       };
 
   return (
