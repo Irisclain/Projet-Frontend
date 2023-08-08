@@ -24,11 +24,15 @@ const BACKEND_ADDRESS = "https://stay-backend.vercel.app";
 
 export default function ReservationsScreen({ navigation }) {
   const [selectedDates, setSelectedDates] = useState({});
+  const [selectedOption, setSelectedOption] = useState("");
+  const [selectedOptions, setSelectedOptions] = useState({});
+  const [isOptionModalVisible, setOptionModalVisible] = useState(false);
+  const [markedDates, setMarkedDates] = useState({});
   const [legends, setLegends] = useState([
     { color: "grey", label: "Réservation" },
     { color: "red", label: "Indisponibilité" },
     { color: "blue", label: "Ménage" },
-    { color: "green", label: "Travaux" },
+    { color: "green", label: "Dépannage" },
   ]);
 
   const [reservations, setReservations] = useState([]);
@@ -42,7 +46,49 @@ export default function ReservationsScreen({ navigation }) {
   });
   const [isModalVisible, setModalVisible] = useState(false);
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
-console.log(reservations)
+console.log(selectedOptions)
+
+const calculateMarkedDates = () => {
+  const markedDates = {};
+
+  for (let i = 0; i < reservations.length; i++) {
+    const reservation = reservations[i];
+    const arrival = new Date(reservation.arrival.split("T")[0]);
+    const departure = new Date(reservation.departure.split("T")[0]);
+
+    const currentDate = new Date(arrival);
+    while (currentDate <= departure) {
+      const formattedDate = currentDate.toISOString().split("T")[0];
+      if (!markedDates[formattedDate]) {
+        markedDates[formattedDate] = {
+          periods: [],
+        };
+      }
+      markedDates[formattedDate].periods.push({
+        color: "grey",
+        textColor: "white",
+        text: `Réservation ${i + 1}`,
+      });
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+  }
+
+  Object.keys(selectedOptions).forEach((date) => {
+    const color = selectedOptions[date];
+    if (markedDates[date]) {
+      markedDates[date].periods.push({ color });
+    } else {
+      markedDates[date] = {
+        periods: [{ color }],
+      };
+    }
+  });
+
+  return markedDates;
+}; 
+
+const periods = calculateMarkedDates();
+
   useEffect(() => {
     fetchReservations();
   }, []);
@@ -60,57 +106,6 @@ console.log(reservations)
       console.error("Error fetching reservations:", error);
     }
   };
-
-
-const calculatePeriods = () => {
-  const periods = {};
-
-  for (let i = 0; i < reservations.length; i++) {
-    const reservation = reservations[i];
-    const arrival = new Date(reservation.arrival.split("T")[0]);
-    const departure = new Date(reservation.departure.split("T")[0]);
-
-    const currentDate = new Date(arrival);
-    while (currentDate <= departure) {
-      const formattedDate = currentDate.toISOString().split("T")[0];
-      if (!periods[formattedDate]) {
-        periods[formattedDate] = {
-          periods: [],
-        };
-      }
-      periods[formattedDate].periods.push({
-        color: "grey",
-        textColor: "white",
-        text: `Réservation ${i + 1}`,
-      });
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
-  }
-
-  Object.keys(selectedDates).forEach((date) => {
-    if (!periods[date]) {
-      periods[date] = {
-        periods: [],
-      };
-    }
-    periods[date].periods.push({
-      color: "red",
-      textColor: "white",
-      customStyles: {
-        container: {
-          backgroundColor: "red",
-          borderRadius: 20,
-        },
-      },
-      text: "Barre rouge",
-    });
-  });
-
-  return periods;
-  };
-
-const markedDates = calculatePeriods();
-
 
   const handleCreateReservation = async () => {
     try {
@@ -260,6 +255,35 @@ const markedDates = calculatePeriods();
     );
   };
 
+  const handleOptionSelect = (option) => {
+    setOptionModalVisible(false);
+    setSelectedOptions((prevSelectedOptions) => {
+      const updatedSelectedOptions = { ...prevSelectedOptions };
+      if (updatedSelectedOptions[selectedDates] === option) {
+        delete updatedSelectedOptions[selectedDates];
+      } else {
+        updatedSelectedOptions[selectedDates] = option;
+      }
+      return updatedSelectedOptions;
+    });
+    
+    const updatedMarkedDates = calculateMarkedDates();
+    setMarkedDates(updatedMarkedDates);
+  };
+
+  const handleDayPress = (day) => {
+        const dateString = day.dateString;
+        
+        if (selectedOptions[dateString]) {
+          const updatedSelectedOptions = { ...selectedOptions };
+          delete updatedSelectedOptions[dateString];
+          setSelectedOptions(updatedSelectedOptions);
+        } else {
+          setSelectedDates(dateString); 
+          setOptionModalVisible(true);
+        }
+      };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -268,20 +292,31 @@ const markedDates = calculatePeriods();
         <Calendar
           style={styles.calendar}
           markingType="multi-period"
-          markedDates = {markedDates}
-          onDayPress={(day) => {
-            const selectedDate = day.dateString;
-            setSelectedDates((prevSelectedDates) => {
-              const newSelectedDates = { ...prevSelectedDates };
-              if (newSelectedDates[selectedDate]) {
-                delete newSelectedDates[selectedDate];
-              } else {
-                newSelectedDates[selectedDate] = true;
-              }
-              return newSelectedDates;
-            });
-          }}
+          markedDates = {periods}
+          onDayPress={handleDayPress}
         />
+        <Modal visible={isOptionModalVisible} transparent={true} animationType="slide">
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+          <Text>Choisir une option:</Text>
+          <TouchableOpacity
+            onPress={() => handleOptionSelect('red')}
+          >
+            <Text style={styles.optionButtonText}>Indisponibilité</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => handleOptionSelect('blue')}
+          >
+            <Text style={styles.optionButtonText}>Ménage</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+          onPress={() => handleOptionSelect('green')}
+          >
+            <Text style={styles.optionButtonText}>Dépannage</Text>
+          </TouchableOpacity>
+        </View>
+        </View>
+        </Modal>
          <StatusBar style="auto" />
       </View>
 
