@@ -29,7 +29,7 @@ export default function MyAccommodationsScreen() {
   const isFocused = useIsFocused();
 
   const user = useSelector(state => state.user.value);
-  console.log('Tout sur l\'user : ' , user);
+  //console.log('Tout sur l\'user : ' , user);
   
   useEffect(() => {
     if (isFocused) {

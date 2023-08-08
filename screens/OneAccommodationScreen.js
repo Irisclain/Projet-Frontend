@@ -163,6 +163,7 @@ export default function AddAccommodationScreen({ navigation }) {
                   setFormData({ ...formData, price: number })
                 }
                 style={styles.inputPrice}
+                keyboardType="numeric"
               />
               <Text style={styles.textPrice}> €</Text>
             </View>

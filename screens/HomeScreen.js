@@ -67,10 +67,10 @@ export default function HomeScreen({ navigation }) {
       }).then(response => response.json())
     .then(data => {
       if (data.result) {
-        console.log('datas : ', data);
-        console.log('Connexion réussie!');
+        //console.log('datas : ', data);
+        //console.log('Connexion réussie!');
         //dispatch(addUser(formData));
-        console.log('à logguer : ', { username: formData.username, token: data.token })
+        //console.log('à logguer : ', { username: formData.username, token: data.token })
         dispatch(login({ username: formData.username, token: data.token }));
         navigation.navigate('MyAccommodations');
       } else {

@@ -16,15 +16,11 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
-import Header from "../components/Header";
 import Footer from "../components/Footer";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 // import { useDispatch, useSelector } from 'react-redux';
-// import {  } from '../reducers/user';
-// import {  } from '../reducers/accommodations';
-// import {  } from '../reducers/messages';
+
 const BACKEND_ADDRESS = "https://stay-backend.vercel.app";
-//'https://stay-backend.vercel.app';
 
 const distributeurs = [
   {
@@ -94,6 +90,8 @@ export default function AddAccommodationScreen({ navigation }) {
 
   const handleNewAccommodation = () => {
     
+    console.log('toutes les infos : ' , formData);
+
     fetch(`${BACKEND_ADDRESS}/accommodation`, {
       method: "POST",
       headers: {

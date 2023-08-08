@@ -68,10 +68,13 @@ export default function ServiceProviderSignUpScreen({ navigation }) {
       },
       body: JSON.stringify(formData),
     })
-      .then((response) => {
-        if (response.ok) {
+    .then(response => response.json())
+    .then(data => {
+        if (data) {
           console.log('Utilisateur enregistré avec succès!');
-          dispatch(addUser(formData));
+          //dispatch(addUser(formData));
+          dispatch(login({ username: formData.username, token: data.token }));
+          //console.log({ username: formData.username, token: data.token });
           navigation.navigate('MyAccommodations');
         } else {
           console.error('Erreur lors de l\'enregistrement de l\'utilisateur');

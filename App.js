@@ -76,8 +76,8 @@ const TabNavigator = () => {
       const Header = () => {
       const currentRoute = useSelector((state) => state.currentRoute.value);
       const currentAccommodation = useSelector((state) => state.currentAccommodation.value); 
-      console.log ('nom de la page : ', currentRoute);
-      console.log ('nom de l\'hébergement : ', currentAccommodation);
+      // console.log ('nom de la page : ', currentRoute);
+      // console.log ('nom de l\'hébergement : ', currentAccommodation);
 
       const navigation=useNavigation();
       if (currentRoute==='Home'){
