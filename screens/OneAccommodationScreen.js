@@ -163,6 +163,7 @@ export default function AddAccommodationScreen({ navigation }) {
                   setFormData({ ...formData, price: number })
                 }
                 style={styles.inputPrice}
+                keyboardType="numeric"
               />
               <Text style={styles.textPrice}> €</Text>
             </View>
@@ -221,7 +222,8 @@ const styles = StyleSheet.create({
     padding: 0,
     borderWidth: 1,
     borderColor: "#FF7A00",
-    borderRadius: 12,
+    borderTopRightRadius: 12,
+    borderTopLeftRadius: 12,
     margin: 0,
     marginBottom: 3,
     marginTop: 12,

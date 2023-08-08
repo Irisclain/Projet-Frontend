@@ -29,7 +29,7 @@ export default function MyAccommodationsScreen() {
   const isFocused = useIsFocused();
 
   const user = useSelector(state => state.user.value);
-  console.log('Tout sur l\'user : ' , user);
+  //console.log('Tout sur l\'user : ' , user);
   
   useEffect(() => {
     if (isFocused) {
@@ -45,10 +45,11 @@ export default function MyAccommodationsScreen() {
 
     let ownerToken = 'kZg43tvoorU8F5ypqMv5QZBYZjLC426k'
     
-
-    if (!user) {
+    if (user.token!==null) {
       ownerToken = user.token;
     }
+
+    console.log('pour vérifier le passage sans connexion // ownerToken : ', ownerToken, 'user : ', user);
 
     //fetch(`${BACKEND_ADDRESS}/accommodation/${owner}`)
     fetch(`${BACKEND_ADDRESS}/accommodation/${ownerToken}`)
@@ -79,17 +80,17 @@ export default function MyAccommodationsScreen() {
               : require("../assets/faux-appart-1.jpg")
           }
           style={styles.accommodationPicture}
-          />
-          <View style={styles.accommodationText}>
-            <Text style={styles.accommodationTitle}>{data.name.substring(0, 20)}...</Text>
-            <Text>{data.description.substring(0, 86)}...</Text> 
-          </View>
-        </TouchableOpacity>
-      );
-    });
+        />
+        <View style={styles.accommodationText}>
+          <Text style={styles.accommodationTitle}>
+            {data.name.substring(0, 20)}...
+          </Text>
+          <Text>{data.description.substring(0, 86)}...</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  });
 
-  
-   
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>
