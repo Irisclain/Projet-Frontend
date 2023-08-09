@@ -8,6 +8,7 @@ import {
   Dimensions,
   Modal,
   ScrollView,
+  TextInput
 } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { Circle, Rect, Svg } from 'react-native-svg';
@@ -26,6 +27,8 @@ const ServiceProvidersScreen = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedTaskType, setSelectedTaskType] = useState('Réservation');
   const [isOptionModalVisible, setOptionModalVisible] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
+  const [isEditModalVisible, setEditModalVisible] = useState(false);
 
   const currentReservation = useSelector(state => state.currentReservation.reservationData);
   const selectedDate = useSelector(state => state.currentReservation.selectedDate);
@@ -123,6 +126,61 @@ const ServiceProvidersScreen = ({ navigation }) => {
     );
   };
 
+  //Modifier les taches
+  const handleUpdateTask = (task) => {
+    setSelectedTask(task);
+    setEditModalVisible(true);
+  };
+
+  const updateTask = async () => {
+    try {
+      const response = await fetch(`${BACKEND_ADDRESS}/prestations/${selectedTask._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          start: selectedTask.start,
+          end: selectedTask.end,
+          status: selectedTask.status,
+          tache: selectedTask.tache,
+        }),
+      });
+
+      const data = await response.json();
+      if (data.result) {
+        const updatedTasks = tasks.map(task =>
+          task._id === selectedTask._id ? data.updatedPrestation : task
+        );
+        setTasks(updatedTasks);
+        setEditModalVisible(false);
+      } else {
+        console.error(data.error);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Delete tache
+  const handleDeleteTask = async (taskId) => {
+    try {
+      const response = await fetch(`${BACKEND_ADDRESS}/prestations/${taskId}`, {
+        method: 'DELETE',
+      });
+
+      const data = await response.json();
+      if (data.result) {
+        const updatedTasks = tasks.filter(task => task._id !== taskId);
+        setTasks(updatedTasks);
+      } else {
+        console.error(data.error);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const renderCalendar = () => {
     /* const { height } = Dimensions.get('window');
     const calendarHeight = height * 0.6; */
@@ -204,15 +262,92 @@ const ServiceProvidersScreen = ({ navigation }) => {
     return (
       <ScrollView style={styles.tasksContainer}>
         {filteredTasks.map((task, index) => (
-          <TouchableOpacity key={index} style={styles.taskItem}>
+          <View key={index} style={styles.taskItem}>
             <Text>{task.start} - {task.end}</Text>
             <Text>{task.tache}</Text>
             <Text>{task.status}</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.editButton}
+              onPress={() => handleUpdateTask(task)}
+            >
+              <Text style={styles.editButtonText}>Modifier</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.deleteButton}
+              onPress={() => handleDeleteTask(task._id)}
+            >
+              <Text style={styles.deleteButtonText}>Supprimer</Text>
+            </TouchableOpacity>
+          </View>
         ))}
       </ScrollView>
     );
   };
+
+  const renderEditModal = () => {
+    if (!selectedTask) {
+      return null;
+    } 
+    return (
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isEditModalVisible}
+        onRequestClose={() => setEditModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Modifier la tâche</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Début"
+              value={selectedTask.start}
+              onChangeText={(text) =>
+                setSelectedTask({ ...selectedTask, start: text })
+              }
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Fin"
+              value={selectedTask.end}
+              onChangeText={(text) =>
+                setSelectedTask({ ...selectedTask, end: text })
+              }
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Statut"
+              value={selectedTask.status}
+              onChangeText={(text) =>
+                setSelectedTask({ ...selectedTask, status: text })
+              }
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Tâche"
+              value={selectedTask.tache}
+              onChangeText={(text) =>
+                setSelectedTask({ ...selectedTask, tache: text })
+              }
+            />
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={updateTask}
+            >
+              <Text>Enregistrer</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => setEditModalVisible(false)}
+            >
+              <Text>Annuler</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    );
+  };
+
 
   const renderModalContent = () => {
     return (
@@ -308,10 +443,14 @@ const ServiceProvidersScreen = ({ navigation }) => {
           {renderModalContent()}
         </View>
       </Modal>
+
+      {renderEditModal()}
+
       <Footer navigation={navigation} messageButton={true} />
     </SafeAreaView>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -356,9 +495,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   taskItem: {
-    flexDirection: 'column',
+   flexDirection: 'column',
     justifyContent: 'space-between',
-    alignItems: 'center',
     backgroundColor: 'white',
     height: 100,
     padding: 10,
@@ -385,6 +523,54 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: 'center',
     marginTop: 10,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  },
+  modalButtonText: {
+    color: 'white',
+    fontSize: 16,
+  },
+  deleteButton: {
+    backgroundColor: "red",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 5,
+    marginTop: 5,
+    position: 'absolute',
+    bottom: 0,
+    right: 0
+  },
+  deleteButtonText: {
+    color: "white",
+    fontWeight: "bold",
+  },
+  editButton: {
+    backgroundColor: "orange", 
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 5,
+    marginTop: 30,
+    position: 'absolute',
+    top: 0,
+    right: 0
+
+  },
+  editButtonText: {
+    color: "white",
+    fontWeight: "bold",
+  },
+  cancelButton: {
+    backgroundColor: 'gray',
   },
   calendar: {
     borderRadius: 10,
