@@ -65,7 +65,7 @@ export default function ServiceProviderSignUpScreen({ navigation }) {
     setIsLoading(false);
 
     navigation.navigate('LoadingSignUp'); // Affiche la page de chargement
-    await new Promise((resolve) => setTimeout(resolve, 7000)); // Temps de chargement simulé
+    await new Promise((resolve) => setTimeout(resolve, 6000)); // Temps de chargement simulé
     navigation.navigate('MyAccommodations'); // Navigue vers la page suivante
   };
 
