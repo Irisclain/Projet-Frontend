@@ -17,16 +17,10 @@ import Footer from "../components/Footer";
 import { useDispatch, useSelector } from 'react-redux';
 import { updateSelectedDate } from '../reducers/currentReservation';
 
-// Adresse du backend
 const BACKEND_ADDRESS = 'https://stay-backend.vercel.app';
 
 const ServiceProvidersScreen = ({ navigation }) => {
-  // Redux
   const dispatch = useDispatch();
-  const currentReservation = useSelector(state => state.currentReservation.reservationData);
-  const selectedDate = useSelector(state => state.currentReservation.selectedDate);
-
-  // State
   const [selectedDates, setSelectedDates] = useState({});
   const [selectedTaskStatus, setSelectedTaskStatus] = useState('Tous');
   const [tasks, setTasks] = useState([]);
@@ -36,37 +30,42 @@ const ServiceProvidersScreen = ({ navigation }) => {
   const [selectedTask, setSelectedTask] = useState(null);
   const [isEditModalVisible, setEditModalVisible] = useState(false);
 
-  // Calcul des dates marquées dans le calendrier
+  const currentReservation = useSelector(state => state.currentReservation.reservationData);
+  const selectedDate = useSelector(state => state.currentReservation.selectedDate);
+
+  console.log(currentReservation);
+  console.log(selectedDate);
   const calculateMarkedDates = () => {
     const markedDates = {};
-
+  
     for (let i = 0; i < currentReservation.length; i++) {
       const reservation = currentReservation[i];
       const arrivalDateString = reservation.arrival;
       const departureDateString = reservation.departure;
-
+      
       if (arrivalDateString && departureDateString) {
         const arrival = new Date(arrivalDateString);
         const departure = new Date(departureDateString);
-
-        const currentDate = new Date(arrival);
-        while (currentDate <= departure) {
-          const formattedDate = currentDate.toISOString().split("T")[0];
-          if (!markedDates[formattedDate]) {
-            markedDates[formattedDate] = {
-              periods: [],
-            };
-          }
-          markedDates[formattedDate].periods.push({
-            color: "grey",
-            textColor: "white",
-            text: `Réservation ${i + 1}`,
-          });
-          currentDate.setDate(currentDate.getDate() + 1);
+        
+  
+      const currentDate = new Date(arrival);
+      while (currentDate <= departure) {
+        const formattedDate = currentDate.toISOString().split("T")[0];
+        if (!markedDates[formattedDate]) {
+          markedDates[formattedDate] = {
+            periods: [],
+          };
         }
+        markedDates[formattedDate].periods.push({
+          color: "grey",
+          textColor: "white",
+          text: `Réservation ${i + 1}`,
+        });
+        currentDate.setDate(currentDate.getDate() + 1);
       }
     }
-
+  }
+  
     Object.keys(selectedDate).forEach((date) => {
       const color = selectedDate[date];
       if (markedDates[date]) {
@@ -77,13 +76,12 @@ const ServiceProvidersScreen = ({ navigation }) => {
         };
       }
     });
-
+  
     return markedDates;
-  };
+  }; 
 
   const periods = calculateMarkedDates();
 
-  // Récupération des prestations depuis le backend
   const fetchPrestations = async () => {
     try {
       const response = await fetch(`${BACKEND_ADDRESS}/prestations`);
@@ -102,7 +100,6 @@ const ServiceProvidersScreen = ({ navigation }) => {
     fetchPrestations();
   }, []);
 
-  // Affichage de la légende du calendrier
   const renderLegend = () => {
     const legends = [
       { color: 'gray', label: 'Réservation' },
@@ -112,9 +109,9 @@ const ServiceProvidersScreen = ({ navigation }) => {
     ];
 
     return (
-      <View style={styles.legendContainer}>
+      <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginBottom: 10 }}>
         {legends.map((legend, index) => (
-          <View key={index} style={styles.legendItem}>
+          <View key={index} style={{ flexDirection: 'row', alignItems: 'center', marginRight: 10 }}>
             <Svg height="12" width="12">
               {legend.color === 'gray' ? (
                 <Circle cx="6" cy="6" r="5" fill={legend.color} />
@@ -129,13 +126,12 @@ const ServiceProvidersScreen = ({ navigation }) => {
     );
   };
 
-  // Mise à jour d'une tâche
+  //Modifier les taches
   const handleUpdateTask = (task) => {
     setSelectedTask(task);
     setEditModalVisible(true);
   };
 
-  // Mise à jour d'une tâche via l'API
   const updateTask = async () => {
     try {
       const response = await fetch(`${BACKEND_ADDRESS}/prestations/${selectedTask._id}`, {
@@ -166,7 +162,7 @@ const ServiceProvidersScreen = ({ navigation }) => {
     }
   };
 
-  // Suppression d'une tâche
+  // Delete tache
   const handleDeleteTask = async (taskId) => {
     try {
       const response = await fetch(`${BACKEND_ADDRESS}/prestations/${taskId}`, {
@@ -185,49 +181,56 @@ const ServiceProvidersScreen = ({ navigation }) => {
     }
   };
 
-  // Affichage du calendrier
   const renderCalendar = () => {
+    /* const { height } = Dimensions.get('window');
+    const calendarHeight = height * 0.6; */
+
     return (
-      <View style={styles.calendarContainer}>
+      <View /* style={{ height: calendarHeight }} */>
         <Calendar
+          /* theme={{
+            calendarBackground: 'white',
+            selectedDayBackgroundColor: 'green',
+            selectedDayTextColor: 'white',
+          }} */
+          /* markedDates={selectedDates} */
+          /* onDayPress={(day) => handleDayPress(day.dateString)} */
           style={styles.calendar}
           markingType="multi-period"
-          markedDates={periods}
+          markedDates = {periods}
           onDayPress={handleDayPress}
         />
       </View>
     );
   };
 
-  // Gestion de la sélection d'une date
   const handleDayPress = (day) => {
     const dateString = day.dateString;
-    dispatch(updateSelectedDate(selectedDate));
-
-    if (selectedDate[dateString]) {
-      const updatedSelectedOptions = { ...selectedDate };
-      delete updatedSelectedOptions[dateString];
-      setSelectedOptions(updatedSelectedOptions);
-    } else {
-      setSelectedDates(dateString);
-      setOptionModalVisible(true);
-    }
+        dispatch(updateSelectedDate(selectedDate));
+        
+        if (selectedDate[dateString]) {
+          const updatedSelectedOptions = { ...selectedDate };
+          delete updatedSelectedOptions[dateString];
+          setSelectedOptions(updatedSelectedOptions);
+        } else {
+          setSelectedDates(dateString); 
+          setOptionModalVisible(true);
+        }
   };
 
-  // Création d'une nouvelle tâche
   const handleCreateTask = async () => {
     const selectedDateKeys = Object.keys(selectedDates);
     if (selectedDateKeys.length > 0) {
       const startDate = selectedDateKeys[0];
       const endDate = selectedDateKeys[selectedDateKeys.length - 1];
-
+      
       const taskData = {
         start: startDate,
         end: endDate,
         status: selectedTaskStatus,
         tache: selectedTaskType,
       };
-
+      
       try {
         const response = await fetch(`${BACKEND_ADDRESS}/prestations`, {
           method: 'POST',
@@ -250,7 +253,6 @@ const ServiceProvidersScreen = ({ navigation }) => {
     }
   };
 
-  // Affichage des tâches
   const renderTasks = () => {
     let filteredTasks = tasks;
     if (selectedTaskStatus !== 'Tous') {
@@ -282,11 +284,10 @@ const ServiceProvidersScreen = ({ navigation }) => {
     );
   };
 
-  // Affichage du modal d'édition
   const renderEditModal = () => {
     if (!selectedTask) {
       return null;
-    }
+    } 
     return (
       <Modal
         animationType="slide"
@@ -347,7 +348,7 @@ const ServiceProvidersScreen = ({ navigation }) => {
     );
   };
 
-  // Affichage du contenu du modal
+
   const renderModalContent = () => {
     return (
       <View style={styles.modalContent}>
@@ -356,17 +357,22 @@ const ServiceProvidersScreen = ({ navigation }) => {
           selectedValue={selectedTaskStatus}
           onValueChange={(itemValue) => setSelectedTaskStatus(itemValue)}
         >
-          {/* Options du filtre */}
+          <Picker.Item label="En cours" value="En cours" />
+          <Picker.Item label="A venir" value="A venir" />
+          <Picker.Item label="A planifier" value="A planifier" />
         </Picker>
-
+  
         <Text>Sélectionner un type de tâche :</Text>
         <Picker
           selectedValue={selectedTaskType}
           onValueChange={(itemValue) => setSelectedTaskType(itemValue)}
         >
-          {/* Options du type de tâche */}
+          <Picker.Item label="Réservation" value="Réservation" />
+          <Picker.Item label="Indisponibilité" value="Indisponibilité" />
+          <Picker.Item label="Travaux" value="Travaux" />
+          <Picker.Item label="Ménage" value="Ménage" />
         </Picker>
-
+  
         <TouchableOpacity
           style={styles.modalButton}
           onPress={handleCreateTask}
@@ -387,19 +393,43 @@ const ServiceProvidersScreen = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       {renderLegend()}
       <ScrollView>
-        {renderCalendar()}
+       {/*  < Calendar style={styles.calendar} /> */}
+         {renderCalendar(selectedDates, handleDayPress)}
 
-        <View style={styles.filterButtonsContainer}>
-          {/* Boutons de filtre */}
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity
+            style={styles.filterButton}
+            onPress={() => setSelectedTaskStatus('Tous')}
+          >
+            <Text>Tous</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.filterButton}
+            onPress={() => setSelectedTaskStatus('En cours')}
+          >
+            <Text>En cours</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.filterButton}
+            onPress={() => setSelectedTaskStatus('A venir')}
+          >
+            <Text>A venir</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.filterButton}
+            onPress={() => setSelectedTaskStatus('A planifier')}
+          >
+            <Text>A planifier</Text>
+          </TouchableOpacity>
         </View>
 
         {renderTasks()}
 
         <TouchableOpacity
           onPress={() => setModalVisible(true)}
-          style={styles.addButton}
+          style={styles.button}
         >
-          <Text style={styles.addButtonText}>Ajouter une tâche</Text>
+          <Text style={styles.text}>Ajouter une tâche</Text>
         </TouchableOpacity>
       </ScrollView>
 
@@ -409,7 +439,9 @@ const ServiceProvidersScreen = ({ navigation }) => {
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
-        {renderModalContent()}
+        <View style={styles.modalContainer}>
+          {renderModalContent()}
+        </View>
       </Modal>
 
       {renderEditModal()}
@@ -419,6 +451,7 @@ const ServiceProvidersScreen = ({ navigation }) => {
   );
 };
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -426,30 +459,11 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     backgroundColor: 'white',
   },
-  calendarContainer: {
+  calendar: {
     borderRadius: 10,
     elevation: 4,
-    width: "85%",
-    alignSelf: 'center',
   },
-  legendContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  legendItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginRight: 10,
-  },
-  filterButtonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
-    marginTop: 10,
-  },
-  addButton: {
+  button: {
     backgroundColor: '#fbe29c',
     padding: 7,
     borderRadius: 5,
@@ -458,17 +472,30 @@ const styles = StyleSheet.create({
     width: '60%',
     alignSelf: 'center',
   },
-  addButtonText: {
+  text: {
     color: 'white',
     fontSize: 20,
     textAlign: 'center',
+  },
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+    marginTop: 10,
+  },
+  filterButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    backgroundColor: 'lightgray',
+    borderRadius: 5,
+    fontSize: 20,
   },
   tasksContainer: {
     marginTop: 20,
     paddingHorizontal: 20,
   },
   taskItem: {
-    flexDirection: 'column',
+   flexDirection: 'column',
     justifyContent: 'space-between',
     backgroundColor: 'white',
     height: 100,
@@ -499,7 +526,7 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 10,
   },
   input: {
@@ -509,33 +536,47 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
   },
+  modalButtonText: {
+    color: 'white',
+    fontSize: 16,
+  },
   deleteButton: {
-    backgroundColor: 'red',
+    backgroundColor: "red",
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 5,
     marginTop: 5,
     position: 'absolute',
     bottom: 0,
-    right: 0,
+    right: 0
   },
   deleteButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
   },
   editButton: {
-    backgroundColor: 'orange',
+    backgroundColor: "orange", 
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 5,
     marginTop: 30,
     position: 'absolute',
     top: 0,
-    right: 0,
+    right: 0
+
   },
   editButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
+  },
+  cancelButton: {
+    backgroundColor: 'gray',
+  },
+  calendar: {
+    borderRadius: 10,
+    elevation: 4,
+    width: "85%",
+    alignSelf: 'center',
   },
 });
 
