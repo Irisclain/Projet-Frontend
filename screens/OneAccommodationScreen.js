@@ -27,6 +27,7 @@ import { updateCurrentRoute } from '../reducers/currentRoute';
 import { updateCurrentAccommodation } from '../reducers/currentAccommodation';
 import { useIsFocused } from '@react-navigation/native';
 import {LinearGradient} from 'expo-linear-gradient';
+import { StatusBar } from 'react-native';
 
 const BACKEND_ADDRESS = 'https://stay-backend.vercel.app'; 
 
@@ -64,11 +65,19 @@ const getSelectedItems = (data) => {
   return selectedItems;  
 };
 
-export default function AddAccommodationScreen({ navigation }) {
+export default function OneAccommodationScreen({ navigation }) {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const currentAccommodation = useSelector((state) => state.currentAccommodation.value);
 
+  useEffect(() => {
+    StatusBar.setHidden(false);
+    StatusBar.setBackgroundColor('#000');
+    StatusBar.setBarStyle('light-content');
+  }, []);
+
+
+  
   useEffect(() => {
     if (isFocused) {      
       dispatch(updateCurrentRoute('OneAccommodation'));
@@ -134,6 +143,9 @@ export default function AddAccommodationScreen({ navigation }) {
   console.log(formData);
 
   return (
+    <>
+    <StatusBar animated={false} backgroundColor="#000" />
+    
     <View style={styles.container}>
       <View style={styles.accommodationContainer}>
         <TouchableOpacity onPress={pickImage}>
@@ -153,6 +165,8 @@ export default function AddAccommodationScreen({ navigation }) {
             numberOfLines={2}
             returnKeyType="done"
             blurOnSubmit={true}
+            enterKeyHint='done'
+            returnKeyLabel="done"
           />
           </KeyboardAvoidingView>
           <View style={styles.priceContainer}>
@@ -192,17 +206,15 @@ export default function AddAccommodationScreen({ navigation }) {
           </TouchableOpacity>
       <Footer navigation={navigation} messageButton={true} />
     </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
-    backgroundColor: "white",
-    margin: 20,
-    padding: 20,
+    backgroundColor: "#fff",
     width: Dimensions.get("window").width,
   },
   title: {
@@ -392,12 +404,6 @@ const styles = StyleSheet.create({
     color: "#868686",
     flexDirection: "row",
     justifyContent: "space-between",
-  },
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "flex-start",
-    backgroundColor: "#fff",
   },
   container1: {
     justifyContent: "center",

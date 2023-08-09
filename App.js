@@ -41,13 +41,10 @@ import currentRoute  from './reducers/currentRoute';
 import currentAccommodation from './reducers/currentAccommodation';
 import currentReservation from './reducers/currentReservation';
 import user from './reducers/user';
-// import message from './reducers/message';
-// import accommodation from './reducers/accommodation';*/
 
 const store = configureStore({
   reducer: { currentAccommodation, currentRoute, user, currentReservation },
 });
-const tabBarItemStyle = Dimensions.get('window').width/4;
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialTopTabNavigator();
@@ -69,6 +66,9 @@ const TabNavigator = () => {
     </Tab.Navigator>
   );
 };
+
+
+
 
  
     // ESSAYER : 
@@ -123,8 +123,8 @@ export default function App() {
 
   return (
   <Provider store={store}>
+    <StatusBar animated={false} backgroundColor="#000" />
     <NavigationContainer>
-      <StatusBar animated={false} backgroundColor="#000"/>
       <Header/>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Home" component={HomeScreen} />
