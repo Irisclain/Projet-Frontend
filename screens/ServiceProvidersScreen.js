@@ -610,6 +610,7 @@ const handleDeleteTask = async (taskId) => {
           <Text>{task.start} - {task.end}</Text>
           <Text>Status : {task.status}</Text>
           <Text>Tache : {task.tache}</Text>
+          <View>
           <TouchableOpacity
             style={styles.editButton}
             onPress={() => handleUpdateTask(task)}
@@ -622,6 +623,7 @@ const handleDeleteTask = async (taskId) => {
           >
             <Text style={styles.deleteButtonText}>Supprimer</Text>
           </TouchableOpacity>
+          </View>
         </View>
       ))}
     </ScrollView>
@@ -744,8 +746,8 @@ const styles = StyleSheet.create({
       borderRadius: 5,
       marginTop: 20,
       position: 'absolute',
-      top: 5,
-      right: 10
+      bottom: 10,
+      right: 0,
   
     },
     editButtonText: {
@@ -799,7 +801,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 5,
-    marginTop: 30,
+    marginTop: -80,
     position: 'absolute',
     top: 0,
     right: 0
