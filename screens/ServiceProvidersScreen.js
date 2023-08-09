@@ -607,7 +607,7 @@ const handleDeleteTask = async (taskId) => {
       <ScrollView style={styles.taskContainer}>
       {renderTasks().map((task, index) => (
         <View key={index} style={styles.taskItem}>
-          <Text>{task.start} - {task.end}</Text>
+          <Text>{task.start ? task.start.split("T")[0] : task.start}{" - "}{task.end ? task.end.split("T")[0] : task.end}</Text>
           <Text>Status : {task.status}</Text>
           <Text>Tache : {task.tache}</Text>
           <View>
