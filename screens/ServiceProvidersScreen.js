@@ -1,3 +1,5 @@
+
+
 import {
   SafeAreaView,
   ScrollView,
@@ -476,10 +478,6 @@ const handleDeleteTask = async (taskId) => {
                   <TouchableOpacity style={styles.modalButton} onPress={() => setOptionModalVisible(false)}>
                     <Text style={styles.modalButtonText}>Annuler</Text>
                   </TouchableOpacity>
-                  {/* Vous pouvez ajouter des styles spécifiques au bouton Ajouter si nécessaire */}
-                  <TouchableOpacity style={[styles.modalButton, styles.addButton]} onPress={() => setOptionModalVisible(false)}>
-                    <Text style={styles.modalButtonText}>Ajouter</Text>
-                  </TouchableOpacity>
                 </View>
               </View>
             </View>
@@ -488,79 +486,79 @@ const handleDeleteTask = async (taskId) => {
       };
       
 
-  const renderNewTaskModal = () => {
-      return (
-          <Modal visible={isTaskModalVisible} transparent={true} animationType="slide">
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>Nouvelle Tâche</Text>
-              <TextInput
-                  style={styles.input}
-                  placeholder="Début (format : YYYY-MM-DD)"
-                  placeholderTextColor="#999"
-                  value={taskData.start}
-                  onChangeText={(date) =>
-                    setTaskData((prevData) => ({
-                      ...prevData,
-                      start: new Date(date), // Convertir la chaîne en instance de date ou null
-                    }))
-                  }
-                />
+  // const renderNewTaskModal = () => {
+  //     return (
+  //         <Modal visible={isTaskModalVisible} transparent={true} animationType="slide">
+  //         <View style={styles.modalContainer}>
+  //           <View style={styles.modalContent}>
+  //             <Text style={styles.modalTitle}>Nouvelle Tâche</Text>
+  //             <TextInput
+  //                 style={styles.input}
+  //                 placeholder="Début (format : YYYY-MM-DD)"
+  //                 placeholderTextColor="#999"
+  //                 value={taskData.start}
+  //                 onChangeText={(date) =>
+  //                   setTaskData((prevData) => ({
+  //                     ...prevData,
+  //                     start: new Date(date), // Convertir la chaîne en instance de date ou null
+  //                   }))
+  //                 }
+  //               />
   
-                <TextInput
-                  style={styles.input}
-                  placeholder="Fin (format : YYYY-MM-DD)"
-                  placeholderTextColor="#999"
-                  value={taskData.end}
-                  onChangeText={(date) =>
-                    setTaskData((prevData) => ({
-                      ...prevData,
-                      end: new Date(date), // Convertir la chaîne en instance de date ou null
-                    }))
-                  }
-                />
-              <TextInput
-                style={styles.input}
-                placeholder="Statut"
-                placeholderTextColor="#999"
-                value={taskData.status}
-                onChangeText={(text) => {
-                  setTaskData((prevData) => ({
-                    ...prevData,
-                    price: text,
-                  }));
-                }}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="Tache"
-                placeholderTextColor="#999"
-                value={taskData.tache}
-                onChangeText={(text) =>
-                  setTaskData((prevData) => ({
-                    ...prevData,
-                    status: text,
-                  }))
-                }
-              />
-              <TouchableOpacity
-                style={styles.button}
-                onPress={handleCreateTask}
-              >
-                <Text style={styles.textButton}>Confirmer</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => setTaskModalVisible(false)}
-              >
-                <Text style={styles.textButton}>Annuler</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
+  //               <TextInput
+  //                 style={styles.input}
+  //                 placeholder="Fin (format : YYYY-MM-DD)"
+  //                 placeholderTextColor="#999"
+  //                 value={taskData.end}
+  //                 onChangeText={(date) =>
+  //                   setTaskData((prevData) => ({
+  //                     ...prevData,
+  //                     end: new Date(date), // Convertir la chaîne en instance de date ou null
+  //                   }))
+  //                 }
+  //               />
+  //             <TextInput
+  //               style={styles.input}
+  //               placeholder="Statut"
+  //               placeholderTextColor="#999"
+  //               value={taskData.status}
+  //               onChangeText={(text) => {
+  //                 setTaskData((prevData) => ({
+  //                   ...prevData,
+  //                   price: text,
+  //                 }));
+  //               }}
+  //             />
+  //             <TextInput
+  //               style={styles.input}
+  //               placeholder="Tache"
+  //               placeholderTextColor="#999"
+  //               value={taskData.tache}
+  //               onChangeText={(text) =>
+  //                 setTaskData((prevData) => ({
+  //                   ...prevData,
+  //                   status: text,
+  //                 }))
+  //               }
+  //             />
+  //             <TouchableOpacity
+  //               style={styles.button}
+  //               onPress={handleCreateTask}
+  //             >
+  //               <Text style={styles.textButton}>Confirmer</Text>
+  //             </TouchableOpacity>
+  //             <TouchableOpacity
+  //               style={styles.button}
+  //               onPress={() => setTaskModalVisible(false)}
+  //             >
+  //               <Text style={styles.textButton}>Annuler</Text>
+  //             </TouchableOpacity>
+  //           </View>
+  //         </View>
+  //       </Modal>
 
-      )
-  }
+  //     )
+  // }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -635,17 +633,17 @@ const handleDeleteTask = async (taskId) => {
       ))}
     </ScrollView>
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.openModalButton}
           onPress={() => setTaskModalVisible(true)}
         >
           <Text style={styles.openModalButtonText}>Ajouter une tache</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
       </ScrollView>
 
 {/*Modal pour la nouvelle tache */}
-     {renderNewTaskModal()}
+     {/* {renderNewTaskModal()} */}
       {renderEditModal()}
 
       <Footer navigation={navigation} messageButton={true} />
