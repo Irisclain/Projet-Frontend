@@ -10,6 +10,12 @@ const initialState = {
       distribution: "",
     },
     selectedDate: null,
+    currentTask: {
+      start: "",
+      end: "",
+      status: "",
+      tache: "",
+    },
   };
 
 export const currentReservationSlice = createSlice({
@@ -22,8 +28,11 @@ export const currentReservationSlice = createSlice({
     updateSelectedDate: (state, action) => {
       state.selectedDate = action.payload;
     },
+    updateCurrentTask: (state, action) => {
+      state.currentTask = action.payload;
+    },
   },
 });
 
-export const { updateCurrentReservation, updateSelectedDate } = currentReservationSlice.actions;
+export const { updateCurrentReservation, updateSelectedDate, updateCurrentTask } = currentReservationSlice.actions;
 export default currentReservationSlice.reducer;

@@ -13,7 +13,7 @@ import { Circle, Rect, Svg } from "react-native-svg";
 import Footer from "../components/Footer";
 import { StatusBar } from 'expo-status-bar';
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateCurrentReservation, updateSelectedDate } from '../reducers/currentReservation';
 
 const BACKEND_ADDRESS = "https://stay-backend.vercel.app";
@@ -23,7 +23,6 @@ export default function ReservationsScreen({ navigation }) {
 
   const [selectedDates, setSelectedDates] = useState({});
   const [selectedOptions, setSelectedOptions] = useState({});
-  const [isOptionModalVisible, setOptionModalVisible] = useState(false);
   const [markedDates, setMarkedDates] = useState({});
   const [legends, setLegends] = useState([
     { color: "grey", label: "Réservation" },
@@ -44,7 +43,10 @@ export default function ReservationsScreen({ navigation }) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
   const [isModalModifVisible, setModalModifVisible] = useState(false);
-console.log(reservations)
+//console.log(reservations)
+
+const selectedDate = useSelector(state => state.currentReservation.selectedDate);
+const currentTask = useSelector(state => state.currentReservation.currentTask);
 
 const calculateMarkedDates = () => {
   const markedDates = {};
@@ -77,27 +79,58 @@ const calculateMarkedDates = () => {
   }
 }
 
-  Object.keys(selectedOptions).forEach((date) => {
-    const color = selectedOptions[date];
-    if (markedDates[date]) {
-      markedDates[date].periods.push({ color });
-    } else {
-      markedDates[date] = {
-        periods: [{ color }],
+const statusColors = {
+  "Indisponibilité": "red",
+  "Ménage": "blue",
+  "Dépannage": "green",
+};
+
+// Ajouter les tâches au calendrier
+for (let index = 0; index < currentTask.length; index++) {
+  const task = currentTask[index];
+  
+  const startDate = new Date(task.start);
+  const endDate = new Date(task.end);
+
+  const currentDate = new Date(startDate);
+  while (currentDate <= endDate) {
+    const formattedDate = currentDate.toISOString().split("T")[0];
+    if (!markedDates[formattedDate]) {
+      markedDates[formattedDate] = {
+        periods: [],
       };
     }
+
+    const color = statusColors[task.tache] || 'black'; // Utiliser bleu par défaut si le statut n'est pas reconnu
+    markedDates[formattedDate].periods.push({
+      color,
+      textColor: 'white',
+      text: `Tâche ${index + 1}`,
+    });
+
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+}
+
+if (selectedDate) {
+  Object.keys(selectedDate).forEach((date) => {
+    const color = selectedDate[date];
+    
+    if (!markedDates[date]) {
+      markedDates[date] = {
+        periods: [],
+      };
+    }
+
+    markedDates[date].periods.push({ color });
   });
-  dispatch(updateSelectedDate(selectedOptions));
+}
 
   return markedDates;
 }; 
 
 const periods = calculateMarkedDates();
 
-const updateMarkedDates = () => {
-  const newMarkedDates = calculateMarkedDates();
-  setMarkedDates(newMarkedDates);
-};
 
   useEffect(() => {
     fetchReservations();
@@ -149,7 +182,6 @@ const updateMarkedDates = () => {
     } catch (error) {
       console.error("Error creating reservation:", error);
     }
-    updateMarkedDates();
   };
   //Supprimer une réservation
   const handleDeleteReservation = async (reservationId) => {
@@ -177,7 +209,6 @@ const updateMarkedDates = () => {
     } catch (error) {
       console.error("Error deleting reservation:", error);
     }
-    updateMarkedDates();
   };
 
   // Modifier Réservation
@@ -237,24 +268,6 @@ const updateMarkedDates = () => {
     } catch (error) {
       console.error("Error updating reservation:", error);
     }
-    updateMarkedDates();
-  };
-
-  // Partie Modal
-  const showDatePicker = () => {
-    setDatePickerVisible(true);
-  };
-
-  const hideDatePicker = () => {
-    setDatePickerVisible(false);
-  };
-
-  const handleDateConfirm = (date) => {
-    setReservationData((prevData) => ({
-      ...prevData,
-      arrival: date.toISOString(),
-    }));
-    hideDatePicker();
   };
   
 
@@ -277,36 +290,6 @@ const updateMarkedDates = () => {
     );
   };
 
-  const handleOptionSelect = (option) => {
-    setOptionModalVisible(false);
-    setSelectedOptions((prevSelectedOptions) => {
-      const updatedSelectedOptions = { ...prevSelectedOptions };
-      if (updatedSelectedOptions[selectedDates] === option) {
-        delete updatedSelectedOptions[selectedDates];
-      } else {
-        updatedSelectedOptions[selectedDates] = option;
-      }
-      return updatedSelectedOptions;
-    });
-    
-    const updatedMarkedDates = calculateMarkedDates();
-    setMarkedDates(updatedMarkedDates);
-  };
-
-  const handleDayPress = (day) => {
-        const dateString = day.dateString;
-        dispatch(updateSelectedDate(selectedOptions));
-        
-        if (selectedOptions[dateString]) {
-          const updatedSelectedOptions = { ...selectedOptions };
-          delete updatedSelectedOptions[dateString];
-          setSelectedOptions(updatedSelectedOptions);
-        } else {
-          setSelectedDates(dateString); 
-          setOptionModalVisible(true);
-        }
-      };
-
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -316,31 +299,7 @@ const updateMarkedDates = () => {
           style={styles.calendar}
           markingType="multi-period"
           markedDates = {periods}
-          onDayPress={handleDayPress}
         />
-        <Modal visible={isOptionModalVisible} transparent={true} animationType="slide">
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-          <Text style={styles.optionTitle}>Choisir une option:</Text>
-          <TouchableOpacity
-            onPress={() => handleOptionSelect('red')}
-          >
-            <Text style={styles.optionButtonTextI} >Indisponibilité</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleOptionSelect('blue')}
-          >
-            <Text style={styles.optionButtonTextM}>Ménage</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-          onPress={() => handleOptionSelect('green')}
-          >
-            <Text style={styles.optionButtonTextD}>Dépannage</Text>
-          </TouchableOpacity>
-        </View>
-        </View>
-        </Modal>
-         <StatusBar style="auto" />
       </View>
 
         {reservations.map((reservation) => (

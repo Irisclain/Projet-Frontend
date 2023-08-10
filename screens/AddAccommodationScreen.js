@@ -26,6 +26,8 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 
 const BACKEND_ADDRESS = "https://stay-backend.vercel.app";
+//const BACKEND_ADDRESS = "http://192.168.1.54:3000";
+
 
 const distributeurs = [
   {
@@ -76,6 +78,7 @@ export default function AddAccommodationScreen({ navigation }) {
   }, [isFocused]);
 
 
+
   const [image, setImage] = useState(null);
   const [data, setData] = useState(distributeurs);
   const selectedItems = getSelectedItems(data);
@@ -91,8 +94,21 @@ export default function AddAccommodationScreen({ navigation }) {
     });
 
     if (!result.canceled) {
+      // console.log('result.canceled : ', result.canceled);
+       console.log('result.assets[0].uri : ', result.assets[0].uri);
+      // console.log('result : ', result);
+
+      
+      // pictureFormData.append('photoFromFront', {
+      //   uri: result.assets[0].uri,
+      //   name: 'photo.jpg',
+      //   type: 'image/jpeg',
+      // });
+
+
+
       setImage(result.assets[0].uri);
-      setFormData({ ...formData, picture: result.assets[0].uri });
+      // setFormData({ ...formData, picture: pictureFormData });
     }
   };
   
@@ -115,15 +131,31 @@ export default function AddAccommodationScreen({ navigation }) {
   });
 
   const handleNewAccommodation = () => {
+    const pictureFormData = new FormData();
     
     //console.log('toutes les infos : ' , formData);
+    pictureFormData.append("name", formData.name);
+    pictureFormData.append("address", formData.address);
+    pictureFormData.append("description", formData.description);
+    pictureFormData.append("price", formData.price);
+    pictureFormData.append("distribution", formData.distribution);
+    pictureFormData.append("ownerToken", formData.ownerToken);
+    pictureFormData.append("photoFromFront", {
+        uri: image,
+        name: 'photo.jpg',
+        type: 'image/jpeg',
+      });
+
+    console.log('pictureFormData : ', pictureFormData);
+
 
     fetch(`${BACKEND_ADDRESS}/accommodation`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
+      // headers: {
+      //   "Content-Type": "application/json",
+      // },
+      // body: JSON.stringify(pictureFormData),
+      body: pictureFormData
     })
       .then((response) => response.json())
       .then((response) => {
@@ -133,7 +165,7 @@ export default function AddAccommodationScreen({ navigation }) {
           setFormData({ ...formData, distribution: [] });
           navigation.navigate("MyAccommodations");
         } else {
-          console.error("Erreur lors de l'enregistrement de l'hébergement");
+          console.error("Erreur lors de l'enregistrement de l'hébergement, response.result: ", response.result);
         }
       })
       .catch((error) => {
