@@ -62,8 +62,53 @@ export default function ChatScreen({ navigation, route }) {
   };
 
   //console.log(messageText)
-
   const handleSendMessage = () => {
+    if (!messageText) {
+      return;
+    }
+  
+    const payload = {
+      text: messageText,
+      username: user.username,
+      createdAt: new Date(),
+      id: Math.floor(Math.random() * 100000),
+    };
+  
+    // Immediately update the UI with the new message
+    setMessages((messages) => [...messages, { ...payload, status: "unsent" }]);
+    setMessageText(""); // Clear the message input field
+  
+    fetch(`${BACKEND_ADDRESS}/messages`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("La réponse du réseau n'était pas valide");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // Update the status of the message to "sent" in the UI
+        setMessages((messages) =>
+          messages.map((message) =>
+            message.id === payload.id ? { ...message, status: "sent" } : message
+          )
+        );
+      })
+      .catch((error) => {
+        // Update the status of the message to "failed" in the UI
+        setMessages((messages) =>
+          messages.map((message) =>
+            message.id === payload.id ? { ...message, status: "failed" } : message
+          )
+        );
+        console.error("Erreur lors de l'envoi du message :", error);
+      });
+  };
+  
+/*   const handleSendMessage = () => {
     if (!messageText) {
       return;
     }
@@ -96,7 +141,8 @@ export default function ChatScreen({ navigation, route }) {
       });
 
     setMessageText("");
-  };
+  }; */
+
   const autoMessage = [
     {
       title: "Message ménage",
@@ -118,7 +164,7 @@ export default function ChatScreen({ navigation, route }) {
   const [hasPermission, setHasPermission] = useState(null);
   useEffect(() => {
     (async () => {
-      const { status } = await Camera.requestPermissionsAsync();
+      const { status } = await Camera.requestCameraPermissionsAsync();
       setHasPermission(status === "granted");
     })();
   }, []);

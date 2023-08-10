@@ -119,7 +119,7 @@ for (let index = 0; index < tasks.length; index++) {
     currentDate.setDate(currentDate.getDate() + 1);
   }
 }
-  dispatch(updateSelectedDate(selectedOptions));
+  //dispatch(updateSelectedDate(selectedOptions));
    
 
   return markedDates;
@@ -132,6 +132,7 @@ const updateMarkedDates = () => {
   const newMarkedDates = calculateMarkedDates();
   setMarkedDates(newMarkedDates);
 };
+console.log('markeddates =' + markedDates)
 
   useEffect(() => {
     fetchPrestations();
