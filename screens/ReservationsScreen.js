@@ -43,6 +43,8 @@ export default function ReservationsScreen({ navigation }) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
   const [isModalModifVisible, setModalModifVisible] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState('Tout');
+  const [selectedReservationStatus, setSelectedReservationStatus] = useState('Tout');
 //console.log(reservations)
 
 const selectedDate = useSelector(state => state.currentReservation.selectedDate);
@@ -290,6 +292,100 @@ const periods = calculateMarkedDates();
     );
   };
 
+  const handleFilterTask = (task) => {
+  setSelectedReservationStatus(task)
+  setSelectedFilter(task)
+  };
+
+  const renderTasks = () => {
+      const currentDate = new Date(); // Date actuelle
+    
+      const reservationsEnCours = []; // Réservations en cours
+      const reservationsAVenir = []; // Réservations à venir
+    
+      for (const reservation of reservations) {
+        const arrivalDate = new Date(reservation.arrival);
+        const departureDate = new Date(reservation.departure);
+    
+        if (arrivalDate <= currentDate && currentDate <= departureDate) {
+          // La réservation est en cours si la date actuelle est entre la date d'arrivée et de départ
+          reservationsEnCours.push(reservation);
+        } else if (currentDate < arrivalDate) {
+          // La réservation est à venir si la date d'arrivée est postérieure à la date actuelle
+          reservationsAVenir.push(reservation);
+        }
+      }
+    
+      let filteredTasks = []; // Réservations à afficher en fonction de l'onglet sélectionné
+    
+      if (selectedReservationStatus === 'Tout') {
+        // Afficher toutes les réservations en cours et à venir
+        filteredTasks = [...reservationsEnCours, ...reservationsAVenir];
+      } else if (selectedReservationStatus === 'En cours') {
+        // Afficher uniquement les réservations en cours
+        filteredTasks = reservationsEnCours;
+      } else if (selectedReservationStatus === 'A venir') {
+        // Afficher uniquement les réservations à venir
+        filteredTasks = reservationsAVenir;
+      }
+
+    return (
+      <View>
+      {filteredTasks.map((reservation) => (
+        <View key={reservation._id} style={styles.reservationItem}>
+
+          <View style={styles.detailContainer}>
+            <Text style={styles.detailLabel}>Nom :</Text>
+            <Text>{reservation.name}</Text>
+          </View>
+          <View style={styles.detailContainer}>
+            <Text style={styles.detailLabel}>Arrivée:</Text>
+            <Text>{reservation.arrival.split("T")[0]}</Text>
+          </View>
+          
+          <View style={styles.detailContainer}>
+            <Text style={styles.detailLabel}>Départ :</Text>
+            <Text>{reservation.departure.split("T")[0]}</Text>
+          </View>
+          
+          <View style={styles.detailContainer}>
+            <Text style={styles.detailLabel}>Prix :</Text>
+            <Text>{reservation.price}€</Text>
+          </View>
+          
+          <View style={styles.detailContainer}>
+            <Text style={styles.detailLabel}>Statut :</Text>
+            <Text>{reservation.status}</Text>
+          </View>
+          
+          <View style={styles.detailContainer}>
+            <Text style={styles.detailLabel}>Distribution :</Text>
+            <Text>{reservation.distribution}</Text>
+          </View>
+          {/* Ajouter d'autres propriétés ici */}
+
+          {/* Bouton de suppression */}
+          <TouchableOpacity
+            style={styles.deleteButton}
+            onPress={() => handleDeleteReservation(reservation._id)}
+          >
+            <Text style={styles.deleteButtonText}>Supprimer</Text>
+          </TouchableOpacity>
+
+          {/* Bouton de modification */}
+          <TouchableOpacity
+            style={styles.editButton}
+            onPress={() => handleEditReservation(reservation)}
+          >
+            <Text style={styles.editButtonText}>Modifier</Text>
+          </TouchableOpacity>
+        </View>
+      ))}
+      </View>
+    )
+  };
+  console.log(reservations)
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -301,34 +397,36 @@ const periods = calculateMarkedDates();
           markedDates = {periods}
         />
       </View>
-
-        {reservations.map((reservation) => (
-          <View key={reservation._id} style={styles.reservationItem}>
-            <Text>Nom : {reservation.name}</Text>
-            <Text>Arrivée: {reservation.arrival.split("T")[0]}</Text>
-            <Text>Départ : {reservation.departure.split("T")[0]}</Text>
-            <Text>Prix : {reservation.price}€</Text>
-            <Text>Status : {reservation.status}</Text>
-            <Text>Distribution :{reservation.distribution}</Text>
-            {/* Ajouter d'autres propriétés ici */}
-
-            {/* Bouton de suppression */}
-            <TouchableOpacity
-              style={styles.deleteButton}
-              onPress={() => handleDeleteReservation(reservation._id)}
-            >
-              <Text style={styles.deleteButtonText}>Supprimer</Text>
-            </TouchableOpacity>
-
-            {/* Bouton de modification */}
-            <TouchableOpacity
-              style={styles.editButton}
-              onPress={() => handleEditReservation(reservation)}
-            >
-              <Text style={styles.editButtonText}>Modifier</Text>
-            </TouchableOpacity>
-          </View>
-        ))}
+      <View style={styles.buttonsContainer}>
+      <TouchableOpacity
+          style={[
+            styles.filterButton,
+            selectedFilter === 'Tout' ? styles.selectedFilter : null,
+          ]}
+          onPress={() => handleFilterTask('Tout')}
+        >
+          <Text>Tout</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.filterButton,
+            selectedFilter === 'En cours' ? styles.selectedFilter : null,
+          ]}
+          onPress={() => handleFilterTask('En cours')}
+        >
+          <Text>En cours</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.filterButton,
+             selectedFilter === 'A venir' ? styles.selectedFilter : null,
+          ]}
+          onPress={() => handleFilterTask('A venir')}
+        >
+          <Text>A venir</Text>
+        </TouchableOpacity>
+        </View>
+          {renderTasks()}
 
         <TouchableOpacity
           style={styles.openModalButton}
@@ -540,6 +638,33 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     backgroundColor: "#fff",
   },
+  detailContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 5,
+  },
+  detailLabel: {
+    fontWeight: 'bold',
+    marginRight: 5,
+  },
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+    marginTop: 10,
+  },
+  selectedFilter: {
+    borderBottomColor: 'black',
+  },
+  filterButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 50,
+    backgroundColor: 'white',
+    borderRadius: 5,
+    fontSize: 20,
+    borderBottomWidth: 2,
+    borderBottomColor: 'lightgrey',
+  },
   contentContainer: {
     paddingHorizontal: 20,
     paddingVertical: 10,
@@ -573,13 +698,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   reservationItem: {
-    // flexDirection: "column",
-    // justifyContent: "",
-    // alignItems: "center",
-    paddingVertical: 10,
-    borderBottomWidth: 2,
-    borderBottomColor: "#ccc",
-     borderRadiusColor: "black",
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    backgroundColor: '#F1EFEC',
+    margin: 10,
+    borderRadius: 15,
+    padding: 10,
   },
   modalContainer: {
     flex: 1,
@@ -622,29 +746,28 @@ const styles = StyleSheet.create({
     width: "50%",
   },
   deleteButton: {
-    backgroundColor: "red",
+    backgroundColor: "#fc944c",
     paddingVertical: 8,
     paddingHorizontal: 16,
-    borderRadius: 5,
-    marginTop: 5,
+    borderRadius: 10,
+    marginTop: 30,
     position: 'absolute',
-    bottom: 0,
-    right: 0
+    bottom: 35,
+    right: 15,
   },
   deleteButtonText: {
     color: "white",
     fontWeight: "bold",
   },
   editButton: {
-    backgroundColor: "orange", 
+    backgroundColor: "#ffd05c", 
     paddingVertical: 8,
     paddingHorizontal: 16,
-    borderRadius: 5,
+    borderRadius: 10,
     marginTop: 30,
     position: 'absolute',
     top: 0,
-    right: 0
-
+    right: 15
   },
   editButtonText: {
     color: "white",

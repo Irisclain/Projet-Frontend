@@ -119,7 +119,7 @@ for (let index = 0; index < tasks.length; index++) {
     currentDate.setDate(currentDate.getDate() + 1);
   }
 }
-  dispatch(updateSelectedDate(selectedOptions));
+  //dispatch(updateSelectedDate(selectedOptions));
    
 
   return markedDates;
@@ -132,6 +132,7 @@ const updateMarkedDates = () => {
   const newMarkedDates = calculateMarkedDates();
   setMarkedDates(newMarkedDates);
 };
+console.log('markeddates =' + markedDates)
 
   useEffect(() => {
     fetchPrestations();
@@ -352,39 +353,6 @@ const handleDeleteTask = async (taskId) => {
         setOptionModalVisible(true);
         setSelectedDates(dateString);
       }
-    
-
-
-        /* const dayObject = day;
-        
-        // Extraire les valeurs de l'objet dayObject
-        const year = dayObject.year;
-        const month = dayObject.month - 1; // Soustraire 1 car les mois commencent à partir de 0
-        const dayOfMonth = dayObject.day;
-        
-        // Créer un nouvel objet Date à partir des valeurs extraites
-        const selectedDate = new Date(year, month, dayOfMonth);
-        
-        // Obtenir la chaîne au format ISO
-        const selectedDateISO = selectedDate.toISOString();
-
-        let value = Object.values(selectedOptions).toString();
-      
-        if (value === 'red') {
-            value = 'Indisponibilité';
-        } else if (value === 'blue') {
-            value = 'Ménage';
-        } else if (value === 'green') {
-            value = 'Dépannage';
-        }
-      
-        const newTask = {
-          start: selectedDateISO + 1,
-          end: selectedDateISO,
-          status: 'A venir',
-          tache: value,
-        };
-        setTasks((prevTasks) => [...prevTasks, newTask]);*/
       }; 
 
   const handleFilterTask = (task) => {
@@ -607,9 +575,21 @@ const handleDeleteTask = async (taskId) => {
       <ScrollView style={styles.taskContainer}>
       {renderTasks().map((task, index) => (
         <View key={index} style={styles.taskItem}>
-          <Text>{task.start ? task.start.split("T")[0] : task.start}{" - "}{task.end ? task.end.split("T")[0] : task.end}</Text>
-          <Text>Status : {task.status}</Text>
-          <Text>Tache : {task.tache}</Text>
+          
+          <Text style={styles.detailLabel}>Date d'intervention :</Text>
+          <Text style={styles.detailDate}>{task.start ? task.start.split("T")[0] : task.start}{" - "}{task.end ? task.end.split("T")[0] : task.end}</Text>
+    
+
+          <View style={styles.detailContainer}>
+          <Text style={styles.detailLabel}>Status :</Text>
+          <Text>{task.status}</Text>
+          </View>
+
+          <View style={styles.detailContainer}>
+          <Text style={styles.detailLabel}>Tache :</Text>
+          <Text> {task.tache}</Text>
+          </View>
+
           <View>
           <TouchableOpacity
             style={styles.editButton}
@@ -652,6 +632,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     backgroundColor: "#fff",
+  },
+  detailDate: {
+    marginBottom:5,
+  },
+  detailContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 5,
+  },
+  detailLabel: {
+    fontWeight: 'bold',
+    marginRight: 5,
   },
   contentContainer: {
     paddingHorizontal: 20,
@@ -725,32 +717,27 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: "80%",
   },
-  deleteButton: {
-      backgroundColor: "red",
+  editButton: {
+    backgroundColor: "#ffd05c", 
       paddingVertical: 8,
       paddingHorizontal: 16,
-      borderRadius: 5,
-      marginTop: 5,
+      borderRadius: 10,
+      marginTop: -80,
       position: 'absolute',
-      bottom: 0,
-      right: 0
+      top: -10,
+      right: 10
+  },
+  deleteButton: {
+      backgroundColor: "#fc944c",
+      paddingVertical: 8,
+      paddingHorizontal: 16,
+      borderRadius: 10,
+      marginTop: 30,
+      position: 'absolute',
+      bottom: 5,
+      right: 10,
     },
     deleteButtonText: {
-      color: "white",
-      fontWeight: "bold",
-    },
-    editButton: {
-      backgroundColor: "orange", 
-      paddingVertical: 8,
-      paddingHorizontal: 16,
-      borderRadius: 5,
-      marginTop: 20,
-      position: 'absolute',
-      bottom: 10,
-      right: 0,
-  
-    },
-    editButtonText: {
       color: "white",
       fontWeight: "bold",
     },
@@ -782,30 +769,9 @@ const styles = StyleSheet.create({
   datePicker: {
     width: "50%",
   },
-  deleteButton: {
-    backgroundColor: "red",
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 5,
-    marginTop: 5,
-    position: 'absolute',
-    bottom: 0,
-    right: 0
-  },
   deleteButtonText: {
     color: "white",
     fontWeight: "bold",
-  },
-  editButton: {
-    backgroundColor: "orange", 
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 5,
-    marginTop: -80,
-    position: 'absolute',
-    top: 0,
-    right: 0
-
   },
   buttonsContainer: {
       flexDirection: 'row',
@@ -845,15 +811,12 @@ const styles = StyleSheet.create({
       marginTop: 20,
       paddingHorizontal: 20,
     },
-    taskItem: {
-     flexDirection: 'column',
-      justifyContent: 'space-between',
-      backgroundColor: 'white',
-      height: 100,
-      padding: 10,
-      marginBottom: 10,
-      borderRadius: 5,
-      borderColor: 'gray',
-      borderWidth: 1,
-    },
+  taskItem: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    backgroundColor: '#F1EFEC',
+    margin: 10,
+    borderRadius: 15,
+    padding: 10,
+  },
 });

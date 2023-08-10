@@ -56,7 +56,7 @@ export default function HomeScreen({ navigation }) {
     setIsLoading(false);
 
     navigation.navigate('LoadingSignIn'); // Affiche la page de chargement
-    await new Promise((resolve) => setTimeout(resolve, 700)); // Temps de chargement simulé
+    await new Promise((resolve) => setTimeout(resolve, 3000)); // Temps de chargement simulé
     navigation.navigate('MyAccommodations'); // Navigue vers la page suivante
   };
 
