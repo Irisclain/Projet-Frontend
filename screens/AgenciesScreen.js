@@ -37,14 +37,48 @@ export default function AgenciesScreen({ navigation }) {
     dispatch(updateCurrentRoute("Agencies"));
   }, []);
 
-  const [distributeurs, setDistributeurs] = useState([]);
+  const distributeur = [
+    {
+      data: [
+        {
+          image: require("../assets/Logo-Booking.png"),
+          name: "Booking.com",
+          selected: false,
+        },
+        {
+          image: require("../assets/Logo-Airbnb.png"),
+          name: "AirBNB",
+          selected: false,
+        },
+        {
+          image: require("../assets/Logo-Expedia.png"),
+          name: "Expedia",
+          selected: false,
+        },
+      ],
+    },
+  ];
 
-  const handleItemSelection = (itemIndex, sectionIndex) => {
-    const updatedData = [...distributeurs];
-    updatedData[sectionIndex].data[itemIndex].selected =
-      !updatedData[sectionIndex].data[itemIndex].selected;
-    setDistributeurs(updatedData);
-  };
+  const [distributeurs, setDistributeurs] = useState(() => {
+    const initializedDistributeurs = distributeur[0].data.map((item) => ({
+      ...item,
+      selected: selectedAccommodation.distribution.includes(item.name),
+    }));
+    return initializedDistributeurs;
+  });
+
+  console.log(selectedAccommodation)
+
+  const handleItemSelection = (itemIndex) => {
+      // Create a copy of the distributeurs state
+      const updatedDistributeurs = [...distributeurs];
+  
+      // Toggle the selected property of the clicked distributor
+      updatedDistributeurs[itemIndex].selected = !updatedDistributeurs[itemIndex].selected;
+  
+      // Update the state with the modified data
+      setDistributeurs(updatedDistributeurs);
+    };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -52,22 +86,32 @@ export default function AgenciesScreen({ navigation }) {
         Ou voulez-vous que votre annonce apparaisse ?
       </Text>
       <FlatList
-      style={styles.list}
-        data={selectedAccommodation.distribution}
+        style={styles.list}
+        data={distributeurs}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           <View style={styles.item}>
-            <FontAwesome
-                        style={styles.icon}
-                        name={ "check-square-o"}
-                        color= {"green"}
-                        size={20}
-                      />
-            <Text style={styles.text}>{item}</Text>
-            
-          </View>
-  )}
-      />
+            <TouchableOpacity onPress={() => handleItemSelection(index)}>
+              {item.selected ? (
+                <FontAwesome
+                  style={styles.icon}
+                  name={"check-square-o"}
+                  color={"green"}
+                  size={25}
+                />
+              ) : (
+                <FontAwesome
+                style={styles.icon}
+                name={"square-o"}
+                color={"black"}
+                size={25}
+              />
+            )}
+          </TouchableOpacity>
+          <Image source={item.image} style={styles.img} />
+        </View>
+      )}
+    />
       <Footer navigation={navigation} messageButton={true} />
     </SafeAreaView>
   );
@@ -76,20 +120,15 @@ export default function AgenciesScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
     justifyContent: "flex-start",
     backgroundColor: "#fff",
   },
   
   icon:{
-    marginLeft:50,
-    
-    
+    marginLeft:50, 
   },
   list:{
     flexDirection:"column",
-    marginLeft:40,
-    width:"50%",
   },
  text: { 
     display: "flex",
@@ -102,10 +141,13 @@ const styles = StyleSheet.create({
     fontSize: 30,
 },
   img: {
-    marginLeft: 20,
-    height: 60,
-    width: 100,
-    resizeMode: "contain",
+    height: 80, // Ajustez la hauteur comme vous le souhaitez
+    width: 200, // Ajustez la largeur comme vous le souhaitez
+    resizeMode: "contain", // Ajustez la façon dont les images sont redimensionnées
+    marginBottom: 10,
+    marginTop: -30,
+    marginLeft: 30, // Ajoutez un espacement vertical
+    alignSelf: "center", 
   },
   title: {
     fontSize: 30,
@@ -113,13 +155,9 @@ const styles = StyleSheet.create({
     marginTop: 50,
     marginHorizontal: 10,
     marginVertical: 10,
-    marginBottom: 150,
-  },
-  image: {
-    marginLeft: 40,
-    width: 270,
-    height: 150,
-    resizeMode: "contain",
+    marginBottom: 100,
+    textAlign: "center",
+    fontStyle: "italic",
   },
   modalTitle: {
     fontSize: 10,
@@ -130,6 +168,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
     marginVertical: 10,
+    display: "flex",
+    flexDirection: "row",
   },
   checkboxContainer: {
     height: 80,

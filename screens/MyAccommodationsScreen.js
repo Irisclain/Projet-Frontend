@@ -29,7 +29,9 @@ export default function MyAccommodationsScreen() {
   const isFocused = useIsFocused();
 
   const user = useSelector(state => state.user.value);
-  //console.log('Tout sur l\'user : ' , user);
+  //console.log('Tout sur l\'user : ' , user); 
+  // Ce console.log nous a servi à vérifier le bon fonctionnement du reducer user, 
+  // et notamment le bon passage du token
   
   const [accommodationsData, setAccommodationsData] = useState([]);
 
@@ -38,17 +40,23 @@ export default function MyAccommodationsScreen() {
       dispatch(updateCurrentRoute("MyAccommodations"));
       dispatch(updateCurrentAccommodation({}));
     }
-    //let owner = '64d0ab5e432f8c174dfa08c7'; // Il faudra prendre le user en Store. Pour l'instant, c'est Maxime
 
-    let ownerToken = 'kZg43tvoorU8F5ypqMv5QZBYZjLC426k'
-    
+    // En environnement de travail, il nous a été utile de simuler un faux utilisateur, 
+    // pour faire des tests sans avoir besoin de ce connecter.
+    // Ici, nous avons repris le token de MaximusProprio
+    let ownerToken = 'kZg43tvoorU8F5ypqMv5QZBYZjLC426k' 
+
+    // Dans une première partie du projet, le reducer user n'était pas encore développé, 
+    // et la liste des hébergements de l'utilisateur était retrouvée par son id.
+    // let owner = '64d0ab5e432f8c174dfa08c7'; // Il faudra prendre le user en Store. Pour l'instant, c'est Maxime
+
+    // Mais dans le cas d'une vraie connexion (seule possible, hors environnement de travail, pour atteindre cette page), 
+    // le faux token est écrasé par le vrai
+
     if (user.token!==null) {
       ownerToken = user.token;
     }
 
-    //console.log('pour vérifier le passage sans connexion // ownerToken : ', ownerToken, 'user : ', user);
-
-    //fetch(`${BACKEND_ADDRESS}/accommodation/${owner}`)
     fetch(`${BACKEND_ADDRESS}/accommodation/${ownerToken}`)
       .then((response) => response.json())
       .then((data) => {
@@ -73,7 +81,7 @@ export default function MyAccommodationsScreen() {
         key={i}
       >
         <Image
-          // pour éviter le warning uri
+          // pour éviter le warning uri en environment de travail
           source={
             data.picture
               ? { uri: data.picture }
@@ -101,23 +109,9 @@ export default function MyAccommodationsScreen() {
       <View style={styles.scroll}>
         <ScrollView>{accommodations}</ScrollView>
       </View>
-      <View style={styles.containerbutton}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("AddAccommodation")}
-          style={styles.button}
-          activeOpacity={0.8}
-        >
-          <LinearGradient
-            colors={["#FAB28F", "pink", "white"]}
-            start={{ x: 1.0, y: 0.0 }}
-            end={{ x: 1.0, y: 1.0 }}
-            height={50}
-            borderRadius={20}
-          >
-            <Text style={styles.textButton}>Nouvel Hébergement</Text>
-          </LinearGradient>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity onPress={() => navigation.navigate("AddAccommodation")}>        
+        <Text style={styles.submitButton}>Nouvel hébergement</Text>
+      </TouchableOpacity>
       <Footer navigation={navigation} messageButton={true} />
     </SafeAreaView>
   );
@@ -140,23 +134,18 @@ const styles = StyleSheet.create({
   },
   scroll: {
     height: Dimensions.get("window").height - 300,
-    //height:500,
     //backgroundColor:'red',
   },
-  containerbutton: {
-    paddingTop: 40,
-    marginBottom: -10,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  textButton: {
-    paddingLeft: 5,
-    paddingTop: 10,
-    width: 200,
-    height: "100%",
-    fontWeight: "400",
-    fontSize: 20,
+  submitButton:{
+    borderRadius:30,
+    borderWidth:0,
+    backgroundColor: '#FF7A00',
+    textAlign: 'center',
+    width: 260,
+    fontSize: 18,
+    padding: 10,
+    color: '#FFF',
+    marginBottom: 20,
   },
   accommodationContainer: {
     display: "flex",
@@ -184,15 +173,5 @@ const styles = StyleSheet.create({
   accommodationText: {
     margin: 12,
     width: Dimensions.get("window").width - 156,
-  },
-  memobutton: {
-    alignItems: "center",
-    justifyContent: "center",
-    borderColor: "#fbe29c",
-    borderWidth: 2,
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    marginBottom: 10,
   },
 });
