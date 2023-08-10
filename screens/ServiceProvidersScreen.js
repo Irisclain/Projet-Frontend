@@ -456,28 +456,37 @@ const handleDeleteTask = async (taskId) => {
       );
       };
 
-  const renderOptionModal = () => {
-      return(
-      <Modal visible={isOptionModalVisible} transparent={true} animationType="slide">
-              <View style={styles.modalContainer}>
-                  <View style={styles.modalContent}>
-                          <Text style={styles.optionTitle}>Choisir une option:</Text>
-                      <TouchableOpacity
-                      onPress={() => handleOptionSelect('red')}>
-                              <Text style={styles.optionButtonTextI} >Indisponibilité</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                      onPress={() => handleOptionSelect('blue')}>
-                              <Text style={styles.optionButtonTextM}>Ménage</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                      onPress={() => handleOptionSelect('green')}>
-                          <Text style={styles.optionButtonTextD}>Dépannage</Text>
-                      </TouchableOpacity>
-                  </View>
+      const renderOptionModal = () => {
+        return (
+          <Modal visible={isOptionModalVisible} transparent={true} animationType="slide">
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <Text style={styles.optionTitle}>Choisir une option:</Text>
+                <TouchableOpacity onPress={() => handleOptionSelect('red')}>
+                  <Text style={styles.optionButtonTextI}>Indisponibilité</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => handleOptionSelect('blue')}>
+                  <Text style={styles.optionButtonTextM}>Ménage</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => handleOptionSelect('green')}>
+                  <Text style={styles.optionButtonTextD}>Dépannage</Text>
+                </TouchableOpacity>
+                {/* Ajout des boutons Ajouter et Annuler */}
+                <View style={styles.modalButtonContainer}>
+                  <TouchableOpacity style={styles.modalButton} onPress={() => setOptionModalVisible(false)}>
+                    <Text style={styles.modalButtonText}>Annuler</Text>
+                  </TouchableOpacity>
+                  {/* Vous pouvez ajouter des styles spécifiques au bouton Ajouter si nécessaire */}
+                  <TouchableOpacity style={[styles.modalButton, styles.addButton]} onPress={() => setOptionModalVisible(false)}>
+                    <Text style={styles.modalButtonText}>Ajouter</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-        </Modal>
-  )};
+            </View>
+          </Modal>
+        );
+      };
+      
 
   const renderNewTaskModal = () => {
       return (
@@ -772,6 +781,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#fbe29c",
     borderRadius: 1,
   },
+      addButton: {
+  backgroundColor: 'green', // Personnalisez la couleur du bouton Ajouter si nécessaire
+  marginLeft: 10, // Ajoutez un espacement entre les boutons
+},
   textButton: {
     height: 30,
     fontWeight: "600",
